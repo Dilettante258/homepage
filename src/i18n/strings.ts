@@ -24,6 +24,15 @@ export type Messages = {
 		subtitle: string;
 		readMore: string;
 		allPosts: string;
+		filterAll: string;
+		sortBy: string;
+		sortDefault: string;
+		sortNameAZ: string;
+		sortNameZA: string;
+		sortNewest: string;
+		sortOldest: string;
+		layoutGrid: string;
+		layoutList: string;
 	};
 	gallery: {
 		title: string;
@@ -82,7 +91,16 @@ export const messages: Record<Locale, Messages> = {
 			title: 'Writing',
 			subtitle: 'Notes about architecture, DX, and the craft of shipping fast.',
 			readMore: 'Read post',
-			allPosts: 'Browse all posts'
+			allPosts: 'Browse all posts',
+			filterAll: 'All',
+			sortBy: 'Sort by',
+			sortDefault: 'Newest first',
+			sortNameAZ: 'Title A \u2192 Z',
+			sortNameZA: 'Title Z \u2192 A',
+			sortNewest: 'Newest first',
+			sortOldest: 'Oldest first',
+			layoutGrid: 'Grid',
+			layoutList: 'List',
 		},
 		gallery: {
 			title: 'Gallery',
@@ -141,7 +159,16 @@ export const messages: Record<Locale, Messages> = {
 			title: '写作',
 			subtitle: '记录架构思考、开发者体验与高效交付。',
 			readMore: '阅读全文',
-			allPosts: '查看全部'
+			allPosts: '查看全部',
+			filterAll: '全部',
+			sortBy: '排序',
+			sortDefault: '最新优先',
+			sortNameAZ: '标题 A \u2192 Z',
+			sortNameZA: '标题 Z \u2192 A',
+			sortNewest: '最新优先',
+			sortOldest: '最早优先',
+			layoutGrid: '网格',
+			layoutList: '列表',
 		},
 		gallery: {
 			title: '组件示例',
