@@ -1,7 +1,11 @@
 ---
-import { getCollection } from "astro:content";
 import SiteLayout from "../../../layouts/SiteLayout.astro";
-import { resolveLocale, messages, SUPPORTED_LOCALES } from "../../../i18n/strings";
+import {
+  resolveLocale,
+  messages,
+  SUPPORTED_LOCALES,
+} from "../../../i18n/strings";
+import { galleryItems, getAllTags } from "../../../data/gallery";
 
 export function getStaticPaths() {
   return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
@@ -10,49 +14,205 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = resolveLocale(lang);
 const t = messages[locale];
-
-const posts = (
-  await getCollection("blog", ({ data }) => data.locale === locale)
-).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const allTags = getAllTags();
 ---
 
 <SiteLayout
   locale={locale}
   t={t}
-  page="blog"
-  title={`${t.nav.blog} · Yiming`}
-  description={t.blog.subtitle}
+  title={`${t.gallery.title} · Yiming`}
+  description={t.gallery.subtitle}
 >
   <section class="panel">
     <div class="panel__header">
       <div>
-        <p class="eyebrow">{t.blog.subtitle}</p>
-        <h1>{t.blog.title}</h1>
+        <p class="eyebrow">{t.gallery.subtitle}</p>
+        <h1>{t.gallery.title}</h1>
       </div>
     </div>
-    <div class="posts">
+
+    <div class="toolbar">
+      <div class="filters" role="group" aria-label="Filter by tag">
+        <button class="filter-btn active" data-tag="all">
+          {t.gallery.filterAll}
+        </button>
+        {
+          allTags.map((tag) => (
+            <button class="filter-btn" data-tag={tag}>
+              {t.gallery.tagLabels[tag] ?? tag}
+            </button>
+          ))
+        }
+      </div>
+      <div class="sort-group">
+        <label for="sort-select" class="sort-label">{t.gallery.sortBy}</label>
+        <select id="sort-select" class="sort-select">
+          <option value="default">{t.gallery.sortDefault}</option>
+          <option value="name-az">{t.gallery.sortNameAZ}</option>
+          <option value="name-za">{t.gallery.sortNameZA}</option>
+          <option value="newest">{t.gallery.sortNewest}</option>
+          <option value="oldest">{t.gallery.sortOldest}</option>
+        </select>
+      </div>
+      <div class="layout-toggle" role="group" aria-label="Layout mode">
+        <button
+          class="layout-btn active"
+          data-layout="grid"
+          title={t.gallery.layoutGrid}
+          aria-label={t.gallery.layoutGrid}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </button>
+        <button
+          class="layout-btn"
+          data-layout="list"
+          title={t.gallery.layoutList}
+          aria-label={t.gallery.layoutList}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="1" width="14" height="4" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="1" y="7" width="14" height="4" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="1" y="13" width="14" height="2" rx="1" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </button>
+        <button
+          class="layout-btn"
+          data-layout="tiling"
+          title={t.gallery.layoutTiling}
+          aria-label={t.gallery.layoutTiling}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="1" width="6" height="9" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="9" y="1" width="6" height="5" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="1" y="12" width="6" height="3" rx="1" stroke="currentColor" stroke-width="1.5" />
+            <rect x="9" y="8" width="6" height="7" rx="1" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="gallery-container" data-layout="grid">
       {
-        posts.map((post) => (
-          <a class="post" href={`/${locale}/blog/${post.slug}`}>
-            <p class="eyebrow">
-              {new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(
-                post.data.date,
+        galleryItems.map((item, idx) => (
+          <a
+            class="gallery-card"
+            href={`/${locale}/gallery/${item.slug}`}
+            data-tags={item.tags.join(",")}
+            data-title={item.title[locale]}
+            data-date={item.createdAt}
+            data-order={String(idx)}
+            style={`view-transition-name: gallery-${item.slug};`}
+          >
+            <div class={`card-thumbnail card-thumbnail--${item.aspect}`}>
+              {item.cover ? (
+                <img src={item.cover} alt={item.title[locale]} loading="lazy" />
+              ) : (
+                <div
+                  class="card-gradient"
+                  style={`background: ${item.fallbackGradient};`}
+                />
               )}
-            </p>
-            <h3>{post.data.title}</h3>
-            <p class="body">{post.data.description}</p>
-            <div class="tags">
-              {post.data.tags?.map((tag) => (
-                <span>{tag}</span>
-              ))}
+            </div>
+            <div class="card-body">
+              <h3>{item.title[locale]}</h3>
+              <p class="card-desc">{item.description[locale]}</p>
+              <div class="tags">
+                {item.tags.map((tag) => (
+                  <span>{t.gallery.tagLabels[tag] ?? tag}</span>
+                ))}
+              </div>
             </div>
           </a>
         ))
       }
-      {posts.length === 0 && <p class="muted">No posts yet.</p>}
     </div>
   </section>
 </SiteLayout>
+
+<script>
+  const container = document.querySelector(
+    ".gallery-container"
+  ) as HTMLElement;
+  const filterBtns = document.querySelectorAll(".filter-btn");
+  const layoutBtns = document.querySelectorAll(".layout-btn");
+  const sortSelect = document.getElementById(
+    "sort-select"
+  ) as HTMLSelectElement;
+
+  function withViewTransition(callback: () => void) {
+    if (document.startViewTransition) {
+      document.startViewTransition(callback);
+    } else {
+      callback();
+    }
+  }
+
+  function getCards() {
+    return Array.from(
+      container.querySelectorAll(".gallery-card")
+    ) as HTMLElement[];
+  }
+
+  layoutBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const mode = (btn as HTMLElement).dataset.layout!;
+      layoutBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      withViewTransition(() => {
+        container.dataset.layout = mode;
+      });
+    });
+  });
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tag = (btn as HTMLElement).dataset.tag!;
+      filterBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      withViewTransition(() => {
+        getCards().forEach((card) => {
+          if (tag === "all") {
+            card.hidden = false;
+          } else {
+            const cardTags = card.dataset.tags?.split(",") ?? [];
+            card.hidden = !cardTags.includes(tag);
+          }
+        });
+      });
+    });
+  });
+
+  sortSelect.addEventListener("change", () => {
+    const mode = sortSelect.value;
+    const cards = getCards();
+
+    cards.sort((a, b) => {
+      if (mode === "name-az") {
+        return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
+      }
+      if (mode === "name-za") {
+        return (b.dataset.title ?? "").localeCompare(a.dataset.title ?? "");
+      }
+      if (mode === "newest") {
+        return (b.dataset.date ?? "").localeCompare(a.dataset.date ?? "");
+      }
+      if (mode === "oldest") {
+        return (a.dataset.date ?? "").localeCompare(b.dataset.date ?? "");
+      }
+      return Number(a.dataset.order) - Number(b.dataset.order);
+    });
+
+    withViewTransition(() => {
+      cards.forEach((card) => container.appendChild(card));
+    });
+  });
+</script>
 
 <style>
   .panel {
@@ -60,8 +220,8 @@ const posts = (
     border: 1px solid var(--stroke);
     border-radius: 20px;
     padding: 1.8rem;
-    background: rgba(255, 255, 255, 0.03);
-    box-shadow: 0 30px 120px rgba(0, 0, 0, 0.28);
+    background: var(--surface);
+    box-shadow: 0 30px 120px var(--shadow);
   }
 
   .panel__header {
@@ -83,54 +243,267 @@ const posts = (
     margin: 0.4rem 0;
   }
 
-  .body {
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .posts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  /* ---- Toolbar ---- */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 1rem;
     margin-top: 1.2rem;
+    flex-wrap: wrap;
   }
 
-  .post {
+  .filters {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--stroke);
+    background: var(--surface-hover);
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    transition:
+      background 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .filter-btn:hover {
+    color: var(--text);
+    border-color: var(--border-hover);
+  }
+
+  .filter-btn.active {
+    color: var(--text);
+    border-color: var(--primary-border);
+    background: linear-gradient(120deg, var(--primary-bg), var(--accent-bg));
+  }
+
+  .layout-toggle {
+    display: inline-flex;
+    gap: 0.25rem;
+    border: 1px solid var(--stroke);
+    border-radius: 999px;
+    padding: 0.15rem;
+    background: var(--surface-hover);
+  }
+
+  .layout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+
+  .layout-btn:hover {
+    color: var(--text);
+  }
+
+  .layout-btn.active {
+    background: linear-gradient(120deg, var(--primary-bg), var(--accent-bg));
+    color: var(--text);
+  }
+
+  .layout-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ---- Sort ---- */
+  .sort-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .sort-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .sort-select {
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--stroke);
+    background: var(--surface-hover);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition:
+      border-color 0.2s;
+  }
+
+  .sort-select:hover,
+  .sort-select:focus-visible {
+    border-color: var(--border-hover);
+    outline: none;
+  }
+
+  /* ---- Gallery Container: 3 Layout Modes ---- */
+  .gallery-container {
+    margin-top: 1rem;
+  }
+
+  /* Grid (default) */
+  [data-layout="grid"] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  /* List (vertical) */
+  [data-layout="list"] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  [data-layout="list"] .gallery-card {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  [data-layout="list"] .card-thumbnail {
+    height: 140px;
+    aspect-ratio: auto;
+  }
+
+  /* Tiling / Masonry (CSS columns) */
+  [data-layout="tiling"] {
+    columns: 3;
+    column-gap: 1rem;
+  }
+
+  [data-layout="tiling"] .gallery-card {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  /* ---- Hidden cards must override layout display ---- */
+  .gallery-card[hidden] {
+    display: none;
+  }
+
+  /* ---- Card Styles ---- */
+  .gallery-card {
     display: block;
     border: 1px solid var(--stroke);
     border-radius: 14px;
-    padding: 1rem;
+    overflow: hidden;
     text-decoration: none;
     color: var(--text);
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--surface-raised);
     transition:
       transform 0.2s,
       border-color 0.2s,
       box-shadow 0.2s;
   }
 
-  .post:hover {
+  .gallery-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(126, 243, 209, 0.45);
-    box-shadow: 0 15px 80px rgba(126, 243, 209, 0.14);
+    border-color: var(--primary-border);
+    box-shadow: 0 15px 80px var(--primary-glow);
+  }
+
+  .card-thumbnail {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .card-thumbnail--landscape {
+    aspect-ratio: 16 / 10;
+  }
+  .card-thumbnail--portrait {
+    aspect-ratio: 9 / 14;
+  }
+  .card-thumbnail--square {
+    aspect-ratio: 1;
+  }
+
+  .card-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-gradient {
+    width: 100%;
+    height: 100%;
+    min-height: 140px;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-body h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem;
+  }
+
+  .card-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 0.6rem;
   }
 
   .tags {
     display: flex;
     gap: 0.4rem;
     flex-wrap: wrap;
-    margin-top: 0.6rem;
   }
 
   .tags span {
     padding: 0.35rem 0.6rem;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--surface-tag);
     color: var(--muted);
     font-size: 0.85rem;
   }
 
-  .muted {
-    color: var(--muted);
+  /* ---- View Transition: reduced motion ---- */
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation-duration: 0.01ms !important;
+    }
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 900px) {
+    [data-layout="tiling"] {
+      columns: 2;
+    }
+  }
+
+  @media (max-width: 600px) {
+    [data-layout="tiling"] {
+      columns: 1;
+    }
+    [data-layout="list"] .gallery-card {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

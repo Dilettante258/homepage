@@ -19,7 +19,7 @@ const posts = (
 const featured = posts.slice(0, 3);
 ---
 
-<SiteLayout locale={locale} t={t} page="home">
+<SiteLayout locale={locale} t={t}>
   <section class="hero">
     <div class="hero__copy">
       <p class="eyebrow">Full-stack · Edge-ready · DX lover</p>
@@ -228,21 +228,21 @@ const featured = posts.slice(0, 3);
   .btn {
     background: linear-gradient(
       120deg,
-      rgba(126, 243, 209, 0.2),
-      rgba(155, 183, 255, 0.2)
+      var(--primary-bg),
+      var(--accent-bg)
     );
-    border-color: rgba(126, 243, 209, 0.45);
-    box-shadow: 0 10px 40px rgba(126, 243, 209, 0.18);
+    border-color: var(--primary-border);
+    box-shadow: 0 10px 40px var(--primary-glow);
   }
 
   .btn:hover,
   .ghost:hover {
     transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--border-hover);
   }
 
   .ghost {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--surface-hover);
   }
 
   .chips {
@@ -258,14 +258,14 @@ const featured = posts.slice(0, 3);
     border: 1px solid var(--stroke);
     color: var(--muted);
     font-size: 0.9rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--surface);
   }
 
   .hero__card {
     border: 1px solid var(--stroke);
     border-radius: 16px;
     padding: 1.4rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--surface);
     display: grid;
     gap: 1rem;
   }
@@ -274,7 +274,7 @@ const featured = posts.slice(0, 3);
     border: 1px solid var(--stroke);
     border-radius: 12px;
     padding: 1rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--surface-raised);
   }
 
   .stat strong {
@@ -288,7 +288,7 @@ const featured = posts.slice(0, 3);
   }
 
   .stat.highlight {
-    border-color: rgba(126, 243, 209, 0.45);
+    border-color: var(--primary-border);
   }
 
   .panel {
@@ -296,8 +296,8 @@ const featured = posts.slice(0, 3);
     border: 1px solid var(--stroke);
     border-radius: 20px;
     padding: 1.8rem;
-    background: rgba(255, 255, 255, 0.03);
-    box-shadow: 0 30px 120px rgba(0, 0, 0, 0.28);
+    background: var(--surface);
+    box-shadow: 0 30px 120px var(--shadow);
   }
 
   .panel__header {
@@ -342,7 +342,7 @@ const featured = posts.slice(0, 3);
     border: 1px solid var(--stroke);
     border-radius: 16px;
     padding: 1.2rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--surface);
     height: 100%;
   }
 
@@ -360,7 +360,7 @@ const featured = posts.slice(0, 3);
     padding: 1rem;
     text-decoration: none;
     color: var(--text);
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--surface-raised);
     transition:
       transform 0.2s,
       border-color 0.2s,
@@ -369,8 +369,8 @@ const featured = posts.slice(0, 3);
 
   .post:hover {
     transform: translateY(-3px);
-    border-color: rgba(126, 243, 209, 0.45);
-    box-shadow: 0 15px 80px rgba(126, 243, 209, 0.14);
+    border-color: var(--primary-border);
+    box-shadow: 0 15px 80px var(--primary-glow);
   }
 
   .tags {
@@ -383,7 +383,7 @@ const featured = posts.slice(0, 3);
   .tags span {
     padding: 0.35rem 0.6rem;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--surface-tag);
     color: var(--muted);
     font-size: 0.85rem;
   }
@@ -432,7 +432,7 @@ const featured = posts.slice(0, 3);
     height: 160px;
     border-radius: 14px;
     border: 1px solid var(--stroke);
-    box-shadow: 0 10px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 60px var(--shadow-heavy);
   }
 
   .controls label {
@@ -470,7 +470,7 @@ const featured = posts.slice(0, 3);
   }
 
   .swatches button.active {
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color: var(--border-hover);
   }
 
   .tilt-wrapper {
@@ -484,7 +484,7 @@ const featured = posts.slice(0, 3);
   }
 
   .tabs button {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--surface-hover);
     border: 1px solid var(--stroke);
     color: var(--muted);
     border-radius: 10px;
@@ -495,11 +495,11 @@ const featured = posts.slice(0, 3);
 
   .tabs button.on {
     color: var(--text);
-    border-color: rgba(126, 243, 209, 0.45);
+    border-color: var(--primary-border);
     background: linear-gradient(
       120deg,
-      rgba(126, 243, 209, 0.14),
-      rgba(155, 183, 255, 0.14)
+      var(--primary-bg),
+      var(--accent-bg)
     );
   }
 
@@ -508,8 +508,8 @@ const featured = posts.slice(0, 3);
     border: 1px solid var(--stroke);
     border-radius: 14px;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
+    background: var(--surface);
+    box-shadow: 0 20px 70px var(--shadow-heavy);
     overflow: hidden;
   }
 
@@ -528,12 +528,12 @@ const featured = posts.slice(0, 3);
     background:
       radial-gradient(
         circle at 30% 20%,
-        rgba(126, 243, 209, 0.16),
+        var(--gradient-1),
         transparent 45%
       ),
       radial-gradient(
         circle at 80% 30%,
-        rgba(155, 183, 255, 0.18),
+        var(--gradient-2),
         transparent 40%
       );
     opacity: 0.8;

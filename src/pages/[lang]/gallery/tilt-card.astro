@@ -1,0 +1,108 @@
+---
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import TiltCard from "../../../components/react/TiltCard.tsx";
+import {
+  resolveLocale,
+  messages,
+  SUPPORTED_LOCALES,
+} from "../../../i18n/strings";
+import { galleryItems } from "../../../data/gallery";
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+const item = galleryItems.find((i) => i.slug === "tilt-card")!;
+---
+
+<SiteLayout
+  locale={locale}
+  t={t}
+  title={`${item.title[locale]} · Yiming`}
+  description={item.description[locale]}
+>
+  <section
+    class="detail-panel"
+    style={`view-transition-name: gallery-${item.slug};`}
+  >
+    <a class="back-link" href={`/${locale}/gallery`}>
+      ← {t.gallery.backToGallery}
+    </a>
+
+    <div class="detail-header">
+      <div>
+        <div class="tags">
+          {item.tags.map((tag) => (
+            <span>{t.gallery.tagLabels[tag] ?? tag}</span>
+          ))}
+        </div>
+        <h1>{item.title[locale]}</h1>
+        <p class="desc">{item.description[locale]}</p>
+      </div>
+    </div>
+
+    <div class="demo-area">
+      <TiltCard client:only="react" />
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .detail-panel {
+    margin-top: 1rem;
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 1.8rem;
+    background: var(--surface);
+    box-shadow: 0 30px 120px var(--shadow);
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: var(--text);
+  }
+
+  .detail-header h1 {
+    margin: 0.4rem 0 0.3rem;
+  }
+
+  .desc {
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .tags span {
+    padding: 0.35rem 0.6rem;
+    border-radius: 10px;
+    background: var(--surface-tag);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .demo-area {
+    margin-top: 1.5rem;
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 1.5rem;
+    background: var(--surface-raised);
+    min-height: 260px;
+  }
+</style>

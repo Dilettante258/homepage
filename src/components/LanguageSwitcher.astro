@@ -28,7 +28,7 @@ const buildHref = (target: Locale) => {
 		border: 1px solid var(--stroke);
 		border-radius: 999px;
 		padding: 0.15rem;
-		background: rgba(255, 255, 255, 0.04);
+		background: var(--surface-hover);
 	}
 
 	.switcher a {
@@ -45,7 +45,7 @@ const buildHref = (target: Locale) => {
 	}
 
 	.switcher a.active {
-		background: linear-gradient(120deg, rgba(126, 243, 209, 0.18), rgba(155, 183, 255, 0.18));
+		background: linear-gradient(120deg, var(--primary-bg), var(--accent-bg));
 		color: var(--text);
 	}
 </style>

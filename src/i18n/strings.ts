@@ -30,6 +30,19 @@ export type Messages = {
 		subtitle: string;
 		solidTitle: string;
 		reactTitle: string;
+		filterAll: string;
+		layoutGrid: string;
+		layoutList: string;
+		layoutTiling: string;
+		viewDemo: string;
+		backToGallery: string;
+		sortBy: string;
+		sortDefault: string;
+		sortNameAZ: string;
+		sortNameZA: string;
+		sortNewest: string;
+		sortOldest: string;
+		tagLabels: Record<string, string>;
 	};
 	contact: {
 		title: string;
@@ -75,10 +88,29 @@ export const messages: Record<Locale, Messages> = {
 			title: 'Gallery',
 			subtitle: 'Small interactive pieces built with Solid and React islands.',
 			solidTitle: 'Solid.js live controls',
-			reactTitle: 'React micro-interaction'
+			reactTitle: 'React micro-interaction',
+			filterAll: 'All',
+			layoutGrid: 'Grid',
+			layoutList: 'List',
+			layoutTiling: 'Masonry',
+			viewDemo: 'View demo',
+			backToGallery: 'Back to Gallery',
+			sortBy: 'Sort by',
+			sortDefault: 'Default',
+			sortNameAZ: 'Name A → Z',
+			sortNameZA: 'Name Z → A',
+			sortNewest: 'Newest first',
+			sortOldest: 'Oldest first',
+			tagLabels: {
+				solid: 'Solid.js',
+				react: 'React',
+				css: 'CSS',
+				ux: 'UX',
+				interaction: 'Interaction',
+			},
 		},
 		contact: {
-			title: 'Let’s build something together',
+			title: 'Let\u2019s build something together',
 			subtitle: 'Available for product engineering, frontend leadership, and rapid prototypes.',
 			emailCta: 'Email me'
 		},
@@ -115,7 +147,26 @@ export const messages: Record<Locale, Messages> = {
 			title: '组件示例',
 			subtitle: '使用 Solid 与 React 构建的交互小品。',
 			solidTitle: 'Solid.js 实时控制',
-			reactTitle: 'React 微交互'
+			reactTitle: 'React 微交互',
+			filterAll: '全部',
+			layoutGrid: '网格',
+			layoutList: '列表',
+			layoutTiling: '瀑布流',
+			viewDemo: '查看演示',
+			backToGallery: '返回组件集',
+			sortBy: '排序',
+			sortDefault: '默认',
+			sortNameAZ: '名称 A → Z',
+			sortNameZA: '名称 Z → A',
+			sortNewest: '最新优先',
+			sortOldest: '最早优先',
+			tagLabels: {
+				solid: 'Solid.js',
+				react: 'React',
+				css: 'CSS',
+				ux: '用户体验',
+				interaction: '交互',
+			},
 		},
 		contact: {
 			title: '一起把想法做出来',
