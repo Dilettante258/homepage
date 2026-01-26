@@ -1,0 +1,136 @@
+---
+import { getCollection } from "astro:content";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import { resolveLocale, messages, SUPPORTED_LOCALES } from "../../../i18n/strings";
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+
+const posts = (
+  await getCollection("blog", ({ data }) => data.locale === locale)
+).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<SiteLayout
+  locale={locale}
+  t={t}
+  page="blog"
+  title={`${t.nav.blog} · Yiming`}
+  description={t.blog.subtitle}
+>
+  <section class="panel">
+    <div class="panel__header">
+      <div>
+        <p class="eyebrow">{t.blog.subtitle}</p>
+        <h1>{t.blog.title}</h1>
+      </div>
+    </div>
+    <div class="posts">
+      {
+        posts.map((post) => (
+          <a class="post" href={`/${locale}/blog/${post.slug}`}>
+            <p class="eyebrow">
+              {new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(
+                post.data.date,
+              )}
+            </p>
+            <h3>{post.data.title}</h3>
+            <p class="body">{post.data.description}</p>
+            <div class="tags">
+              {post.data.tags?.map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+          </a>
+        ))
+      }
+      {posts.length === 0 && <p class="muted">No posts yet.</p>}
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .panel {
+    margin-top: 1rem;
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 1.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 30px 120px rgba(0, 0, 0, 0.28);
+  }
+
+  .panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  h1 {
+    margin: 0.4rem 0;
+  }
+
+  .body {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+
+  .post {
+    display: block;
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 1rem;
+    text-decoration: none;
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.25);
+    transition:
+      transform 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .post:hover {
+    transform: translateY(-3px);
+    border-color: rgba(126, 243, 209, 0.45);
+    box-shadow: 0 15px 80px rgba(126, 243, 209, 0.14);
+  }
+
+  .tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: 0.6rem;
+  }
+
+  .tags span {
+    padding: 0.35rem 0.6rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+</style>

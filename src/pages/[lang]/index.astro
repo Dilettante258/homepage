@@ -1,0 +1,555 @@
+---
+import { getCollection } from "astro:content";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import ColorPlayground from "../../components/solid/ColorPlayground.tsx";
+import TiltCard from "../../components/react/TiltCard.tsx";
+import { resolveLocale, messages, SUPPORTED_LOCALES } from "../../i18n/strings";
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+
+const posts = (
+  await getCollection("blog", ({ data }) => data.locale === locale)
+).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featured = posts.slice(0, 3);
+---
+
+<SiteLayout locale={locale} t={t} page="home">
+  <section class="hero">
+    <div class="hero__copy">
+      <p class="eyebrow">Full-stack · Edge-ready · DX lover</p>
+      <h1>{t.hero.title}</h1>
+      <p class="lede">{t.hero.subtitle}</p>
+      <div class="cta">
+        <a class="btn" href="#gallery">{t.hero.ctaPrimary}</a>
+        <a class="ghost" href="mailto:hi@yiming.work">{t.hero.ctaSecondary}</a>
+      </div>
+      <div class="chips">
+        <span>Astro</span>
+        <span>Solid.js</span>
+        <span>React</span>
+        <span>Serverless</span>
+        <span>Design Systems</span>
+      </div>
+    </div>
+    <div class="hero__card">
+      <div class="stat">
+        <p>Lead time</p>
+        <strong>72h</strong>
+        <small>for a polished prototype</small>
+      </div>
+      <div class="stat">
+        <p>Favorite stack</p>
+        <strong>Astro + Solid</strong>
+        <small>islands with strong typing</small>
+      </div>
+      <div class="stat highlight">
+        <p>Focus</p>
+        <strong>Calm UX</strong>
+        <small>performant, legible, maintainable</small>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="panel">
+    <div>
+      <p class="eyebrow">{t.intro.title}</p>
+      <h2>{t.hero.title}</h2>
+      <p class="body">{t.intro.body}</p>
+      <div class="badges">
+        {t.intro.badges.map((item) => <span>{item}</span>)}
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <p class="eyebrow">Frontend</p>
+        <h3>Design systems & islands</h3>
+        <p>
+          Accessible UI kits, motion-guided storytelling, and SSR/edge-friendly
+          patterns powered by Solid or React.
+        </p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Backend</p>
+        <h3>API that scale with teams</h3>
+        <p>
+          Schema-first services, background jobs, observability, and predictable
+          deployments with CI guardrails.
+        </p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">DX</p>
+        <h3>Tooling that feels invisible</h3>
+        <p>
+          Testing pipelines, codegen, and docs that help teams ship confidently
+          without slowing them down.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="blog" class="panel">
+    <div class="panel__header">
+      <div>
+        <p class="eyebrow">{t.blog.subtitle}</p>
+        <h2>{t.blog.title}</h2>
+      </div>
+      <a class="ghost" href={`/${locale}/blog`}>{t.blog.allPosts}</a>
+    </div>
+    <div class="posts">
+      {
+        featured.map((post) => (
+          <a class="post" href={`/${locale}/blog/${post.slug}`}>
+            <p class="eyebrow">
+              {new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(
+                post.data.date,
+              )}
+            </p>
+            <h3>{post.data.title}</h3>
+            <p class="body">{post.data.description}</p>
+            <div class="tags">
+              {post.data.tags?.map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+            <span class="read">{t.blog.readMore} →</span>
+          </a>
+        ))
+      }
+      {featured.length === 0 && <p class="muted">Posts coming soon.</p>}
+    </div>
+  </section>
+
+  <section id="gallery" class="panel">
+    <div class="panel__header">
+      <div>
+        <p class="eyebrow">{t.gallery.subtitle}</p>
+        <h2>{t.gallery.title}</h2>
+      </div>
+    </div>
+    <div class="gallery">
+      <div class="card interactive">
+        <div class="panel__header">
+          <p class="eyebrow">Solid</p>
+          <h3>{t.gallery.solidTitle}</h3>
+        </div>
+        <ColorPlayground client:only="solid-js" />
+      </div>
+      <div class="card interactive">
+        <div class="panel__header">
+          <p class="eyebrow">React</p>
+          <h3>{t.gallery.reactTitle}</h3>
+        </div>
+        <TiltCard client:only="react" />
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="panel contact">
+    <div>
+      <p class="eyebrow">{t.contact.subtitle}</p>
+      <h2>{t.contact.title}</h2>
+      <div class="cta">
+        <a class="btn" href="mailto:hi@yiming.work">{t.contact.emailCta}</a>
+        <a class="ghost" href="https://github.com/" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+    <div class="card">
+      <p class="eyebrow">What I enjoy</p>
+      <ul>
+        <li>Designing API + UI contracts together</li>
+        <li>Front-of-frontend polish with motion</li>
+        <li>Developer tooling that stays out of the way</li>
+        <li>Mentoring and pair architecture sessions</li>
+      </ul>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 1rem 0 2rem;
+  }
+
+  .hero__copy h1 {
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    margin: 0.2rem 0 0.4rem;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 46ch;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .cta {
+    display: flex;
+    gap: 0.8rem;
+    margin: 1.4rem 0 0.8rem;
+  }
+
+  .btn,
+  .ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.8rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--stroke);
+    color: var(--text);
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s,
+      background 0.18s,
+      box-shadow 0.18s;
+  }
+
+  .btn {
+    background: linear-gradient(
+      120deg,
+      rgba(126, 243, 209, 0.2),
+      rgba(155, 183, 255, 0.2)
+    );
+    border-color: rgba(126, 243, 209, 0.45);
+    box-shadow: 0 10px 40px rgba(126, 243, 209, 0.18);
+  }
+
+  .btn:hover,
+  .ghost:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .ghost {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .chips span {
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--stroke);
+    color: var(--muted);
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .hero__card {
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    padding: 1.4rem;
+    background: rgba(255, 255, 255, 0.03);
+    display: grid;
+    gap: 1rem;
+  }
+
+  .stat {
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .stat strong {
+    display: block;
+    font-size: 1.6rem;
+    margin: 0.2rem 0;
+  }
+
+  .stat small {
+    color: var(--muted);
+  }
+
+  .stat.highlight {
+    border-color: rgba(126, 243, 209, 0.45);
+  }
+
+  .panel {
+    margin-top: 3rem;
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 1.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 30px 120px rgba(0, 0, 0, 0.28);
+  }
+
+  .panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .panel h2,
+  .panel h3 {
+    margin: 0.4rem 0;
+  }
+
+  .body {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .badges {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .badges span {
+    padding: 0.45rem 0.8rem;
+    border: 1px dashed var(--stroke);
+    border-radius: 12px;
+    color: var(--muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+
+  .card {
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.02);
+    height: 100%;
+  }
+
+  .posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+
+  .post {
+    display: block;
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 1rem;
+    text-decoration: none;
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.25);
+    transition:
+      transform 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .post:hover {
+    transform: translateY(-3px);
+    border-color: rgba(126, 243, 209, 0.45);
+    box-shadow: 0 15px 80px rgba(126, 243, 209, 0.14);
+  }
+
+  .tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: 0.6rem;
+  }
+
+  .tags span {
+    padding: 0.35rem 0.6rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .read {
+    display: inline-block;
+    margin-top: 0.8rem;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .interactive {
+    min-height: 260px;
+  }
+
+  .contact {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .contact ul {
+    padding-left: 1.2rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .playground {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .preview {
+    height: 160px;
+    border-radius: 14px;
+    border: 1px solid var(--stroke);
+    box-shadow: 0 10px 60px rgba(0, 0, 0, 0.4);
+  }
+
+  .controls label {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+  }
+
+  .controls input[type="range"] {
+    width: 100%;
+    accent-color: var(--primary);
+  }
+
+  .swatches {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .swatches button {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition:
+      transform 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .swatches button:hover {
+    transform: translateY(-2px);
+  }
+
+  .swatches button.active {
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+
+  .tilt-wrapper {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .tabs {
+    display: inline-flex;
+    gap: 0.35rem;
+  }
+
+  .tabs button {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--stroke);
+    color: var(--muted);
+    border-radius: 10px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .tabs button.on {
+    color: var(--text);
+    border-color: rgba(126, 243, 209, 0.45);
+    background: linear-gradient(
+      120deg,
+      rgba(126, 243, 209, 0.14),
+      rgba(155, 183, 255, 0.14)
+    );
+  }
+
+  .tilt-card {
+    position: relative;
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+  }
+
+  .tilt-card h4 {
+    margin: 0 0 0.3rem;
+  }
+
+  .tilt-card p {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .tilt-glow {
+    position: absolute;
+    inset: -30%;
+    background:
+      radial-gradient(
+        circle at 30% 20%,
+        rgba(126, 243, 209, 0.16),
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 80% 30%,
+        rgba(155, 183, 255, 0.18),
+        transparent 40%
+      );
+    opacity: 0.8;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .tilt-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 900px) {
+    .hero,
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

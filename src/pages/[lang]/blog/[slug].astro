@@ -1,0 +1,105 @@
+---
+import { getCollection } from "astro:content";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import { resolveLocale, messages } from "../../../i18n/strings";
+import TOC from "../../../components/TOC.astro";
+import { Debug } from "astro:components";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { lang: post.data.locale, slug: post.slug },
+  }));
+}
+
+const { lang, slug } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+
+const posts = await getCollection("blog", ({ data }) => data.locale === locale);
+const post = posts.find((entry) => entry.slug === slug);
+
+if (!post) {
+  throw new Error(`Post not found for slug "${slug}" and locale "${locale}"`);
+}
+
+const { Content, headings } = await post.render();
+---
+
+<SiteLayout
+  locale={locale}
+  t={t}
+  page="blog"
+  title={`${post.data.title} · Yiming`}
+  description={post.data.description}
+  data-alignment="center"
+>
+  <!-- <Debug content={headings} /> -->
+  <article class="panel">
+    <p class="eyebrow">
+      {
+        new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(
+          post.data.date,
+        )
+      } ·{" "}
+      {post.data.tags?.join(" · ")}
+    </p>
+    <h1>{post.data.title}</h1>
+    <p class="body lead">{post.data.description}</p>
+    <div class="content">
+      <Content />
+    </div>
+  </article>
+  <TOC heading={headings} />
+</SiteLayout>
+
+<style>
+  .panel {
+    margin-top: 1rem;
+    border: 1px solid var(--stroke);
+    border-radius: 20px;
+    padding: 1.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 30px 120px rgba(0, 0, 0, 0.28);
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .body.lead {
+    margin: 0.6rem 0 1rem;
+  }
+
+  .body,
+  .content {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .content h2,
+  .content h3 {
+    color: var(--text);
+  }
+
+  .content pre {
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow-x: auto;
+  }
+
+  .content code {
+    font-family:
+      "JetBrains Mono", "SFMono-Regular", ui-monospace, SFMono-Regular, Menlo,
+      Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .content a {
+    color: var(--primary);
+  }
+</style>

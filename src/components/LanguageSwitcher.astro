@@ -1,0 +1,51 @@
+---
+import { SUPPORTED_LOCALES, type Locale } from '../i18n/strings';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+
+const buildHref = (target: Locale) => {
+	const segments = Astro.url.pathname.split('/').filter(Boolean);
+	// ensure locale is always at index 0 when prefixDefaultLocale is on
+	if (!segments.length) return `/${target}`;
+	segments[0] = target;
+	return `/${segments.join('/')}`;
+};
+---
+
+<div class="switcher" aria-label="Choose language">
+	{SUPPORTED_LOCALES.map((code) => (
+		<a class={code === locale ? 'active' : ''} href={buildHref(code)}>
+			{code.toUpperCase()}
+		</a>
+	))}
+</div>
+
+<style>
+	.switcher {
+		display: inline-flex;
+		gap: 0.35rem;
+		border: 1px solid var(--stroke);
+		border-radius: 999px;
+		padding: 0.15rem;
+		background: rgba(255, 255, 255, 0.04);
+	}
+
+	.switcher a {
+		color: var(--muted);
+		text-decoration: none;
+		font-weight: 600;
+		padding: 0.35rem 0.8rem;
+		border-radius: 999px;
+		transition: background 0.2s, color 0.2s;
+	}
+
+	.switcher a:hover {
+		color: var(--text);
+	}
+
+	.switcher a.active {
+		background: linear-gradient(120deg, rgba(126, 243, 209, 0.18), rgba(155, 183, 255, 0.18));
+		color: var(--text);
+	}
+</style>

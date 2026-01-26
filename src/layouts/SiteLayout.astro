@@ -1,0 +1,249 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import LanguageSwitcher from "../components/LanguageSwitcher.astro";
+import type { Locale, Messages } from "../i18n/strings";
+
+type Props = {
+  locale: Locale;
+  t: Messages;
+  page?: "home" | "blog" | "post";
+  title?: string;
+  description?: string;
+} & HTMLAttributes<"main">;
+
+const { locale, t, page = "home", title, description, ...rest } = Astro.props;
+
+const navLinks = [
+  { href: `/${locale}`, label: t.nav.home, match: "home" },
+  { href: `/${locale}#about`, label: t.nav.about, match: "home" },
+  { href: `/${locale}/blog`, label: t.nav.blog, match: "blog" },
+  { href: `/${locale}#gallery`, label: t.nav.gallery, match: "home" },
+  { href: `/${locale}#contact`, label: t.nav.contact, match: "home" },
+];
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title ?? "Portfolio · Full‑stack Engineer"}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+  <body>
+    <div class="bg-grid"></div>
+    <div class="grain"></div>
+    <header class="shell header">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>
+          <p class="eyebrow">Full‑stack Engineering</p>
+          <strong>Yiming · Homepage</strong>
+        </div>
+      </div>
+      <nav class="nav">
+        {
+          navLinks.map((link) => (
+            <a class={link.match === page ? "active" : ""} href={link.href}>
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+      <LanguageSwitcher locale={locale} />
+    </header>
+    <main class="shell content" {...rest}>
+      <slot />
+    </main>
+    <footer class="shell footer">
+      <p>{t.footer.note}</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #05060a;
+    --card: rgba(255, 255, 255, 0.04);
+    --stroke: rgba(255, 255, 255, 0.08);
+    --muted: #b0b7c3;
+    --primary: #7ef3d1;
+    --accent: #9bb7ff;
+    --danger: #ff7eb6;
+    --text: #f5f7fb;
+    font-family:
+      "Space Grotesk",
+      "DM Sans",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    scroll-behavior: smooth;
+    overflow: hidden;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    body {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    overflow-y: auto;
+    margin: 0;
+    height: 100svh;
+    background:
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(126, 243, 209, 0.15),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 80% 0%,
+        rgba(155, 183, 255, 0.18),
+        transparent 35%
+      ),
+      radial-gradient(
+        circle at 60% 65%,
+        rgba(255, 126, 182, 0.12),
+        transparent 40%
+      ),
+      var(--bg);
+    color: var(--text);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--stroke) 1px, transparent 1px),
+      linear-gradient(90deg, var(--stroke) 1px, transparent 1px);
+    background-size: 160px 160px;
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+
+  .shell {
+    width: min(1100px, 92vw);
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0 0.5rem;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(12px);
+  }
+
+  .brand {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .brand .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow:
+      0 0 0 6px rgba(126, 243, 209, 0.2),
+      0 8px 30px rgba(126, 243, 209, 0.35);
+  }
+
+  .brand .eyebrow {
+    margin: 0;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nav a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition:
+      border-color 0.2s,
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .nav a:hover {
+    color: var(--text);
+    border-color: var(--stroke);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .nav a.active {
+    color: var(--text);
+    border-color: rgba(126, 243, 209, 0.45);
+    background: linear-gradient(
+      120deg,
+      rgba(126, 243, 209, 0.12),
+      rgba(155, 183, 255, 0.12)
+    );
+  }
+
+  .content {
+    padding: 1rem 0 3rem;
+  }
+
+  .footer {
+    border-top: 1px solid var(--stroke);
+    padding: 1.5rem 0 3rem;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (max-width: 800px) {
+    .header {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .nav {
+      justify-content: flex-start;
+    }
+  }
+</style>
