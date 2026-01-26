@@ -53,6 +53,14 @@ export type Messages = {
 		sortOldest: string;
 		tagLabels: Record<string, string>;
 	};
+	about: {
+		title: string;
+		subtitle: string;
+		educationTitle: string;
+		experienceTitle: string;
+		contactTitle: string;
+		present: string;
+	};
 	contact: {
 		title: string;
 		subtitle: string;
@@ -127,6 +135,14 @@ export const messages: Record<Locale, Messages> = {
 				interaction: 'Interaction',
 			},
 		},
+		about: {
+			title: 'About Me',
+			subtitle: 'Education, experience, and background.',
+			educationTitle: 'Education',
+			experienceTitle: 'Work Experience',
+			contactTitle: 'Get in Touch',
+			present: 'Present',
+		},
 		contact: {
 			title: 'Let\u2019s build something together',
 			subtitle: 'Available for product engineering, frontend leadership, and rapid prototypes.',
@@ -194,6 +210,14 @@ export const messages: Record<Locale, Messages> = {
 				ux: '用户体验',
 				interaction: '交互',
 			},
+		},
+		about: {
+			title: '关于我',
+			subtitle: '教育背景与实习经历',
+			educationTitle: '教育经历',
+			experienceTitle: '实习经历',
+			contactTitle: '联系方式',
+			present: '至今',
 		},
 		contact: {
 			title: '一起把想法做出来',

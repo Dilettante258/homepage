@@ -1,8 +1,5 @@
 ---
-import { getCollection } from "astro:content";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import ColorPlayground from "../../components/solid/ColorPlayground.tsx";
-import TiltCard from "../../components/react/TiltCard.tsx";
 import { resolveLocale, messages, SUPPORTED_LOCALES } from "../../i18n/strings";
 
 export function getStaticPaths() {
@@ -12,184 +9,47 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = resolveLocale(lang);
 const t = messages[locale];
-
-const posts = (
-  await getCollection("blog", ({ data }) => data.locale === locale)
-).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const featured = posts.slice(0, 3);
 ---
 
 <SiteLayout locale={locale} t={t}>
   <section class="hero">
-    <div class="hero__copy">
-      <p class="eyebrow">Full-stack · Edge-ready · DX lover</p>
-      <h1>{t.hero.title}</h1>
-      <p class="lede">{t.hero.subtitle}</p>
-      <div class="cta">
-        <a class="btn" href="#gallery">{t.hero.ctaPrimary}</a>
-        <a class="ghost" href="mailto:hi@yiming.work">{t.hero.ctaSecondary}</a>
-      </div>
-      <div class="chips">
-        <span>Astro</span>
-        <span>Solid.js</span>
-        <span>React</span>
-        <span>Serverless</span>
-        <span>Design Systems</span>
-      </div>
+    <p class="eyebrow">Full-stack · Edge-ready · DX lover</p>
+    <h1>{t.hero.title}</h1>
+    <p class="lede">{t.hero.subtitle}</p>
+    <div class="cta">
+      <a class="btn" href={`/${locale}/gallery`}>{t.hero.ctaPrimary}</a>
+      <a class="ghost" href={`/${locale}/about`}>{t.hero.ctaSecondary}</a>
     </div>
-    <div class="hero__card">
-      <div class="stat">
-        <p>Lead time</p>
-        <strong>72h</strong>
-        <small>for a polished prototype</small>
-      </div>
-      <div class="stat">
-        <p>Favorite stack</p>
-        <strong>Astro + Solid</strong>
-        <small>islands with strong typing</small>
-      </div>
-      <div class="stat highlight">
-        <p>Focus</p>
-        <strong>Calm UX</strong>
-        <small>performant, legible, maintainable</small>
-      </div>
+    <div class="chips">
+      <span>TypeScript</span>
+      <span>React</span>
+      <span>Solid.js</span>
+      <span>Astro</span>
+      <span>Node.js</span>
     </div>
-  </section>
-
-  <section id="about" class="panel">
-    <div>
-      <p class="eyebrow">{t.intro.title}</p>
-      <h2>{t.hero.title}</h2>
-      <p class="body">{t.intro.body}</p>
-      <div class="badges">
-        {t.intro.badges.map((item) => <span>{item}</span>)}
-      </div>
-    </div>
-    <div class="grid">
-      <div class="card">
-        <p class="eyebrow">Frontend</p>
-        <h3>Design systems & islands</h3>
-        <p>
-          Accessible UI kits, motion-guided storytelling, and SSR/edge-friendly
-          patterns powered by Solid or React.
-        </p>
-      </div>
-      <div class="card">
-        <p class="eyebrow">Backend</p>
-        <h3>API that scale with teams</h3>
-        <p>
-          Schema-first services, background jobs, observability, and predictable
-          deployments with CI guardrails.
-        </p>
-      </div>
-      <div class="card">
-        <p class="eyebrow">DX</p>
-        <h3>Tooling that feels invisible</h3>
-        <p>
-          Testing pipelines, codegen, and docs that help teams ship confidently
-          without slowing them down.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section id="blog" class="panel">
-    <div class="panel__header">
-      <div>
-        <p class="eyebrow">{t.blog.subtitle}</p>
-        <h2>{t.blog.title}</h2>
-      </div>
-      <a class="ghost" href={`/${locale}/blog`}>{t.blog.allPosts}</a>
-    </div>
-    <div class="posts">
-      {
-        featured.map((post) => (
-          <a class="post" href={`/${locale}/blog/${post.slug}`}>
-            <p class="eyebrow">
-              {new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(
-                post.data.date,
-              )}
-            </p>
-            <h3>{post.data.title}</h3>
-            <p class="body">{post.data.description}</p>
-            <div class="tags">
-              {post.data.tags?.map((tag) => (
-                <span>{tag}</span>
-              ))}
-            </div>
-            <span class="read">{t.blog.readMore} →</span>
-          </a>
-        ))
-      }
-      {featured.length === 0 && <p class="muted">Posts coming soon.</p>}
-    </div>
-  </section>
-
-  <section id="gallery" class="panel">
-    <div class="panel__header">
-      <div>
-        <p class="eyebrow">{t.gallery.subtitle}</p>
-        <h2>{t.gallery.title}</h2>
-      </div>
-    </div>
-    <div class="gallery">
-      <div class="card interactive">
-        <div class="panel__header">
-          <p class="eyebrow">Solid</p>
-          <h3>{t.gallery.solidTitle}</h3>
-        </div>
-        <ColorPlayground client:only="solid-js" />
-      </div>
-      <div class="card interactive">
-        <div class="panel__header">
-          <p class="eyebrow">React</p>
-          <h3>{t.gallery.reactTitle}</h3>
-        </div>
-        <TiltCard client:only="react" />
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="panel contact">
-    <div>
-      <p class="eyebrow">{t.contact.subtitle}</p>
-      <h2>{t.contact.title}</h2>
-      <div class="cta">
-        <a class="btn" href="mailto:hi@yiming.work">{t.contact.emailCta}</a>
-        <a class="ghost" href="https://github.com/" rel="noreferrer">GitHub</a>
-      </div>
-    </div>
-    <div class="card">
-      <p class="eyebrow">What I enjoy</p>
-      <ul>
-        <li>Designing API + UI contracts together</li>
-        <li>Front-of-frontend polish with motion</li>
-        <li>Developer tooling that stays out of the way</li>
-        <li>Mentoring and pair architecture sessions</li>
-      </ul>
+    <div class="socials">
+      <a href="https://github.com/yiminghe" target="_blank" rel="noreferrer" aria-label="GitHub" class="social-link">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+      </a>
+      <a href="mailto:hi@yiming.work" aria-label="Email" class="social-link">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </svg>
+      </a>
     </div>
   </section>
 </SiteLayout>
 
 <style>
   .hero {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 2rem;
-    align-items: center;
-    padding: 1rem 0 2rem;
-  }
-
-  .hero__copy h1 {
-    font-size: clamp(2.4rem, 4vw, 3.2rem);
-    margin: 0.2rem 0 0.4rem;
-  }
-
-  .lede {
-    color: var(--muted);
-    font-size: 1.05rem;
-    line-height: 1.6;
-    max-width: 46ch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4rem 0 3rem;
+    max-width: 640px;
   }
 
   .eyebrow {
@@ -200,10 +60,24 @@ const featured = posts.slice(0, 3);
     margin: 0;
   }
 
+  h1 {
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    margin: 0.4rem 0 0.6rem;
+    line-height: 1.15;
+  }
+
+  .lede {
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 50ch;
+    margin: 0;
+  }
+
   .cta {
     display: flex;
     gap: 0.8rem;
-    margin: 1.4rem 0 0.8rem;
+    margin-top: 1.8rem;
   }
 
   .btn,
@@ -211,7 +85,6 @@ const featured = posts.slice(0, 3);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.35rem;
     padding: 0.8rem 1.4rem;
     border-radius: 999px;
     font-weight: 600;
@@ -226,11 +99,7 @@ const featured = posts.slice(0, 3);
   }
 
   .btn {
-    background: linear-gradient(
-      120deg,
-      var(--primary-bg),
-      var(--accent-bg)
-    );
+    background: linear-gradient(120deg, var(--primary-bg), var(--accent-bg));
     border-color: var(--primary-border);
     box-shadow: 0 10px 40px var(--primary-glow);
   }
@@ -249,11 +118,11 @@ const featured = posts.slice(0, 3);
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-top: 1rem;
+    margin-top: 1.4rem;
   }
 
   .chips span {
-    padding: 0.5rem 0.8rem;
+    padding: 0.45rem 0.8rem;
     border-radius: 999px;
     border: 1px solid var(--stroke);
     color: var(--muted);
@@ -261,295 +130,40 @@ const featured = posts.slice(0, 3);
     background: var(--surface);
   }
 
-  .hero__card {
-    border: 1px solid var(--stroke);
-    border-radius: 16px;
-    padding: 1.4rem;
-    background: var(--surface);
-    display: grid;
-    gap: 1rem;
-  }
-
-  .stat {
-    border: 1px solid var(--stroke);
-    border-radius: 12px;
-    padding: 1rem;
-    background: var(--surface-raised);
-  }
-
-  .stat strong {
-    display: block;
-    font-size: 1.6rem;
-    margin: 0.2rem 0;
-  }
-
-  .stat small {
-    color: var(--muted);
-  }
-
-  .stat.highlight {
-    border-color: var(--primary-border);
-  }
-
-  .panel {
-    margin-top: 3rem;
-    border: 1px solid var(--stroke);
-    border-radius: 20px;
-    padding: 1.8rem;
-    background: var(--surface);
-    box-shadow: 0 30px 120px var(--shadow);
-  }
-
-  .panel__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .panel h2,
-  .panel h3 {
-    margin: 0.4rem 0;
-  }
-
-  .body {
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .badges {
+  .socials {
     display: flex;
     gap: 0.6rem;
-    flex-wrap: wrap;
-    margin-top: 1rem;
+    margin-top: 1.8rem;
   }
 
-  .badges span {
-    padding: 0.45rem 0.8rem;
-    border: 1px dashed var(--stroke);
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
     border-radius: 12px;
+    border: 1px solid var(--stroke);
     color: var(--muted);
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-    margin-top: 1.2rem;
-  }
-
-  .card {
-    border: 1px solid var(--stroke);
-    border-radius: 16px;
-    padding: 1.2rem;
     background: var(--surface);
-    height: 100%;
-  }
-
-  .posts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
-    margin-top: 1.2rem;
-  }
-
-  .post {
-    display: block;
-    border: 1px solid var(--stroke);
-    border-radius: 14px;
-    padding: 1rem;
     text-decoration: none;
-    color: var(--text);
-    background: var(--surface-raised);
     transition:
-      transform 0.2s,
+      color 0.2s,
       border-color 0.2s,
+      transform 0.2s,
       box-shadow 0.2s;
   }
 
-  .post:hover {
-    transform: translateY(-3px);
-    border-color: var(--primary-border);
-    box-shadow: 0 15px 80px var(--primary-glow);
-  }
-
-  .tags {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-    margin-top: 0.6rem;
-  }
-
-  .tags span {
-    padding: 0.35rem 0.6rem;
-    border-radius: 10px;
-    background: var(--surface-tag);
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-
-  .read {
-    display: inline-block;
-    margin-top: 0.8rem;
-    color: var(--primary);
-    font-weight: 600;
-  }
-
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .interactive {
-    min-height: 260px;
-  }
-
-  .contact {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .contact ul {
-    padding-left: 1.2rem;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  .muted {
-    color: var(--muted);
-  }
-
-  .playground {
-    display: grid;
-    gap: 0.8rem;
-  }
-
-  .preview {
-    height: 160px;
-    border-radius: 14px;
-    border: 1px solid var(--stroke);
-    box-shadow: 0 10px 60px var(--shadow-heavy);
-  }
-
-  .controls label {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--muted);
-  }
-
-  .controls input[type="range"] {
-    width: 100%;
-    accent-color: var(--primary);
-  }
-
-  .swatches {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
-
-  .swatches button {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition:
-      transform 0.15s ease,
-      border-color 0.15s ease;
-  }
-
-  .swatches button:hover {
-    transform: translateY(-2px);
-  }
-
-  .swatches button.active {
-    border-color: var(--border-hover);
-  }
-
-  .tilt-wrapper {
-    display: grid;
-    gap: 0.8rem;
-  }
-
-  .tabs {
-    display: inline-flex;
-    gap: 0.35rem;
-  }
-
-  .tabs button {
-    background: var(--surface-hover);
-    border: 1px solid var(--stroke);
-    color: var(--muted);
-    border-radius: 10px;
-    padding: 0.4rem 0.8rem;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-
-  .tabs button.on {
+  .social-link:hover {
     color: var(--text);
     border-color: var(--primary-border);
-    background: linear-gradient(
-      120deg,
-      var(--primary-bg),
-      var(--accent-bg)
-    );
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px var(--primary-glow);
   }
 
-  .tilt-card {
-    position: relative;
-    border: 1px solid var(--stroke);
-    border-radius: 14px;
-    padding: 1rem;
-    background: var(--surface);
-    box-shadow: 0 20px 70px var(--shadow-heavy);
-    overflow: hidden;
-  }
-
-  .tilt-card h4 {
-    margin: 0 0 0.3rem;
-  }
-
-  .tilt-card p {
-    color: var(--muted);
-    margin: 0;
-  }
-
-  .tilt-glow {
-    position: absolute;
-    inset: -30%;
-    background:
-      radial-gradient(
-        circle at 30% 20%,
-        var(--gradient-1),
-        transparent 45%
-      ),
-      radial-gradient(
-        circle at 80% 30%,
-        var(--gradient-2),
-        transparent 40%
-      );
-    opacity: 0.8;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .tilt-card > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  @media (max-width: 900px) {
-    .hero,
-    .contact {
-      grid-template-columns: 1fr;
+  @media (max-width: 600px) {
+    .hero {
+      padding: 2rem 0;
     }
   }
 </style>

@@ -1,0 +1,374 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { resolveLocale, messages, SUPPORTED_LOCALES } from "../../i18n/strings";
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+
+const education = {
+  school: {
+    en: "Nanjing University of Posts and Telecommunications",
+    zh: "南京邮电大学",
+  },
+  college: {
+    en: "School of Artificial Intelligence",
+    zh: "人工智能学院",
+  },
+  major: {
+    en: "Data Science and Big Data Technology",
+    zh: "数据科学与大数据技术",
+  },
+  period: "2022.09 – 2026.06",
+};
+
+const experiences = [
+  {
+    company: { en: "DeepWhale (深鲸源)", zh: "深鲸源" },
+    department: { en: "Tech", zh: "技术" },
+    role: { en: "AI Agent Full-stack Dev Intern", zh: "AI Agent 全栈开发实习生" },
+    period: { en: `2026.01 – ${t.about.present}`, zh: `2026.01 – ${t.about.present}` },
+    current: true,
+  },
+  {
+    company: { en: "EuroDigit S.R.L", zh: "EuroDigit S.R.L" },
+    department: { en: "Tech Department", zh: "技术部 · 大前端" },
+    role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
+    period: { en: "2025.11 – 2026.01", zh: "2025.11 – 2026.01" },
+    current: false,
+  },
+  {
+    company: { en: "ByteDance", zh: "字节跳动" },
+    department: {
+      en: "Volcengine · Data Infra – Compute",
+      zh: "火山引擎 · Data-基础设施-计算",
+    },
+    role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
+    period: { en: "2025.06 – 2025.11", zh: "2025.06 – 2025.11" },
+    current: false,
+  },
+  {
+    company: { en: "Sealos", zh: "Sealos" },
+    department: {
+      en: "Zhuhai Huanjie Cloud Computing",
+      zh: "珠海环界云计算有限公司",
+    },
+    role: { en: "React & Node Dev", zh: "React & Node 开发工程师" },
+    period: { en: "2025.03 – 2025.05", zh: "2025.03 – 2025.05" },
+    current: false,
+  },
+  {
+    company: { en: "DiShi Smart", zh: "武汉第拾智慧信息科技" },
+    department: { en: "Tech – Frontend", zh: "技术-前端" },
+    role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
+    period: { en: "2024.07 – 2024.08", zh: "2024.07 – 2024.08" },
+    current: false,
+  },
+];
+---
+
+<SiteLayout
+  locale={locale}
+  t={t}
+  title={`${t.about.title} · Yiming`}
+  description={t.about.subtitle}
+>
+  <section class="about-page">
+    <!-- Header -->
+    <div class="page-header">
+      <p class="eyebrow">{t.about.subtitle}</p>
+      <h1>{t.about.title}</h1>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-bar">
+      <a class="contact-chip" href="mailto:hi@yiming.work">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </svg>
+        hi@yiming.work
+      </a>
+      <a class="contact-chip" href="https://github.com/yiminghe" target="_blank" rel="noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+
+    <!-- Education -->
+    <div class="section">
+      <h2 class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+          <path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/>
+        </svg>
+        {t.about.educationTitle}
+      </h2>
+      <div class="edu-card">
+        <div class="edu-main">
+          <h3>{education.school[locale]}</h3>
+          <p class="edu-college">{education.college[locale]}</p>
+          <p class="edu-major">{education.major[locale]}</p>
+        </div>
+        <span class="edu-period">{education.period}</span>
+      </div>
+    </div>
+
+    <!-- Work Experience -->
+    <div class="section">
+      <h2 class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        {t.about.experienceTitle}
+      </h2>
+      <div class="timeline">
+        {
+          experiences.map((exp) => (
+            <div class:list={["timeline-item", { current: exp.current }]}>
+              <div class="timeline-dot" />
+              <div class="timeline-card">
+                <p class="timeline-period">{exp.period[locale]}</p>
+                <h3 class="timeline-company">
+                  {exp.company[locale]}
+                  <span class="timeline-dept">{exp.department[locale]}</span>
+                </h3>
+                <p class="timeline-role">{exp.role[locale]}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .about-page {
+    padding: 1rem 0;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .page-header {
+    margin-bottom: 1.2rem;
+  }
+
+  .page-header h1 {
+    margin: 0.4rem 0 0;
+    font-size: clamp(2rem, 3.5vw, 2.6rem);
+  }
+
+  /* ---- Contact Bar ---- */
+  .contact-bar {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.4rem;
+  }
+
+  .contact-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--stroke);
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition:
+      border-color 0.2s,
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .contact-chip:hover {
+    border-color: var(--primary-border);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px var(--primary-glow);
+  }
+
+  .contact-chip svg {
+    flex-shrink: 0;
+    color: var(--muted);
+  }
+
+  /* ---- Section ---- */
+  .section {
+    margin-bottom: 2.4rem;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.15rem;
+    margin: 0 0 1rem;
+    color: var(--text);
+  }
+
+  .section-title svg {
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* ---- Education Card ---- */
+  .edu-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    padding: 1.4rem;
+    background: var(--surface);
+    box-shadow: 0 20px 80px var(--shadow);
+  }
+
+  .edu-card h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem;
+  }
+
+  .edu-college {
+    color: var(--muted);
+    margin: 0 0 0.15rem;
+    font-size: 0.92rem;
+  }
+
+  .edu-major {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.88rem;
+    opacity: 0.8;
+  }
+
+  .edu-period {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--stroke);
+    background: var(--surface-raised);
+    flex-shrink: 0;
+  }
+
+  /* ---- Timeline ---- */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--stroke);
+    border-radius: 1px;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -24px;
+    top: 1.3rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--stroke);
+    background: var(--surface-raised);
+    z-index: 1;
+  }
+
+  .timeline-item.current .timeline-dot {
+    border-color: var(--primary-border);
+    background: linear-gradient(135deg, var(--primary-bg), var(--accent-bg));
+    box-shadow: 0 0 0 4px var(--primary-glow);
+  }
+
+  .timeline-card {
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 1.1rem 1.3rem;
+    background: var(--surface);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .timeline-item.current .timeline-card {
+    border-color: var(--primary-border);
+    box-shadow: 0 15px 60px var(--primary-glow);
+  }
+
+  .timeline-period {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 0.4rem;
+  }
+
+  .timeline-company {
+    margin: 0 0 0.25rem;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .timeline-dept {
+    font-weight: 400;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+
+  .timeline-role {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 600px) {
+    .edu-card {
+      flex-direction: column;
+    }
+
+    .edu-period {
+      align-self: flex-start;
+    }
+
+    .timeline-company {
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+  }
+</style>

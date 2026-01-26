@@ -16,15 +16,15 @@ const { locale, t, title, description, ...rest } = Astro.props;
 
 const pathname = Astro.url.pathname;
 const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
+const isAbout = pathname.startsWith(`/${locale}/about`);
 const isBlog = pathname.startsWith(`/${locale}/blog`);
 const isGallery = pathname.startsWith(`/${locale}/gallery`);
 
 const navLinks = [
   { href: `/${locale}`, label: t.nav.home, active: isHome },
-  { href: `/${locale}#about`, label: t.nav.about, active: isHome },
+  { href: `/${locale}/about`, label: t.nav.about, active: isAbout },
   { href: `/${locale}/blog`, label: t.nav.blog, active: isBlog },
   { href: `/${locale}/gallery`, label: t.nav.gallery, active: isGallery },
-  { href: `/${locale}#contact`, label: t.nav.contact, active: isHome },
 ];
 ---
 
