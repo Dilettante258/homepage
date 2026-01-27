@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import type { Locale } from "../i18n/strings";
+import Font from "astro/components/Font.astro";
 
 type Props = {
   locale: Locale;
@@ -19,14 +20,11 @@ const barClassName = "page-transition-bar";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <title>{title ?? "Portfolio · Full\u2011stack Engineer"}</title>
     {description && <meta name="description" content={description} />}
+    <Font cssVariable="--font-heading" preload />
+    <Font cssVariable="--font-body" preload />
+
     <ClientRouter />
     <script is:inline>
       // 主题初始化
@@ -110,9 +108,7 @@ const barClassName = "page-transition-bar";
     --grain-opacity: 0.18;
     --grid-opacity: 0;
 
-    --font-heading: "Instrument Serif", Georgia, serif;
-    --font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-
+    /* Astro 会自动生成 --font-heading 和 --font-body CSS 变量 */
     font-family: var(--font-body);
     scroll-behavior: smooth;
     overflow: hidden;
