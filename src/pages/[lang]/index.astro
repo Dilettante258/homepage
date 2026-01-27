@@ -17,7 +17,7 @@ const featured = getFeaturedProjects();
 <SiteLayout locale={locale} t={t}>
   <section class="hero" transition:animate="fade">
     <div class="hero-content">
-      <h1>{t.hero.title}</h1>
+      <h1 set:html={t.hero.title} />
       <p class="lede">{t.hero.subtitle}</p>
       <div class="cta">
         <a class="btn-primary" href={`/${locale}/projects`}>{t.hero.ctaPrimary}</a>
@@ -51,38 +51,69 @@ const featured = getFeaturedProjects();
     <div class="project-list">
       {
         featured.map((item) => (
-          <article class="project-row">
-            <div class="project-thumb">
-              {item.cover ? (
-                <img src={item.cover} alt={item.title[locale]} loading="lazy" />
-              ) : (
-                <div
-                  class="project-gradient"
-                  style={`background: ${item.fallbackGradient};`}
-                />
-              )}
-            </div>
-            <div class="project-info">
-              <h3>{item.title[locale]}</h3>
-              <p class="project-desc">{item.description[locale]}</p>
-              <div class="project-meta">
-                {item.tech.slice(0, 3).map((techName) => (
-                  <span class="tech-tag">{techName}</span>
-                ))}
+          <article class="project-card">
+            <div
+              class="project-icon"
+              style={`background: ${item.fallbackGradient};`}
+            />
+            <div class="project-content">
+              <div class="project-header">
+                <h3>{item.title[locale]}</h3>
+                <div class="tech-icons">
+                  {item.tech.slice(0, 3).map((techName) => {
+                    const tech = techName.toLowerCase();
+                    return (
+                      <span class="tech-icon" title={techName}>
+                        {tech === 'react' && (
+                          <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38a2.167 2.167 0 0 0-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44a23.476 23.476 0 0 0-3.107-.534A23.892 23.892 0 0 0 12.769 4.7c1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442a22.73 22.73 0 0 0-3.113.538 15.02 15.02 0 0 1-.254-1.42c-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87a25.64 25.64 0 0 1-4.412.005 26.64 26.64 0 0 1-1.183-1.86c-.372-.64-.71-1.29-1.018-1.946a25.17 25.17 0 0 1 1.013-1.954c.38-.66.773-1.286 1.18-1.868A25.245 25.245 0 0 1 12 8.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933a25.952 25.952 0 0 0-1.345-2.32zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493a23.966 23.966 0 0 0-1.1-2.98c.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98a23.142 23.142 0 0 0-1.086 2.964c-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39a25.819 25.819 0 0 0 1.341-2.338zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143a22.005 22.005 0 0 1-2.006-.386c.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295a1.185 1.185 0 0 1-.553-.132c-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/>
+                          </svg>
+                        )}
+                        {tech === 'astro' && (
+                          <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16.074 16.86c-.72.616-2.157 1.035-3.812 1.035-2.032 0-3.735-.632-4.187-1.483-.161.488-.198 1.046-.198 1.402 0 0-.106 1.75 1.111 2.968 0-.632.513-1.145 1.145-1.145 1.083 0 1.082.945 1.081 1.712v.069c0 1.164.711 2.161 1.723 2.582a2.347 2.347 0 0 1-.236-1.029c0-1.11.652-1.523 1.41-2.003.602-.383 1.272-.807 1.733-1.66a3.129 3.129 0 0 0 .378-1.494 3.14 3.14 0 0 0-.148-.954z"/>
+                            <path d="M15.551.6c.196.244.296.572.496 1.229l4.368 14.347a18.18 18.18 0 0 0-5.222-1.768L12.35 4.8a.37.37 0 0 0-.71.002l-2.81 9.603a18.175 18.175 0 0 0-5.245 1.771L7.974 1.827c.2-.656.3-.984.497-1.227a1.613 1.613 0 0 1 .654-.484C9.415 0 9.757 0 10.443 0h2.997c.686 0 1.03 0 1.32.116a1.614 1.614 0 0 1 .791.484z"/>
+                          </svg>
+                        )}
+                        {tech === 'typescript' && (
+                          <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.95 3.95 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.38 4.38 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.2c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.12 2.12 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.72 27.72 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"/>
+                          </svg>
+                        )}
+                        {tech === 'rust' && (
+                          <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.836 11.630l-1.821-1.05-.291-.168-.168-.29-.663-1.149v-.002a6.802 6.802 0 0 0-.348-1.134L20.19 7.37l.168-.29.118-.488.236-1.001-1.001-.236-.488-.118-.29-.168-.95-.547a7.372 7.372 0 0 0-1.133-.348l-.468-.356-.29-.168-.169-.291-1.05-1.821-1.05 1.821-.168.291-.29.168-1.149.663a6.795 6.795 0 0 0-1.134.348l-.468.356-.29.168-.488.118-1.001.236.236 1.001.118.488.168.29.547.95a7.372 7.372 0 0 0-.348 1.133l-.356.468-.168.29-.29.169-1.821 1.05 1.821 1.05.29.168.169.29.663 1.149c.167.394.264.762.348 1.134l.356.468.168.29.118.488.236 1.001 1.001-.236.488-.118.29-.168.95-.547c.372.084.74.181 1.133.348l.468.356.29.168.169.291 1.05 1.821 1.05-1.821.168-.291.29-.168 1.149-.663a6.795 6.795 0 0 0 1.134-.348l.468-.356.29-.168.488-.118 1.001-.236-.236-1.001-.118-.488-.168-.29-.547-.95c.084-.372.181-.74.348-1.133l.356-.468.168-.29.29-.169 1.821-1.05zm-2.952 2.828a1.5 1.5 0 1 1-.001-3.001 1.5 1.5 0 0 1 .001 3.001zm-1.911 5.106a1.5 1.5 0 1 1-.001-3.001 1.5 1.5 0 0 1 .001 3.001zM16.5 22.5a1.5 1.5 0 1 1-.001-3.001 1.5 1.5 0 0 1 .001 3.001zm-4.5 1.8a1.5 1.5 0 1 1-.001-3.001A1.5 1.5 0 0 1 12 24.3zm-4.5-1.8a1.5 1.5 0 1 1-.001-3.001 1.5 1.5 0 0 1 .001 3.001zM5.027 19.564a1.5 1.5 0 1 1-.001-3.001 1.5 1.5 0 0 1 .001 3.001zM3.116 14.458a1.5 1.5 0 1 1-.001-3.001 1.5 1.5 0 0 1 .001 3.001zm1.911-5.106a1.5 1.5 0 1 1-.001-3.001 1.5 1.5 0 0 1 .001 3.001zM7.5 1.8a1.5 1.5 0 1 1-.001 3.001A1.5 1.5 0 0 1 7.5 1.8zm4.5-1.8a1.5 1.5 0 1 1-.001 3.001A1.5 1.5 0 0 1 12 0zm4.5 1.8a1.5 1.5 0 1 1-.001 3.001 1.5 1.5 0 0 1 .001-3.001zm2.473 3.552a1.5 1.5 0 1 1-.001 3.001 1.5 1.5 0 0 1 .001-3.001z"/>
+                          </svg>
+                        )}
+                        {(tech.includes('node') || tech.includes('javascript') || tech.includes('js')) && (
+                          <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M0 0h24v24H0V0z" fill="none"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                          </svg>
+                        )}
+                        {!['react', 'astro', 'typescript', 'rust', 'node', 'javascript', 'js'].some(t => tech.includes(t)) && (
+                          techName.charAt(0)
+                        )}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
+              <p class="project-desc">{item.description[locale]}</p>
             </div>
-            <div class="project-actions">
-              {item.links.live && (
-                <a href={item.links.live} target="_blank" rel="noreferrer" class="action-link">
-                  {t.projects.viewProject} &rarr;
-                </a>
-              )}
-              {item.links.github && (
-                <a href={item.links.github} target="_blank" rel="noreferrer" class="action-link secondary">
-                  {t.projects.viewCode}
-                </a>
-              )}
-            </div>
+            <a
+              href={item.links.live || item.links.github || '#'}
+              target="_blank"
+              rel="noreferrer"
+              class="project-link"
+              aria-label={`View ${item.title[locale]}`}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
           </article>
         ))
       }
@@ -101,10 +132,13 @@ const featured = getFeaturedProjects();
     grid-template-columns: minmax(0, 600px) 1fr;
     gap: 4rem;
     align-items: center;
+    width: 100%;
+    overflow: hidden;
   }
 
   .hero-content {
     max-width: 600px;
+    min-width: 0;
   }
 
   .hero-visual {
@@ -112,6 +146,7 @@ const featured = getFeaturedProjects();
     align-items: center;
     justify-content: center;
     min-height: 360px;
+    overflow: hidden;
   }
 
   h1 {
@@ -121,6 +156,8 @@ const featured = getFeaturedProjects();
     line-height: 1.2;
     letter-spacing: -0.02em;
     margin: 0 0 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .lede {
@@ -128,6 +165,8 @@ const featured = getFeaturedProjects();
     font-size: 1.05rem;
     line-height: 1.7;
     margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .cta {
@@ -195,6 +234,8 @@ const featured = getFeaturedProjects();
   .projects-section {
     border-top: 1px solid var(--stroke);
     padding: 3rem 0 2rem;
+    width: 100%;
+    overflow: hidden;
   }
 
   .section-header {
@@ -207,6 +248,8 @@ const featured = getFeaturedProjects();
     font-weight: 400;
     margin: 0 0 0.4rem;
     letter-spacing: -0.01em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .section-desc {
@@ -216,98 +259,107 @@ const featured = getFeaturedProjects();
   }
 
   .project-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
+    width: 100%;
   }
 
-  .project-row {
+  .project-card {
     display: grid;
-    grid-template-columns: 160px 1fr auto;
+    grid-template-columns: 48px 1fr auto;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
     padding: 1rem;
     border: 1px solid var(--stroke);
-    border-radius: 12px;
-    transition: border-color 0.15s;
+    border-radius: 10px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--surface);
   }
 
-  .project-row:hover {
+  .project-card:hover {
     border-color: var(--border-hover);
+    background: var(--surface-hover);
   }
 
-  .project-thumb {
-    width: 160px;
-    aspect-ratio: 16 / 10;
+  .project-icon {
+    width: 48px;
+    height: 48px;
     border-radius: 8px;
-    overflow: hidden;
     flex-shrink: 0;
   }
 
-  .project-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  .project-content {
+    flex: 1;
+    min-width: 0;
   }
 
-  .project-gradient {
-    width: 100%;
-    height: 100%;
+  .project-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
-  .project-info h3 {
+  .project-header h3 {
     font-family: var(--font-heading);
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin: 0 0 0.3rem;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.01em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .tech-icons {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .tech-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--surface-tag);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+  }
+
+  .tech-icon svg {
+    width: 14px;
+    height: 14px;
   }
 
   .project-desc {
     color: var(--muted);
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     line-height: 1.5;
-    margin: 0 0 0.5rem;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
-  .project-meta {
+  .project-link {
     display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-  }
-
-  .tech-tag {
-    font-size: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
     color: var(--muted);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    background: var(--surface-tag);
-  }
-
-  .project-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.3rem;
+    transition: color 0.15s;
     flex-shrink: 0;
   }
 
-  .action-link {
-    font-size: 0.85rem;
-    font-weight: 500;
+  .project-link:hover {
     color: var(--text);
-    text-decoration: none;
-    white-space: nowrap;
-    transition: color 0.15s;
-  }
-
-  .action-link.secondary {
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  .action-link:hover {
-    color: var(--primary);
   }
 
   .view-all {
@@ -322,6 +374,12 @@ const featured = getFeaturedProjects();
 
   .view-all:hover {
     color: var(--text);
+  }
+
+  @media (max-width: 900px) {
+    .project-list {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 700px) {
@@ -339,18 +397,20 @@ const featured = getFeaturedProjects();
       flex-wrap: wrap;
     }
 
-    .project-row {
-      grid-template-columns: 1fr;
-      gap: 0.8rem;
+    .project-card {
+      grid-template-columns: 40px 1fr auto;
+      gap: 0.75rem;
     }
 
-    .project-thumb {
-      width: 100%;
+    .project-icon {
+      width: 40px;
+      height: 40px;
     }
 
-    .project-actions {
-      flex-direction: row;
-      align-items: center;
+    .project-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
     }
   }
 </style>

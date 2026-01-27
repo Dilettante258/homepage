@@ -69,10 +69,10 @@ export const projectItems: ProjectItem[] = [
 			zh: '你正在看的这个网站 — 基于 Astro、Solid.js 和 React 岛屿架构，支持国际化与深色模式。',
 		},
 		tags: ['frontend', 'oss'],
-		tech: ['Astro', 'Solid.js', 'React'],
+		tech: ['Astro', 'React', 'TypeScript'],
 		fallbackGradient: 'linear-gradient(120deg, #9BB7FF, #c1a3ff)',
 		links: {
-			github: 'https://github.com/yiminghe/homepage',
+			github: 'https://github.com/Dilettante258he/homepage',
 		},
 		featured: true,
 		createdAt: '2026-01-10',

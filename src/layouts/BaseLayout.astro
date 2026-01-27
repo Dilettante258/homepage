@@ -112,7 +112,6 @@ const barClassName = "page-transition-bar";
     --font-mono: ui-monospace, "SF Mono", Monaco, Menlo, Consolas, "Courier New", monospace;
     font-family: var(--font-body);
     scroll-behavior: smooth;
-    overflow: hidden;
   }
 
   :root[data-theme="light"] {
@@ -158,14 +157,20 @@ const barClassName = "page-transition-bar";
     }
   }
 
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     overflow-y: auto;
+    overflow-x: hidden;
     margin: 0;
     min-height: 100svh;
     background: var(--bg);
     color: var(--text);
     position: relative;
-    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
     transition:
       background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
       color 0.4s cubic-bezier(0.4, 0, 0.2, 1);

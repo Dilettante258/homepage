@@ -108,9 +108,9 @@ export const messages: Record<Locale, Messages> = {
 			contact: 'Contact'
 		},
 		hero: {
-			title: 'Full‑stack engineer crafting calm experiences.',
+			title: 'Hello,<br>I\'m Dilettante258.',
 			subtitle:
-				'I design resilient backends, expressive frontends, and the glue that keeps teams shipping fast.',
+				'Passionate about crafting beautiful, modern web experiences with cutting-edge technologies.',
 			ctaPrimary: 'View projects',
 			ctaGallery: 'Gallery',
 			ctaSecondary: 'Let\u2019s talk'
@@ -185,7 +185,7 @@ export const messages: Record<Locale, Messages> = {
 			},
 		},
 		home: {
-			projectsTitle: 'Selected Projects',
+			projectsTitle: 'Pinned Projects',
 			projectsSubtitle: 'A few things I\'ve built recently.',
 		},
 		about: {
@@ -215,8 +215,8 @@ export const messages: Record<Locale, Messages> = {
 			contact: '联系'
 		},
 		hero: {
-			title: '全栈工程师，专注平静而可靠的体验',
-			subtitle: '我把复杂需求拆解成优雅的界面与稳健的后端，让团队高效落地想法。',
+			title: '你好，<br>我是 Dilettante258。',
+			subtitle: '热衷于用前沿技术打造优雅、现代的 Web 体验。',
 			ctaPrimary: '查看项目',
 			ctaGallery: '组件集',
 			ctaSecondary: '聊一聊'
@@ -291,7 +291,7 @@ export const messages: Record<Locale, Messages> = {
 			},
 		},
 		home: {
-			projectsTitle: '精选项目',
+			projectsTitle: 'Pinned Project',
 			projectsSubtitle: '近期构建的部分作品。',
 		},
 		about: {

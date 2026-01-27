@@ -68,11 +68,13 @@ const plusProps: () => Partial<HTMLAttributes<"div">> = () => ({
   .grid-container {
     position: relative;
     width: 100%;
+    max-width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 320px;
+    overflow: hidden;
   }
 
   .interactive-grid {
@@ -86,7 +88,7 @@ const plusProps: () => Partial<HTMLAttributes<"div">> = () => ({
     font-family: var(--font-mono);
     cursor: none;
     width: 100%;
-    max-width: 480px;
+    max-width: min(480px, 100%);
     opacity: 0.6;
   }
 

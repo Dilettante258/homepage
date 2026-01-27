@@ -30,8 +30,14 @@ const experiences = [
   {
     company: { en: "DeepWhale (深鲸源)", zh: "深鲸源" },
     department: { en: "Tech", zh: "技术" },
-    role: { en: "AI Agent Full-stack Dev Intern", zh: "AI Agent 全栈开发实习生" },
-    period: { en: `2026.01 – ${t.about.present}`, zh: `2026.01 – ${t.about.present}` },
+    role: {
+      en: "AI Agent Full-stack Dev Intern",
+      zh: "AI Agent 全栈开发实习生",
+    },
+    period: {
+      en: `2026.01 – ${t.about.present}`,
+      zh: `2026.01 – ${t.about.present}`,
+    },
     current: true,
   },
   {
@@ -52,11 +58,11 @@ const experiences = [
     current: false,
   },
   {
-    company: { en: "Sealos", zh: "Sealos" },
-    department: {
+    company: {
       en: "Zhuhai Huanjie Cloud Computing",
       zh: "珠海环界云计算有限公司",
     },
+    department: { en: "Sealos", zh: "Sealos" },
     role: { en: "React & Node Dev", zh: "React & Node 开发工程师" },
     period: { en: "2025.03 – 2025.05", zh: "2025.03 – 2025.05" },
     current: false,
@@ -74,7 +80,7 @@ const experiences = [
 <SiteLayout
   locale={locale}
   t={t}
-  title={`${t.about.title} · Yiming`}
+  title={`${t.about.title} · Dilettante258`}
   description={t.about.subtitle}
 >
   <section class="about-page" transition:animate="fade">
@@ -87,15 +93,31 @@ const experiences = [
     <!-- Contact -->
     <div class="contact-bar">
       <a class="contact-chip" href="mailto:wang1m@outlook.com">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
         </svg>
         wang1m@outlook.com
       </a>
-      <a class="contact-chip" href="https://github.com/Dilettante258" target="_blank" rel="noreferrer">
+      <a
+        class="contact-chip"
+        href="https://github.com/Dilettante258"
+        target="_blank"
+        rel="noreferrer"
+      >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          <path
+            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+          ></path>
         </svg>
         GitHub
       </a>
@@ -104,9 +126,18 @@ const experiences = [
     <!-- Education -->
     <div class="section">
       <h2 class="section-title">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-          <path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+          <path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"></path>
         </svg>
         {t.about.educationTitle}
       </h2>
@@ -123,9 +154,18 @@ const experiences = [
     <!-- Work Experience -->
     <div class="section">
       <h2 class="section-title">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path>
         </svg>
         {t.about.experienceTitle}
       </h2>
@@ -153,6 +193,9 @@ const experiences = [
 <style>
   .about-page {
     padding: 2rem 0;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .subtitle {
@@ -192,6 +235,10 @@ const experiences = [
     text-decoration: none;
     font-size: 0.85rem;
     transition: color 0.15s;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .contact-chip:hover {
@@ -232,6 +279,13 @@ const experiences = [
     border: 1px solid var(--stroke);
     border-radius: 10px;
     padding: 1.2rem;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .edu-main {
+    flex: 1;
+    min-width: 0;
   }
 
   .edu-card h3 {
@@ -239,12 +293,16 @@ const experiences = [
     margin: 0 0 0.25rem;
     font-size: 1rem;
     font-weight: 400;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .edu-college {
     color: var(--muted);
     margin: 0 0 0.1rem;
     font-size: 0.88rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .edu-major {
@@ -252,6 +310,8 @@ const experiences = [
     margin: 0;
     font-size: 0.85rem;
     opacity: 0.7;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .edu-period {
@@ -265,6 +325,8 @@ const experiences = [
   .timeline {
     position: relative;
     padding-left: 24px;
+    width: 100%;
+    overflow: hidden;
   }
 
   .timeline::before {
@@ -300,6 +362,8 @@ const experiences = [
   .timeline-card {
     border-bottom: 1px solid var(--stroke);
     padding: 1rem 0;
+    width: 100%;
+    overflow: hidden;
   }
 
   .timeline-item:last-child .timeline-card {
@@ -322,18 +386,24 @@ const experiences = [
     align-items: baseline;
     gap: 0.5rem;
     flex-wrap: wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .timeline-dept {
     font-family: var(--font-body);
     font-size: 0.85rem;
     color: var(--muted);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .timeline-role {
     margin: 0;
     color: var(--muted);
     font-size: 0.88rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   @media (max-width: 600px) {

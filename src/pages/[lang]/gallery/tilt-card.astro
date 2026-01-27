@@ -21,7 +21,7 @@ const item = galleryItems.find((i) => i.slug === "tilt-card")!;
 <SiteLayout
   locale={locale}
   t={t}
-  title={`${item.title[locale]} · Yiming`}
+  title={`${item.title[locale]} · Dilettante258`}
   description={item.description[locale]}
 >
   <section
@@ -35,9 +35,11 @@ const item = galleryItems.find((i) => i.slug === "tilt-card")!;
     <div class="detail-header">
       <div>
         <div class="tags">
-          {item.tags.map((tag) => (
-            <span>{t.gallery.tagLabels[tag] ?? tag}</span>
-          ))}
+          {
+            item.tags.map((tag) => (
+              <span>{t.gallery.tagLabels[tag] ?? tag}</span>
+            ))
+          }
         </div>
         <h1>{item.title[locale]}</h1>
         <p class="desc">{item.description[locale]}</p>
