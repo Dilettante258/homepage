@@ -4,6 +4,7 @@ import solidJs from '@astrojs/solid-js';
 import react from '@astrojs/react';
 import viewTimelinePlugin from './src/remark/view-timeline';
 import { fontProviders } from "astro/config";
+import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
   integrations: [
@@ -14,6 +15,7 @@ export default defineConfig({
       include: ['**/solid/*'],
     }),
   ],
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'zh'],
@@ -22,9 +24,11 @@ export default defineConfig({
       redirectToDefaultLocale: true
     }
   },
+
   markdown: {
     rehypePlugins: [viewTimelinePlugin]
   },
+
   experimental: {
     fonts: [
       {
@@ -46,6 +50,7 @@ export default defineConfig({
         fallbacks: ["system-ui", "-apple-system", "sans-serif"]
       }
     ]
-  }
+  },
 
+  adapter: cloudflare()
 });
