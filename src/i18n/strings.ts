@@ -35,6 +35,7 @@ export type Messages = {
 		sortOldest: string;
 		layoutGrid: string;
 		layoutList: string;
+		backToBlog: string;
 	};
 	gallery: {
 		title: string;
@@ -134,6 +135,7 @@ export const messages: Record<Locale, Messages> = {
 			sortOldest: 'Oldest first',
 			layoutGrid: 'Grid',
 			layoutList: 'List',
+			backToBlog: 'Back to Blog',
 		},
 		gallery: {
 			title: 'Gallery',
@@ -240,6 +242,7 @@ export const messages: Record<Locale, Messages> = {
 			sortOldest: '最早优先',
 			layoutGrid: '网格',
 			layoutList: '列表',
+			backToBlog: '返回博客',
 		},
 		gallery: {
 			title: '组件示例',
