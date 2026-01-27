@@ -38,8 +38,6 @@
 </button>
 
 <script>
-  let isInitialized = false;
-
   function handleThemeToggle() {
     const current = document.documentElement.dataset.theme;
     const next = current === "light" ? "dark" : "light";
@@ -48,26 +46,17 @@
   }
 
   function setupThemeToggle() {
-    if (isInitialized) return;
-
     const btn = document.querySelector(".theme-toggle");
     if (!btn) return;
 
-    btn.addEventListener("click", handleThemeToggle);
-    isInitialized = true;
+    // 因为使用了 transition:persist，元素和事件监听器会在导航时保持
+    // 只需要在初始加载时绑定一次
+    btn.addEventListener("click", handleThemeToggle, { once: false });
   }
 
-  // 初始化
-  setupThemeToggle();
-
-  // 监听页面导航事件（View Transitions 会保持元素，所以不需要重新绑定）
-  document.addEventListener("astro:page-load", () => {
-    // 因为使用了 transition:persist，按钮元素会保持，事件监听器也会保持
-    // 这里只需要确保在完全重新加载时重新初始化
-    if (!isInitialized) {
-      setupThemeToggle();
-    }
-  });
+  // 使用 astro:page-load 统一处理
+  // 由于 transition:persist，实际上只会在首次加载时执行一次绑定
+  document.addEventListener("astro:page-load", setupThemeToggle, { once: true });
 </script>
 
 <style>

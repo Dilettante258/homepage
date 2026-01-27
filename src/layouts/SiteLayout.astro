@@ -3,6 +3,7 @@ import type { HTMLAttributes } from "astro/types";
 import BaseLayout from "./BaseLayout.astro";
 import LanguageSwitcher from "../components/LanguageSwitcher.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
+import NavLinks from "../components/NavLinks.astro";
 import type { Locale, Messages } from "../i18n/strings";
 
 type Props = {
@@ -13,21 +14,6 @@ type Props = {
 } & HTMLAttributes<"main">;
 
 const { locale, t, title, description, ...rest } = Astro.props;
-
-const pathname = Astro.url.pathname;
-const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
-const isAbout = pathname.startsWith(`/${locale}/about`);
-const isBlog = pathname.startsWith(`/${locale}/blog`);
-const isGallery = pathname.startsWith(`/${locale}/gallery`);
-const isProjects = pathname.startsWith(`/${locale}/projects`);
-
-const navLinks = [
-  { href: `/${locale}`, label: t.nav.home, active: isHome },
-  { href: `/${locale}/about`, label: t.nav.about, active: isAbout },
-  { href: `/${locale}/blog`, label: t.nav.blog, active: isBlog },
-  { href: `/${locale}/projects`, label: t.nav.projects, active: isProjects },
-  { href: `/${locale}/gallery`, label: t.nav.gallery, active: isGallery },
-];
 ---
 
 <BaseLayout locale={locale} title={title} description={description}>
@@ -35,15 +21,7 @@ const navLinks = [
     <div class="brand">
       <strong class="brand-name">Yiming</strong>
     </div>
-    <nav class="nav">
-      {
-        navLinks.map((link) => (
-          <a class={link.active ? "active" : ""} href={link.href}>
-            {link.label}
-          </a>
-        ))
-      }
-    </nav>
+    <NavLinks locale={locale} t={t} />
     <div class="header-actions">
       <LanguageSwitcher locale={locale} />
       <ThemeToggle />
@@ -56,34 +34,6 @@ const navLinks = [
     <p>{t.footer.note}</p>
   </footer>
 </BaseLayout>
-
-<script>
-  function updateActiveNav() {
-    const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll('.nav a');
-
-    navLinks.forEach((link) => {
-      const href = link.getAttribute('href');
-      if (!href) return;
-
-      // 移除所有活动状态
-      link.classList.remove('active');
-
-      // 检查是否匹配当前路径
-      if (currentPath === href || currentPath === href + '/') {
-        link.classList.add('active');
-      } else if (href !== '/' && currentPath.startsWith(href + '/')) {
-        link.classList.add('active');
-      }
-    });
-  }
-
-  // 初始化
-  updateActiveNav();
-
-  // 监听页面导航事件
-  document.addEventListener('astro:page-load', updateActiveNav);
-</script>
 
 <style>
   .shell {
@@ -127,33 +77,6 @@ const navLinks = [
     letter-spacing: -0.01em;
   }
 
-  .nav {
-    display: flex;
-    gap: 0.25rem;
-    flex-wrap: wrap;
-    margin-left: auto;
-  }
-
-  .nav a {
-    position: relative;
-    color: var(--muted);
-    text-decoration: none;
-    padding: 0.4rem 0.7rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .nav a:hover {
-    color: var(--text);
-    background: var(--surface-hover);
-  }
-
-  .nav a.active {
-    color: var(--text);
-    background: var(--surface-tag);
-  }
-
   .header-actions {
     display: flex;
     align-items: center;
@@ -177,12 +100,6 @@ const navLinks = [
   @media (max-width: 700px) {
     .header {
       flex-wrap: wrap;
-    }
-
-    .nav {
-      order: 3;
-      width: 100%;
-      margin-left: 0;
     }
   }
 </style>

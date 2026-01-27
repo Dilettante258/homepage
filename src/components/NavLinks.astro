@@ -1,0 +1,154 @@
+---
+import type { Locale, Messages } from "../i18n/strings";
+
+type Props = {
+  locale: Locale;
+  t: Messages;
+};
+
+const { locale, t } = Astro.props;
+
+const pathname = Astro.url.pathname;
+const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
+const isAbout = pathname.startsWith(`/${locale}/about`);
+const isBlog = pathname.startsWith(`/${locale}/blog`);
+const isGallery = pathname.startsWith(`/${locale}/gallery`);
+const isProjects = pathname.startsWith(`/${locale}/projects`);
+
+const navLinks = [
+  { href: `/${locale}`, label: t.nav.home, active: isHome },
+  { href: `/${locale}/about`, label: t.nav.about, active: isAbout },
+  { href: `/${locale}/blog`, label: t.nav.blog, active: isBlog },
+  { href: `/${locale}/projects`, label: t.nav.projects, active: isProjects },
+  { href: `/${locale}/gallery`, label: t.nav.gallery, active: isGallery },
+];
+---
+
+<nav class="nav">
+  {
+    navLinks.map((link) => (
+      <a class={link.active ? "active" : ""} href={link.href} data-nav-link>
+        <span>{link.label}</span>
+      </a>
+    ))
+  }
+</nav>
+
+<script>
+  function updateActiveNav() {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll("[data-nav-link]");
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (!href) return;
+
+      // 移除所有活动状态
+      link.classList.remove("active");
+
+      // 规范化路径（去除末尾斜杠）
+      const normalizedCurrent = currentPath.replace(/\/$/, "");
+      const normalizedHref = href.replace(/\/$/, "");
+
+      // 精确匹配当前路径
+      if (normalizedCurrent === normalizedHref) {
+        link.classList.add("active");
+      }
+      // 如果是子路径，且不是首页链接
+      else if (normalizedCurrent.startsWith(normalizedHref + "/")) {
+        // 检查是否是首页链接（形如 /zh 或 /en）
+        const isHomeLink = normalizedHref.split("/").length === 2;
+        if (!isHomeLink) {
+          link.classList.add("active");
+        }
+      }
+    });
+  }
+
+  // 使用 astro:page-load 统一处理初始化和导航后更新
+  document.addEventListener("astro:page-load", updateActiveNav);
+</script>
+
+<style>
+  .nav {
+    position: relative;
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  .nav a {
+    position: relative;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  .nav a span {
+    display: inline-block;
+    padding: 0.4rem 0.7rem;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+
+  .nav a:hover {
+    color: var(--text);
+  }
+
+  .nav a:hover:not(.active) span {
+    transform: scale(1.05);
+  }
+
+  .nav a.active {
+    color: var(--text);
+  }
+
+  .nav a.active span {
+    anchor-name: --active-nav;
+  }
+
+  /* 滑动背景指示器 */
+  .nav::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    background: var(--surface-tag);
+    border-radius: 6px;
+    position-anchor: --active-nav;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    left: anchor(left);
+    right: anchor(right);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  /* 为不支持 anchor positioning 的浏览器提供 fallback */
+  @supports not (anchor-name: --test) {
+    .nav::before {
+      display: none;
+    }
+
+    .nav a.active {
+      background: var(--surface-tag);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav a:hover:not(.active) {
+      background: var(--surface-hover);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .nav {
+      order: 3;
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+</style>

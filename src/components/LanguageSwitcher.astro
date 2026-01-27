@@ -6,9 +6,24 @@ const { locale } = Astro.props;
 
 const buildHref = (target: Locale) => {
   const segments = Astro.url.pathname.split("/").filter(Boolean);
-  // ensure locale is always at index 0 when prefixDefaultLocale is on
-  if (!segments.length) return `/${target}`;
+
+  // 如果是首页，直接返回目标语言首页
+  if (!segments.length || segments.length === 1) {
+    return `/${target}`;
+  }
+
+  // 替换语言代码（第一个段）
   segments[0] = target;
+
+  // 检查是否是详情页（3个或更多段，如 /zh/blog/post-slug）
+  // 如果是详情页，只保留到列表页级别（如 /en/blog）
+  // 因为详情页的 slug 可能在不同语言下不存在
+  if (segments.length > 2) {
+    // 保留语言和分类（如 blog, gallery, projects）
+    return `/${segments[0]}/${segments[1]}`;
+  }
+
+  // 列表页或其他页面，保持完整路径
   return `/${segments.join("/")}`;
 };
 ---
@@ -16,7 +31,6 @@ const buildHref = (target: Locale) => {
 <div
   class="switcher"
   aria-label="Choose language"
-  transition:persist="switcher"
 >
   {
     SUPPORTED_LOCALES.map((code) => (
@@ -51,10 +65,7 @@ const buildHref = (target: Locale) => {
     });
   }
 
-  // 初始化
-  updateActiveLocale();
-
-  // 监听页面导航事件（View Transitions）
+  // 使用 astro:page-load 统一处理初始化和导航后更新
   document.addEventListener("astro:page-load", updateActiveLocale);
 </script>
 

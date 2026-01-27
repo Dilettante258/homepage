@@ -61,7 +61,7 @@ const allTags = getAllTags();
             data-title={item.title[locale]}
             data-date={item.createdAt}
             data-order={String(idx)}
-            style={`view-transition-name: gallery-${item.slug};`}
+            transition:name={`gallery-${item.slug}`}
           >
             <div class={`card-thumbnail card-thumbnail--${item.aspect}`}>
               {item.cover ? (
@@ -94,25 +94,19 @@ const allTags = getAllTags();
   import { initListControls } from "../../../scripts/list-controls";
 
   function setupListControls() {
-    // 只在当前页面是 gallery 列表页时初始化
     const container = document.querySelector(".gallery-container");
     if (!container) return;
 
-    // 使用双重 requestAnimationFrame 确保渲染完全完成
+    // 使用 requestAnimationFrame 确保 DOM 渲染完成后初始化
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        initListControls({
-          containerSelector: ".gallery-container",
-          cardSelector: ".gallery-card",
-        });
+      initListControls({
+        containerSelector: ".gallery-container",
+        cardSelector: ".gallery-card",
       });
     });
   }
 
-  // 初始化
-  setupListControls();
-
-  // View Transitions 导航后重新初始化
+  // 使用 astro:page-load 统一处理初始化和导航后更新
   document.addEventListener("astro:page-load", setupListControls);
 </script>
 
