@@ -105,29 +105,24 @@ const layoutIcons: Record<LayoutMode, string> = {
   }
 
   .filter-btn {
-    padding: 0.4rem 0.8rem;
-    border-radius: 999px;
-    border: 1px solid var(--stroke);
-    background: var(--surface-hover);
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
     color: var(--muted);
     cursor: pointer;
     font: inherit;
     font-size: 0.85rem;
-    transition:
-      background 0.2s,
-      color 0.2s,
-      border-color 0.2s;
+    transition: color 0.15s;
   }
 
   .filter-btn:hover {
     color: var(--text);
-    border-color: var(--border-hover);
   }
 
   .filter-btn.active {
     color: var(--text);
-    border-color: var(--primary-border);
-    background: linear-gradient(120deg, var(--primary-bg), var(--accent-bg));
+    background: var(--surface-tag);
   }
 
   .sort-group {
@@ -143,15 +138,15 @@ const layoutIcons: Record<LayoutMode, string> = {
   }
 
   .sort-select {
-    padding: 0.4rem 0.8rem;
-    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
     border: 1px solid var(--stroke);
-    background: var(--surface-hover);
+    background: transparent;
     color: var(--text);
     font: inherit;
     font-size: 0.85rem;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: border-color 0.15s;
   }
 
   .sort-select:hover,
@@ -162,27 +157,24 @@ const layoutIcons: Record<LayoutMode, string> = {
 
   .layout-toggle {
     display: inline-flex;
-    gap: 0.25rem;
+    gap: 2px;
     border: 1px solid var(--stroke);
-    border-radius: 999px;
-    padding: 0.15rem;
-    background: var(--surface-hover);
+    border-radius: 8px;
+    padding: 2px;
   }
 
   .layout-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 999px;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
     border: none;
     background: transparent;
     color: var(--muted);
     cursor: pointer;
-    transition:
-      background 0.2s,
-      color 0.2s;
+    transition: color 0.15s;
   }
 
   .layout-btn:hover {
@@ -190,7 +182,7 @@ const layoutIcons: Record<LayoutMode, string> = {
   }
 
   .layout-btn.active {
-    background: linear-gradient(120deg, var(--primary-bg), var(--accent-bg));
+    background: var(--surface-tag);
     color: var(--text);
   }
 

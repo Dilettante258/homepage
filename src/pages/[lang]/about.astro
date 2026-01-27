@@ -80,20 +80,20 @@ const experiences = [
   <section class="about-page">
     <!-- Header -->
     <div class="page-header">
-      <p class="eyebrow">{t.about.subtitle}</p>
+      <p class="subtitle">{t.about.subtitle}</p>
       <h1>{t.about.title}</h1>
     </div>
 
     <!-- Contact -->
     <div class="contact-bar">
-      <a class="contact-chip" href="mailto:hi@yiming.work">
+      <a class="contact-chip" href="mailto:wang1m@outlook.com">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="4" width="20" height="16" rx="2"/>
           <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
         </svg>
-        hi@yiming.work
+        wang1m@outlook.com
       </a>
-      <a class="contact-chip" href="https://github.com/yiminghe" target="_blank" rel="noreferrer">
+      <a class="contact-chip" href="https://github.com/Dilettante258" target="_blank" rel="noreferrer">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
         </svg>
@@ -152,72 +152,68 @@ const experiences = [
 
 <style>
   .about-page {
-    padding: 1rem 0;
+    padding: 2rem 0;
   }
 
-  .eyebrow {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 12px;
+  .subtitle {
     color: var(--muted);
-    margin: 0;
+    font-size: 0.9rem;
+    margin: 0 0 0.3rem;
   }
 
   .page-header {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
   }
 
   .page-header h1 {
-    margin: 0.4rem 0 0;
-    font-size: clamp(2rem, 3.5vw, 2.6rem);
+    font-family: var(--font-heading);
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 
   /* ---- Contact Bar ---- */
   .contact-bar {
     display: flex;
-    gap: 0.6rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
-    margin-bottom: 2.4rem;
+    margin-bottom: 2.5rem;
   }
 
   .contact-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.55rem 1rem;
-    border-radius: 999px;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
     border: 1px solid var(--stroke);
-    background: var(--surface);
-    color: var(--text);
+    color: var(--muted);
     text-decoration: none;
-    font-size: 0.9rem;
-    transition:
-      border-color 0.2s,
-      transform 0.2s,
-      box-shadow 0.2s;
+    font-size: 0.85rem;
+    transition: color 0.15s;
   }
 
   .contact-chip:hover {
-    border-color: var(--primary-border);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 24px var(--primary-glow);
+    color: var(--text);
   }
 
   .contact-chip svg {
     flex-shrink: 0;
-    color: var(--muted);
   }
 
   /* ---- Section ---- */
   .section {
-    margin-bottom: 2.4rem;
+    margin-bottom: 2.5rem;
   }
 
   .section-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 1.15rem;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 400;
     margin: 0 0 1rem;
     color: var(--text);
   }
@@ -234,111 +230,94 @@ const experiences = [
     align-items: flex-start;
     gap: 1rem;
     border: 1px solid var(--stroke);
-    border-radius: 16px;
-    padding: 1.4rem;
-    background: var(--surface);
-    box-shadow: 0 20px 80px var(--shadow);
+    border-radius: 10px;
+    padding: 1.2rem;
   }
 
   .edu-card h3 {
-    margin: 0 0 0.3rem;
-    font-size: 1.05rem;
+    font-family: var(--font-heading);
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 400;
   }
 
   .edu-college {
     color: var(--muted);
-    margin: 0 0 0.15rem;
-    font-size: 0.92rem;
+    margin: 0 0 0.1rem;
+    font-size: 0.88rem;
   }
 
   .edu-major {
     color: var(--muted);
     margin: 0;
-    font-size: 0.88rem;
-    opacity: 0.8;
+    font-size: 0.85rem;
+    opacity: 0.7;
   }
 
   .edu-period {
     white-space: nowrap;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--muted);
-    padding: 0.3rem 0.7rem;
-    border-radius: 999px;
-    border: 1px solid var(--stroke);
-    background: var(--surface-raised);
     flex-shrink: 0;
   }
 
   /* ---- Timeline ---- */
   .timeline {
     position: relative;
-    padding-left: 28px;
+    padding-left: 24px;
   }
 
   .timeline::before {
     content: "";
     position: absolute;
-    left: 7px;
+    left: 5px;
     top: 8px;
     bottom: 8px;
-    width: 2px;
+    width: 1px;
     background: var(--stroke);
-    border-radius: 1px;
   }
 
   .timeline-item {
     position: relative;
-    margin-bottom: 1rem;
-  }
-
-  .timeline-item:last-child {
     margin-bottom: 0;
   }
 
   .timeline-dot {
     position: absolute;
-    left: -24px;
-    top: 1.3rem;
-    width: 12px;
-    height: 12px;
+    left: -21px;
+    top: 1.2rem;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    border: 2px solid var(--stroke);
-    background: var(--surface-raised);
+    background: var(--muted);
     z-index: 1;
   }
 
   .timeline-item.current .timeline-dot {
-    border-color: var(--primary-border);
-    background: linear-gradient(135deg, var(--primary-bg), var(--accent-bg));
-    box-shadow: 0 0 0 4px var(--primary-glow);
+    background: var(--primary);
   }
 
   .timeline-card {
-    border: 1px solid var(--stroke);
-    border-radius: 14px;
-    padding: 1.1rem 1.3rem;
-    background: var(--surface);
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s;
+    border-bottom: 1px solid var(--stroke);
+    padding: 1rem 0;
   }
 
-  .timeline-item.current .timeline-card {
-    border-color: var(--primary-border);
-    box-shadow: 0 15px 60px var(--primary-glow);
+  .timeline-item:last-child .timeline-card {
+    border-bottom: none;
   }
 
   .timeline-period {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 0.78rem;
     color: var(--muted);
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.3rem;
+    font-variant-numeric: tabular-nums;
   }
 
   .timeline-company {
-    margin: 0 0 0.25rem;
-    font-size: 1.05rem;
+    font-family: var(--font-heading);
+    margin: 0 0 0.2rem;
+    font-size: 1rem;
+    font-weight: 400;
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
@@ -346,24 +325,20 @@ const experiences = [
   }
 
   .timeline-dept {
-    font-weight: 400;
-    font-size: 0.88rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
     color: var(--muted);
   }
 
   .timeline-role {
     margin: 0;
     color: var(--muted);
-    font-size: 0.92rem;
+    font-size: 0.88rem;
   }
 
   @media (max-width: 600px) {
     .edu-card {
       flex-direction: column;
-    }
-
-    .edu-period {
-      align-self: flex-start;
     }
 
     .timeline-company {

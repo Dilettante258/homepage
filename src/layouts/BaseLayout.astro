@@ -19,7 +19,7 @@ const { locale, title, description } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <title>{title ?? "Portfolio · Full\u2011stack Engineer"}</title>
@@ -45,73 +45,71 @@ const { locale, title, description } = Astro.props;
 <style>
   :root {
     color-scheme: dark;
-    --bg: #05060a;
-    --card: rgba(255, 255, 255, 0.04);
-    --stroke: rgba(255, 255, 255, 0.08);
-    --muted: #b0b7c3;
-    --primary: #7ef3d1;
-    --accent: #9bb7ff;
-    --danger: #ff7eb6;
-    --text: #f5f7fb;
+    --bg: #111113;
+    --card: rgba(255, 255, 255, 0.03);
+    --stroke: rgba(255, 255, 255, 0.07);
+    --muted: #88888f;
+    --primary: #c4a265;
+    --accent: #8891b0;
+    --danger: #c4586a;
+    --text: #ededef;
 
-    --surface: rgba(255, 255, 255, 0.03);
+    --surface: rgba(255, 255, 255, 0.025);
     --surface-hover: rgba(255, 255, 255, 0.04);
-    --surface-raised: rgba(0, 0, 0, 0.2);
-    --surface-tag: rgba(255, 255, 255, 0.06);
-    --shadow: rgba(0, 0, 0, 0.28);
-    --shadow-heavy: rgba(0, 0, 0, 0.35);
-    --primary-border: rgba(126, 243, 209, 0.45);
-    --primary-glow: rgba(126, 243, 209, 0.18);
-    --primary-bg: rgba(126, 243, 209, 0.12);
-    --accent-bg: rgba(155, 183, 255, 0.12);
-    --gradient-1: rgba(126, 243, 209, 0.15);
-    --gradient-2: rgba(155, 183, 255, 0.18);
-    --gradient-3: rgba(255, 126, 182, 0.12);
-    --dot-shadow: rgba(126, 243, 209, 0.2);
-    --dot-glow: rgba(126, 243, 209, 0.35);
-    --border-hover: rgba(255, 255, 255, 0.12);
-    --grain-opacity: 0.35;
-    --grid-opacity: 0.2;
+    --surface-raised: rgba(255, 255, 255, 0.02);
+    --surface-tag: rgba(255, 255, 255, 0.05);
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-heavy: rgba(0, 0, 0, 0.4);
+    --primary-border: rgba(196, 162, 101, 0.3);
+    --primary-glow: rgba(196, 162, 101, 0.06);
+    --primary-bg: rgba(196, 162, 101, 0.08);
+    --accent-bg: rgba(136, 145, 176, 0.08);
+    --gradient-1: rgba(196, 162, 101, 0.05);
+    --gradient-2: rgba(136, 145, 176, 0.06);
+    --gradient-3: rgba(196, 88, 106, 0.03);
+    --dot-shadow: rgba(196, 162, 101, 0.1);
+    --dot-glow: rgba(196, 162, 101, 0.15);
+    --border-hover: rgba(255, 255, 255, 0.1);
+    --grain-opacity: 0.18;
+    --grid-opacity: 0;
 
-    font-family:
-      "Space Grotesk",
-      "DM Sans",
-      system-ui,
-      -apple-system,
-      sans-serif;
+    --font-heading: "Instrument Serif", Georgia, serif;
+    --font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+
+    font-family: var(--font-body);
     scroll-behavior: smooth;
     overflow: hidden;
   }
 
   :root[data-theme="light"] {
     color-scheme: light;
-    --bg: #f4f5f9;
-    --card: rgba(0, 0, 0, 0.03);
-    --stroke: rgba(0, 0, 0, 0.09);
-    --muted: #5f6877;
-    --primary: #0d9472;
-    --accent: #4566d0;
-    --danger: #d4326a;
-    --text: #1a1d26;
+    --bg: #f5f4f0;
+    --card: rgba(0, 0, 0, 0.02);
+    --stroke: rgba(0, 0, 0, 0.08);
+    --muted: #6b6b73;
+    --primary: #8b6b2e;
+    --accent: #5563a0;
+    --danger: #a23850;
+    --text: #1c1c1e;
 
-    --surface: rgba(255, 255, 255, 0.65);
-    --surface-hover: rgba(0, 0, 0, 0.04);
-    --surface-raised: rgba(255, 255, 255, 0.7);
-    --surface-tag: rgba(0, 0, 0, 0.05);
-    --shadow: rgba(0, 0, 0, 0.06);
-    --shadow-heavy: rgba(0, 0, 0, 0.08);
-    --primary-border: rgba(13, 148, 114, 0.4);
-    --primary-glow: rgba(13, 148, 114, 0.1);
-    --primary-bg: rgba(13, 148, 114, 0.08);
-    --accent-bg: rgba(69, 102, 208, 0.08);
-    --gradient-1: rgba(13, 148, 114, 0.08);
-    --gradient-2: rgba(69, 102, 208, 0.08);
-    --gradient-3: rgba(212, 50, 106, 0.06);
-    --dot-shadow: rgba(13, 148, 114, 0.15);
-    --dot-glow: rgba(13, 148, 114, 0.2);
-    --border-hover: rgba(0, 0, 0, 0.1);
-    --grain-opacity: 0.12;
-    --grid-opacity: 0.08;
+    --surface: rgba(255, 255, 255, 0.7);
+    --surface-hover: rgba(0, 0, 0, 0.03);
+    --surface-raised: rgba(255, 255, 255, 0.8);
+    --surface-tag: rgba(0, 0, 0, 0.04);
+    --shadow: rgba(0, 0, 0, 0.05);
+    --shadow-heavy: rgba(0, 0, 0, 0.07);
+    --primary-border: rgba(139, 107, 46, 0.25);
+    --primary-glow: rgba(139, 107, 46, 0.05);
+    --primary-bg: rgba(139, 107, 46, 0.06);
+    --accent-bg: rgba(85, 99, 160, 0.06);
+    --gradient-1: rgba(139, 107, 46, 0.04);
+    --gradient-2: rgba(85, 99, 160, 0.04);
+    --gradient-3: rgba(162, 56, 80, 0.03);
+    --dot-shadow: rgba(139, 107, 46, 0.08);
+    --dot-glow: rgba(139, 107, 46, 0.1);
+    --border-hover: rgba(0, 0, 0, 0.12);
+    --grain-opacity: 0.08;
+    --grid-opacity: 0;
   }
 
   *,
@@ -129,53 +127,24 @@ const { locale, title, description } = Astro.props;
   body {
     overflow-y: auto;
     margin: 0;
-    height: 100svh;
-    background:
-      radial-gradient(
-        circle at 20% 20%,
-        var(--gradient-1),
-        transparent 40%
-      ),
-      radial-gradient(
-        circle at 80% 0%,
-        var(--gradient-2),
-        transparent 35%
-      ),
-      radial-gradient(
-        circle at 60% 65%,
-        var(--gradient-3),
-        transparent 40%
-      ),
-      var(--bg);
+    min-height: 100svh;
+    background: var(--bg);
     color: var(--text);
     position: relative;
     overflow-x: hidden;
   }
 
   .bg-grid {
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--stroke) 1px, transparent 1px),
-      linear-gradient(90deg, var(--stroke) 1px, transparent 1px);
-    background-size: 160px 160px;
-    opacity: var(--grid-opacity);
-    pointer-events: none;
+    display: none;
   }
 
   .grain {
     position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
     opacity: var(--grain-opacity);
-    mix-blend-mode: soft-light;
+    mix-blend-mode: overlay;
     pointer-events: none;
   }
 
-  .shell {
-    width: min(1100px, 92vw);
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
 </style>
