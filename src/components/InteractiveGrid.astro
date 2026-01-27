@@ -1,0 +1,172 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+// 交互式网格组件
+const cols = 15;
+const rows = 8;
+const plusProps: () => Partial<HTMLAttributes<"div">> = () => ({
+  class: "grid-cell",
+  style: {
+    "--grade": Math.floor(Math.random() * 12 - 6),
+    "--opacity": Math.min(Math.random(), 0.2),
+    "--hue": Math.floor(Math.random() * 30),
+  },
+});
+---
+
+<div class="grid-container">
+  <div class="interactive-grid">
+    {
+      Array.from({ length: cols * rows }).map(() => (
+        /* 因为有时候会换行导致产生额外的空格 */
+        <div {...plusProps()}>+</div>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  function initGrid() {
+    const grid = document.querySelector(".interactive-grid");
+    if (!grid) return;
+
+    // 移动端触摸支持
+    if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
+      grid.addEventListener(
+        "pointermove",
+        (event) => {
+          document.querySelector("[data-hover]")?.removeAttribute("data-hover");
+          const element = document.elementFromPoint(
+            (event as MouseEvent).clientX,
+            (event as MouseEvent).clientY,
+          ) as HTMLDivElement;
+          if (element?.classList.contains("grid-cell")) {
+            element.dataset.hover = "true";
+          }
+        },
+        true,
+      );
+
+      grid.addEventListener(
+        "pointerleave",
+        () => {
+          document.querySelector("[data-hover]")?.removeAttribute("data-hover");
+        },
+        true,
+      );
+    }
+  }
+
+  // 初始化
+  initGrid();
+
+  // View Transitions 后重新初始化
+  document.addEventListener("astro:page-load", initGrid);
+</script>
+
+<style>
+  .grid-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+  }
+
+  .interactive-grid {
+    touch-action: none;
+    display: grid;
+    grid-template: repeat(8, 1fr) / repeat(15, 1fr);
+    gap: 2px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+    font-family: var(--font-mono);
+    cursor: none;
+    width: 100%;
+    max-width: 480px;
+    opacity: 0.6;
+  }
+
+  .grid-cell {
+    touch-action: none;
+    padding: 4px;
+    opacity: calc(var(--opacity) * 0.5);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    transition-property: opacity, rotate, filter;
+    transition-duration: 0.8s, 0.4s, 0.6s;
+    transition-timing-function: ease-in, ease-out, ease-out;
+    scale: 1.5;
+    filter: grayscale(1);
+    color: hsl(var(--hue) 80% 50%);
+    user-select: none;
+  }
+
+  /* 暗色主题下增加不透明度 */
+  :root[data-theme="dark"] .grid-cell {
+    opacity: calc(var(--opacity) + 0.2);
+  }
+
+  /* Hover 效果 */
+  @media (hover: hover) and (pointer: fine) {
+    .grid-cell:hover {
+      transition-property: opacity, rotate, filter;
+      transition-duration: 0s;
+      rotate: calc(var(--grade, 0) * 90deg);
+      filter: grayscale(0) brightness(1.5);
+      opacity: 1;
+    }
+
+    :root[data-theme="dark"] .grid-cell:hover {
+      opacity: 1;
+    }
+  }
+
+  /* 移动端触摸效果 */
+  .grid-cell[data-hover] {
+    transition-property: opacity, rotate, filter;
+    transition-duration: 0s;
+    rotate: calc(var(--grade, 0) * 90deg);
+    filter: grayscale(0) brightness(1.5);
+    opacity: 1;
+  }
+
+  /* 响应式 */
+  @media (max-width: 900px) {
+    .grid-container {
+      min-height: 240px;
+    }
+
+    .interactive-grid {
+      grid-template-columns: repeat(10, 1fr);
+      max-width: 320px;
+      font-size: 1.2rem;
+    }
+
+    /* 在平板端只显示前 60 个单元格 (10x6) */
+    .grid-cell:nth-child(n + 61) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .grid-container {
+      min-height: 200px;
+    }
+
+    .interactive-grid {
+      grid-template-columns: repeat(8, 1fr);
+      max-width: 280px;
+      font-size: 1rem;
+    }
+
+    /* 在手机端只显示前 40 个单元格 (8x5) */
+    .grid-cell:nth-child(n + 41) {
+      display: none;
+    }
+  }
+</style>
