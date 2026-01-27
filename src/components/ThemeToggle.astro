@@ -38,34 +38,36 @@
 </button>
 
 <script>
-  import { startViewTransition } from "utils/index.ts";
+  let isInitialized = false;
+
+  function handleThemeToggle() {
+    const current = document.documentElement.dataset.theme;
+    const next = current === "light" ? "dark" : "light";
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem("theme", next);
+  }
 
   function setupThemeToggle() {
+    if (isInitialized) return;
+
     const btn = document.querySelector(".theme-toggle");
     if (!btn) return;
 
-    function toggleTheme() {
-      const current = document.documentElement.dataset.theme;
-      const next = current === "light" ? "dark" : "light";
-      document.documentElement.dataset.theme = next;
-      localStorage.setItem("theme", next);
-    }
-
-    // 移除旧的监听器（如果存在）
-    btn.removeEventListener("click", handleClick);
-
-    function handleClick() {
-      startViewTransition(toggleTheme);
-    }
-
-    btn.addEventListener("click", handleClick);
+    btn.addEventListener("click", handleThemeToggle);
+    isInitialized = true;
   }
 
   // 初始化
   setupThemeToggle();
 
-  // 监听页面导航事件
-  document.addEventListener("astro:page-load", setupThemeToggle);
+  // 监听页面导航事件（View Transitions 会保持元素，所以不需要重新绑定）
+  document.addEventListener("astro:page-load", () => {
+    // 因为使用了 transition:persist，按钮元素会保持，事件监听器也会保持
+    // 这里只需要确保在完全重新加载时重新初始化
+    if (!isInitialized) {
+      setupThemeToggle();
+    }
+  });
 </script>
 
 <style>
