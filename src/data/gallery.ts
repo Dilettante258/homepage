@@ -59,6 +59,21 @@ export const galleryItems: GalleryItem[] = [
 		aspect: 'landscape',
 		createdAt: '2026-01-10',
 	},
+	{
+		slug: 'theme-toggle',
+		title: {
+			en: 'Theme Toggle',
+			zh: '主题切换',
+		},
+		description: {
+			en: 'Smooth animated theme switcher with rotation and cross-fade effects.',
+			zh: '流畅的主题切换器，带旋转和淡入淡出效果。',
+		},
+		tags: ['css', 'interaction'],
+		fallbackGradient: 'linear-gradient(120deg, #FFA07A, #FFD700)',
+		aspect: 'square',
+		createdAt: '2026-01-27',
+	},
 ];
 
 export function getAllTags(): GalleryTag[] {

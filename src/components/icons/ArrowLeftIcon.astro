@@ -1,0 +1,75 @@
+---
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 24, class: className } = Astro.props;
+---
+
+<div class:list={["arrow-left-icon", className]} style={`--size: ${size}px`}>
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path class="arrow-path" d="m12 19-7-7 7-7"></path>
+    <path class="line-path" d="M19 12H5"></path>
+  </svg>
+</div>
+
+<style>
+  .arrow-left-icon {
+    display: inline-flex;
+    cursor: pointer;
+    width: var(--size);
+    height: var(--size);
+  }
+
+  .arrow-left-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .arrow-path {
+    transform-origin: center;
+  }
+
+  .line-path {
+    stroke-dasharray: 14;
+    stroke-dashoffset: 0;
+  }
+
+  .arrow-left-icon:hover .arrow-path {
+    animation: arrowMove 0.4s ease-in-out;
+  }
+
+  .arrow-left-icon:hover .line-path {
+    animation: lineStretch 0.4s ease-in-out;
+  }
+
+  @keyframes arrowMove {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(3px);
+    }
+  }
+
+  @keyframes lineStretch {
+    0%,
+    100% {
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dashoffset: -5;
+    }
+  }
+</style>

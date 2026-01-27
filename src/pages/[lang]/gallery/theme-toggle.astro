@@ -1,0 +1,252 @@
+---
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import { resolveLocale, messages, SUPPORTED_LOCALES } from "../../../i18n/strings";
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+---
+
+<SiteLayout
+  locale={locale}
+  t={t}
+  title={`${locale === "en" ? "Theme Toggle" : "主题切换"} · Dilettante258`}
+  description={locale === "en" ? "Interactive theme toggle animation" : "交互式主题切换动画"}
+>
+  <article class="gallery-page" transition:animate="fade">
+    <div class="page-header">
+      <a href={`/${locale}/gallery`} class="back-link">
+        ← {t.gallery.backToGallery}
+      </a>
+      <h1>{locale === "en" ? "Theme Toggle" : "主题切换"}</h1>
+      <p class="subtitle">
+        {locale === "en" ? "Smooth animated theme switcher" : "流畅的主题切换动画"}
+      </p>
+    </div>
+
+    <div class="demo-container">
+      <div class="theme-toggle-wrapper">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="description">
+      <h2>{locale === "en" ? "Features" : "特性"}</h2>
+      <ul>
+        <li>{locale === "en" ? "Smooth rotation animation" : "流畅的旋转动画"}</li>
+        <li>{locale === "en" ? "Icon cross-fade transition" : "图标淡入淡出过渡"}</li>
+        <li>{locale === "en" ? "Hover scale effect" : "悬停缩放效果"}</li>
+        <li>{locale === "en" ? "CSS-only animation" : "纯 CSS 动画"}</li>
+      </ul>
+    </div>
+  </article>
+</SiteLayout>
+
+<script>
+  function initThemeToggle() {
+    const toggle = document.getElementById("theme-toggle");
+    if (!toggle) return;
+
+    // 初始化状态
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    toggle.setAttribute("data-theme", isDark ? "dark" : "light");
+
+    toggle.addEventListener("click", () => {
+      const currentTheme = toggle.getAttribute("data-theme");
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+      toggle.setAttribute("data-theme", newTheme);
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+    });
+  }
+
+  // 初始化
+  initThemeToggle();
+
+  // View Transitions 后重新初始化
+  document.addEventListener("astro:page-load", initThemeToggle);
+</script>
+
+<style>
+  .gallery-page {
+    padding: 2rem 0;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover {
+    color: var(--text);
+  }
+
+  h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .demo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    background: var(--surface);
+    margin-bottom: 3rem;
+  }
+
+  .theme-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-toggle {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-hover);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+
+  .theme-toggle:active {
+    transform: scale(0.95);
+  }
+
+  .sun-icon,
+  .moon-icon {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    color: var(--text);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Light theme (默认显示太阳) */
+  .theme-toggle[data-theme="light"] .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .theme-toggle[data-theme="light"] .moon-icon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+  }
+
+  /* Dark theme (显示月亮) */
+  .theme-toggle[data-theme="dark"] .sun-icon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+
+  .theme-toggle[data-theme="dark"] .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  /* 点击时的旋转动画 */
+  .theme-toggle:active .sun-icon,
+  .theme-toggle:active .moon-icon {
+    transition-duration: 0.2s;
+  }
+
+  .description {
+    padding: 2rem 0;
+  }
+
+  .description h2 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin: 0 0 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .description ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .description li {
+    padding: 0.5rem 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .description li::before {
+    content: "→";
+    margin-right: 0.75rem;
+    color: var(--primary);
+  }
+
+  @media (max-width: 600px) {
+    .demo-container {
+      min-height: 300px;
+    }
+
+    .theme-toggle {
+      width: 64px;
+      height: 64px;
+    }
+
+    .sun-icon,
+    .moon-icon {
+      width: 28px;
+      height: 28px;
+    }
+  }
+</style>
