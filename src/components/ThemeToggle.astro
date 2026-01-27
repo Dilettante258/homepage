@@ -1,4 +1,19 @@
-<button class="theme-toggle" type="button" aria-label="Toggle theme" transition:persist="theme-toggle">
+---
+function handleThemeToggle() {
+  const current = document.documentElement.dataset.theme;
+  const next = current === "light" ? "dark" : "light";
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem("theme", next);
+}
+---
+
+<button
+  class="theme-toggle"
+  type="button"
+  aria-label="Toggle theme"
+  transition:persist="theme-toggle"
+  onclick="handleThemeToggle()"
+>
   <div class="icon-wrapper">
     <svg
       class="icon sun"
@@ -38,25 +53,12 @@
 </button>
 
 <script>
-  function handleThemeToggle() {
+  window.handleThemeToggle = function handleThemeToggle() {
     const current = document.documentElement.dataset.theme;
     const next = current === "light" ? "dark" : "light";
     document.documentElement.dataset.theme = next;
     localStorage.setItem("theme", next);
-  }
-
-  function setupThemeToggle() {
-    const btn = document.querySelector(".theme-toggle");
-    if (!btn) return;
-
-    // 因为使用了 transition:persist，元素和事件监听器会在导航时保持
-    // 只需要在初始加载时绑定一次
-    btn.addEventListener("click", handleThemeToggle, { once: false });
-  }
-
-  // 使用 astro:page-load 统一处理
-  // 由于 transition:persist，实际上只会在首次加载时执行一次绑定
-  document.addEventListener("astro:page-load", setupThemeToggle, { once: true });
+  };
 </script>
 
 <style>
