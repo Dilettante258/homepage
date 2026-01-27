@@ -60,7 +60,7 @@ const allTags = getAllProjectTags();
             data-title={item.title[locale]}
             data-date={item.createdAt}
             data-order={String(idx)}
-            style={`view-transition-name: project-${item.slug};`}
+            style={`view-transition-name: project-${item.slug}; --i: ${idx};`}
           >
             <div class="card-thumbnail">
               {item.cover ? (
@@ -71,6 +71,8 @@ const allTags = getAllProjectTags();
                   style={`background: ${item.fallbackGradient};`}
                 />
               )}
+              <div class="thumbnail-shimmer" aria-hidden="true"></div>
+              <span class="card-index">{String(idx + 1).padStart(2, '0')}</span>
             </div>
             <div class="card-body">
               <h3>{item.title[locale]}</h3>
@@ -88,7 +90,8 @@ const allTags = getAllProjectTags();
                     rel="noreferrer"
                     class="card-link card-link--primary"
                   >
-                    {t.projects.viewProject} ↗
+                    {t.projects.viewProject}
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
                   </a>
                 )}
                 {item.links.github && (
@@ -98,7 +101,8 @@ const allTags = getAllProjectTags();
                     rel="noreferrer"
                     class="card-link"
                   >
-                    {t.projects.viewCode} ↗
+                    {t.projects.viewCode}
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
                   </a>
                 )}
               </div>
@@ -183,23 +187,39 @@ const allTags = getAllProjectTags();
   /* ---- Card Styles ---- */
   .project-card {
     border: 1px solid var(--stroke);
-    border-radius: 14px;
+    border-radius: 16px;
     overflow: hidden;
     color: var(--text);
     background: var(--surface-raised);
+    animation: card-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 0.06s);
     transition:
-      transform 0.2s,
-      border-color 0.2s,
-      box-shadow 0.2s;
+      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.25s,
+      box-shadow 0.35s;
+  }
+
+  @keyframes card-rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .project-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px) scale(1.005);
     border-color: var(--primary-border);
-    box-shadow: 0 15px 80px var(--primary-glow);
+    box-shadow:
+      0 20px 60px var(--primary-glow),
+      0 0 0 1px var(--primary-border);
   }
 
   .card-thumbnail {
+    position: relative;
     width: 100%;
     aspect-ratio: 16 / 10;
     overflow: hidden;
@@ -210,44 +230,97 @@ const allTags = getAllProjectTags();
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .project-card:hover .card-thumbnail img {
+    transform: scale(1.04);
   }
 
   .card-gradient {
     width: 100%;
     height: 100%;
     min-height: 140px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .project-card:hover .card-gradient {
+    transform: scale(1.04);
+  }
+
+  .thumbnail-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.08) 55%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    transition: none;
+    pointer-events: none;
+  }
+
+  .project-card:hover .thumbnail-shimmer {
+    transform: translateX(100%);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card-index {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.6rem;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-variant-numeric: tabular-nums;
   }
 
   .card-body {
-    padding: 1rem;
+    padding: 1rem 1.2rem 1.2rem;
   }
 
   .card-body h3 {
-    margin: 0 0 0.3rem;
-    font-size: 1.05rem;
+    margin: 0 0 0.35rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 
   .card-desc {
     color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin: 0 0 0.6rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin: 0 0 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .tech-chips {
     display: flex;
-    gap: 0.4rem;
+    gap: 0.35rem;
     flex-wrap: wrap;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.9rem;
   }
 
   .tech-chip {
-    padding: 0.3rem 0.6rem;
-    border-radius: 999px;
-    border: 1px solid var(--stroke);
+    padding: 0.25rem 0.55rem;
+    border-radius: 6px;
     color: var(--muted);
-    font-size: 0.8rem;
-    background: var(--surface);
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--surface-tag);
+    letter-spacing: 0.01em;
   }
 
   .card-links {
@@ -259,9 +332,11 @@ const allTags = getAllProjectTags();
   .card-link {
     display: inline-flex;
     align-items: center;
+    gap: 0.3rem;
     padding: 0.4rem 0.8rem;
     border-radius: 999px;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 500;
     text-decoration: none;
     border: 1px solid var(--stroke);
     color: var(--muted);
@@ -272,10 +347,21 @@ const allTags = getAllProjectTags();
       background 0.2s;
   }
 
+  .card-link svg {
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: transform 0.2s ease, opacity 0.2s;
+  }
+
   .card-link:hover {
     color: var(--text);
     border-color: var(--primary-border);
     background: var(--surface-hover);
+  }
+
+  .card-link:hover svg {
+    transform: translate(1px, -1px);
+    opacity: 1;
   }
 
   .card-link--primary {
@@ -285,6 +371,10 @@ const allTags = getAllProjectTags();
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .project-card {
+      animation: none;
+    }
+
     ::view-transition-group(*),
     ::view-transition-old(*),
     ::view-transition-new(*) {
