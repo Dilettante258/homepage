@@ -38,6 +38,7 @@ const experiences = [
       en: `2026.01 – ${t.about.present}`,
       zh: `2026.01 – ${t.about.present}`,
     },
+    location: { en: "Shanghai", zh: "上海" },
     current: true,
   },
   {
@@ -45,6 +46,7 @@ const experiences = [
     department: { en: "Tech Department", zh: "技术部 · 大前端" },
     role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
     period: { en: "2025.11 – 2026.01", zh: "2025.11 – 2026.01" },
+    location: { en: "Shanghai", zh: "上海" },
     current: false,
   },
   {
@@ -55,6 +57,7 @@ const experiences = [
     },
     role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
     period: { en: "2025.06 – 2025.11", zh: "2025.06 – 2025.11" },
+    location: { en: "Shanghai", zh: "上海" },
     current: false,
   },
   {
@@ -65,6 +68,7 @@ const experiences = [
     department: { en: "Sealos", zh: "Sealos" },
     role: { en: "React & Node Dev", zh: "React & Node 开发工程师" },
     period: { en: "2025.03 – 2025.05", zh: "2025.03 – 2025.05" },
+    location: { en: "Hangzhou", zh: "杭州" },
     current: false,
   },
   {
@@ -72,6 +76,7 @@ const experiences = [
     department: { en: "Tech – Frontend", zh: "技术-前端" },
     role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
     period: { en: "2024.07 – 2024.08", zh: "2024.07 – 2024.08" },
+    location: { en: "Wuhan", zh: "武汉" },
     current: false,
   },
 ];
@@ -175,7 +180,9 @@ const experiences = [
             <div class:list={["timeline-item", { current: exp.current }]}>
               <div class="timeline-dot" />
               <div class="timeline-card">
-                <p class="timeline-period">{exp.period[locale]}</p>
+                <p class="timeline-period">
+                  {exp.period[locale]} · {exp.location[locale]}
+                </p>
                 <h3 class="timeline-company">
                   {exp.company[locale]}
                   <span class="timeline-dept">{exp.department[locale]}</span>
