@@ -32,6 +32,11 @@ const { size = 24, class: className } = Astro.props;
     cursor: pointer;
     width: var(--size);
     height: var(--size);
+    transition: transform 0.2s ease;
+  }
+
+  .github-icon:hover {
+    transform: scale(1.05);
   }
 
   .github-icon svg {
@@ -40,42 +45,33 @@ const { size = 24, class: className } = Astro.props;
   }
 
   .body-path {
-    opacity: 1;
-    stroke-dasharray: 1000;
+    stroke-dasharray: 200;
     stroke-dashoffset: 0;
     transform-origin: center;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .tail-path {
-    stroke-dasharray: 100;
+    stroke-dasharray: 20;
     stroke-dashoffset: 0;
-    transform-origin: center;
+    transform-origin: left center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .github-icon:hover .body-path {
-    animation: bodyDraw 0.4s ease-in-out;
+    animation: bodyPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .github-icon:hover .tail-path {
-    animation: tailDraw 0.5s ease-in-out, tailWag 2.5s ease-in-out 0.5s infinite;
+    animation: tailWag 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
-  @keyframes bodyDraw {
+  @keyframes bodyPulse {
     0% {
-      opacity: 0;
-      stroke-dashoffset: 1000;
-      scale: 0.9;
-    }
-    100% {
-      opacity: 1;
       stroke-dashoffset: 0;
-      scale: 1;
     }
-  }
-
-  @keyframes tailDraw {
-    0% {
-      stroke-dashoffset: 100;
+    50% {
+      stroke-dashoffset: -40;
     }
     100% {
       stroke-dashoffset: 0;
@@ -85,25 +81,28 @@ const { size = 24, class: className } = Astro.props;
   @keyframes tailWag {
     0%,
     100% {
-      rotate: 0deg;
+      transform: rotate(0deg) translateX(0);
     }
-    14% {
-      rotate: -15deg;
+    10% {
+      transform: rotate(-8deg) translateX(-1px);
     }
-    28% {
-      rotate: 15deg;
+    20% {
+      transform: rotate(8deg) translateX(1px);
     }
-    42% {
-      rotate: -10deg;
+    30% {
+      transform: rotate(-6deg) translateX(-0.5px);
     }
-    56% {
-      rotate: 10deg;
+    40% {
+      transform: rotate(6deg) translateX(0.5px);
+    }
+    50% {
+      transform: rotate(-3deg) translateX(-0.2px);
+    }
+    60% {
+      transform: rotate(3deg) translateX(0.2px);
     }
     70% {
-      rotate: -5deg;
-    }
-    84% {
-      rotate: 5deg;
+      transform: rotate(0deg) translateX(0);
     }
   }
 </style>

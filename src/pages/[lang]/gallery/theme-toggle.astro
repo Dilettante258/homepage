@@ -1,7 +1,11 @@
 ---
 import SiteLayout from "../../../layouts/SiteLayout.astro";
-import { resolveLocale, messages, SUPPORTED_LOCALES } from "../../../i18n/strings";
-
+import {
+  resolveLocale,
+  messages,
+  SUPPORTED_LOCALES,
+} from "../../../i18n/strings";
+import ThemeToggle from "../../../components/ThemeToggle.astro";
 export function getStaticPaths() {
   return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
 }
@@ -15,7 +19,9 @@ const t = messages[locale];
   locale={locale}
   t={t}
   title={`${locale === "en" ? "Theme Toggle" : "主题切换"} · Dilettante258`}
-  description={locale === "en" ? "Interactive theme toggle animation" : "交互式主题切换动画"}
+  description={locale === "en"
+    ? "Interactive theme toggle animation"
+    : "交互式主题切换动画"}
 >
   <article class="gallery-page" transition:animate="fade">
     <div class="page-header">
@@ -24,68 +30,35 @@ const t = messages[locale];
       </a>
       <h1>{locale === "en" ? "Theme Toggle" : "主题切换"}</h1>
       <p class="subtitle">
-        {locale === "en" ? "Smooth animated theme switcher" : "流畅的主题切换动画"}
+        {
+          locale === "en"
+            ? "Smooth animated theme switcher"
+            : "流畅的主题切换动画"
+        }
       </p>
     </div>
 
     <div class="demo-container">
       <div class="theme-toggle-wrapper">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
+        <ThemeToggle />
       </div>
     </div>
 
     <div class="description">
       <h2>{locale === "en" ? "Features" : "特性"}</h2>
       <ul>
-        <li>{locale === "en" ? "Smooth rotation animation" : "流畅的旋转动画"}</li>
-        <li>{locale === "en" ? "Icon cross-fade transition" : "图标淡入淡出过渡"}</li>
+        <li>
+          {locale === "en" ? "Smooth rotation animation" : "流畅的旋转动画"}
+        </li>
+        <li>
+          {locale === "en" ? "Icon cross-fade transition" : "图标淡入淡出过渡"}
+        </li>
         <li>{locale === "en" ? "Hover scale effect" : "悬停缩放效果"}</li>
         <li>{locale === "en" ? "CSS-only animation" : "纯 CSS 动画"}</li>
       </ul>
     </div>
   </article>
 </SiteLayout>
-
-<script>
-  function initThemeToggle() {
-    const toggle = document.getElementById("theme-toggle");
-    if (!toggle) return;
-
-    // 初始化状态
-    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-    toggle.setAttribute("data-theme", isDark ? "dark" : "light");
-
-    toggle.addEventListener("click", () => {
-      const currentTheme = toggle.getAttribute("data-theme");
-      const newTheme = currentTheme === "dark" ? "light" : "dark";
-
-      toggle.setAttribute("data-theme", newTheme);
-      document.documentElement.setAttribute("data-theme", newTheme);
-      localStorage.setItem("theme", newTheme);
-    });
-  }
-
-  // 初始化
-  initThemeToggle();
-
-  // View Transitions 后重新初始化
-  document.addEventListener("astro:page-load", initThemeToggle);
-</script>
 
 <style>
   .gallery-page {

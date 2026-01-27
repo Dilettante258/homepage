@@ -19,11 +19,11 @@ const { size = 24, class: className } = Astro.props;
     stroke-linejoin="round"
   >
     <path
-      class="link-path"
+      class="link-path link-path-1"
       d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
     ></path>
     <path
-      class="link-path"
+      class="link-path link-path-2"
       d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
     ></path>
   </svg>
@@ -43,32 +43,64 @@ const { size = 24, class: className } = Astro.props;
   }
 
   .link-path {
-    stroke-dasharray: 1000;
+    stroke-dasharray: 50;
     stroke-dashoffset: 0;
     transform-origin: center;
   }
 
-  .link-icon:hover .link-path {
-    animation: linkShake 1s ease-in-out;
+  .link-icon:hover .link-path-1 {
+    animation: linkShake1 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
-  @keyframes linkShake {
+  .link-icon:hover .link-path-2 {
+    animation: linkShake2 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes linkShake1 {
     0%,
     100% {
       stroke-dashoffset: 0;
-      rotate: 0deg;
+      transform: rotate(0deg) translateX(0);
+    }
+    10% {
+      stroke-dashoffset: 5;
+      transform: rotate(-3deg) translateX(-0.5px);
     }
     20% {
-      stroke-dashoffset: 30;
-      rotate: -5deg;
+      stroke-dashoffset: 0;
+      transform: rotate(0deg) translateX(0);
+    }
+    30% {
+      stroke-dashoffset: -5;
+      transform: rotate(3deg) translateX(0.5px);
     }
     40% {
       stroke-dashoffset: 0;
-      rotate: 0deg;
+      transform: rotate(0deg) translateX(0);
     }
-    60% {
-      stroke-dashoffset: 30;
-      rotate: 0deg;
+  }
+
+  @keyframes linkShake2 {
+    0%,
+    100% {
+      stroke-dashoffset: 0;
+      transform: rotate(0deg) translateX(0);
+    }
+    15% {
+      stroke-dashoffset: -5;
+      transform: rotate(3deg) translateX(0.5px);
+    }
+    25% {
+      stroke-dashoffset: 0;
+      transform: rotate(0deg) translateX(0);
+    }
+    35% {
+      stroke-dashoffset: 5;
+      transform: rotate(-3deg) translateX(-0.5px);
+    }
+    45% {
+      stroke-dashoffset: 0;
+      transform: rotate(0deg) translateX(0);
     }
   }
 </style>

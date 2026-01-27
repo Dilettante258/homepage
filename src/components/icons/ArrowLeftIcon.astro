@@ -38,38 +38,48 @@ const { size = 24, class: className } = Astro.props;
 
   .arrow-path {
     transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .line-path {
     stroke-dasharray: 14;
     stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .arrow-left-icon:hover .arrow-path {
-    animation: arrowMove 0.4s ease-in-out;
+    animation: arrowBounce 0.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
   .arrow-left-icon:hover .line-path {
-    animation: lineStretch 0.4s ease-in-out;
+    animation: lineFlow 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
-  @keyframes arrowMove {
+  @keyframes arrowBounce {
     0%,
     100% {
       transform: translateX(0);
     }
+    25% {
+      transform: translateX(-3px);
+    }
     50% {
-      transform: translateX(3px);
+      transform: translateX(0);
+    }
+    75% {
+      transform: translateX(-1px);
     }
   }
 
-  @keyframes lineStretch {
-    0%,
-    100% {
+  @keyframes lineFlow {
+    0% {
       stroke-dashoffset: 0;
     }
     50% {
-      stroke-dashoffset: -5;
+      stroke-dashoffset: -7;
+    }
+    100% {
+      stroke-dashoffset: -14;
     }
   }
 </style>
