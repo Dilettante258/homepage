@@ -14,7 +14,7 @@ const featured = getFeaturedProjects();
 ---
 
 <SiteLayout locale={locale} t={t}>
-  <section class="hero">
+  <section class="hero" transition:animate="fade">
     <h1>{t.hero.title}</h1>
     <p class="lede">{t.hero.subtitle}</p>
     <div class="cta">
@@ -37,7 +37,7 @@ const featured = getFeaturedProjects();
     </div>
   </section>
 
-  <section class="projects-section">
+  <section class="projects-section" transition:animate="fade">
     <div class="section-header">
       <h2>{t.home.projectsTitle}</h2>
       <p class="section-desc">{t.home.projectsSubtitle}</p>

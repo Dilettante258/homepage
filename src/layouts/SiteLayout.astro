@@ -31,7 +31,7 @@ const navLinks = [
 ---
 
 <BaseLayout locale={locale} title={title} description={description}>
-  <header class="shell header">
+  <header class="shell header" transition:persist>
     <div class="brand">
       <strong class="brand-name">Yiming</strong>
     </div>
@@ -45,17 +45,45 @@ const navLinks = [
       }
     </nav>
     <div class="header-actions">
-      <ThemeToggle />
       <LanguageSwitcher locale={locale} />
+      <ThemeToggle />
     </div>
   </header>
   <main class="shell content" {...rest}>
     <slot />
   </main>
-  <footer class="shell footer">
+  <footer class="shell footer" transition:persist>
     <p>{t.footer.note}</p>
   </footer>
 </BaseLayout>
+
+<script>
+  function updateActiveNav() {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav a');
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      // 移除所有活动状态
+      link.classList.remove('active');
+
+      // 检查是否匹配当前路径
+      if (currentPath === href || currentPath === href + '/') {
+        link.classList.add('active');
+      } else if (href !== '/' && currentPath.startsWith(href + '/')) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  // 初始化
+  updateActiveNav();
+
+  // 监听页面导航事件
+  document.addEventListener('astro:page-load', updateActiveNav);
+</script>
 
 <style>
   .shell {
@@ -107,20 +135,23 @@ const navLinks = [
   }
 
   .nav a {
+    position: relative;
     color: var(--muted);
     text-decoration: none;
     padding: 0.4rem 0.7rem;
     border-radius: 6px;
     font-size: 0.9rem;
-    transition: color 0.15s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .nav a:hover {
     color: var(--text);
+    background: var(--surface-hover);
   }
 
   .nav a.active {
     color: var(--text);
+    background: var(--surface-tag);
   }
 
   .header-actions {

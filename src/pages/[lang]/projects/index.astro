@@ -24,11 +24,12 @@ const allTags = getAllProjectTags();
   title={`${t.projects.title} · Yiming`}
   description={t.projects.subtitle}
 >
-  <section class="page-header">
+  <section class="page-header" transition:animate="fade">
     <p class="subtitle">{t.projects.subtitle}</p>
     <h1>{t.projects.title}</h1>
   </section>
 
+  <div transition:animate="fade">
   <ListToolbar
     tags={allTags}
     tagLabels={t.projects.tagLabels}
@@ -104,14 +105,33 @@ const allTags = getAllProjectTags();
       ))
     }
   </div>
+  </div>
 </SiteLayout>
 
 <script>
   import { initListControls } from "../../../scripts/list-controls";
-  initListControls({
-    containerSelector: ".projects-container",
-    cardSelector: ".project-card",
-  });
+
+  function setupListControls() {
+    // 只在当前页面是 projects 列表页时初始化
+    const container = document.querySelector(".projects-container");
+    if (!container) return;
+
+    // 使用双重 requestAnimationFrame 确保渲染完全完成
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        initListControls({
+          containerSelector: ".projects-container",
+          cardSelector: ".project-card",
+        });
+      });
+    });
+  }
+
+  // 初始化
+  setupListControls();
+
+  // View Transitions 导航后重新初始化
+  document.addEventListener("astro:page-load", setupListControls);
 </script>
 
 <style>

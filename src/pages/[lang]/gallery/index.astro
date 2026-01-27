@@ -24,12 +24,13 @@ const allTags = getAllTags();
   title={`${t.gallery.title} · Yiming`}
   description={t.gallery.subtitle}
 >
-  <section>
+  <section transition:animate="fade">
     <div class="page-header">
       <p class="subtitle">{t.gallery.subtitle}</p>
       <h1>{t.gallery.title}</h1>
     </div>
 
+    <div transition:animate="fade">
     <ListToolbar
       tags={allTags}
       tagLabels={t.gallery.tagLabels}
@@ -85,15 +86,34 @@ const allTags = getAllTags();
         ))
       }
     </div>
+    </div>
   </section>
 </SiteLayout>
 
 <script>
   import { initListControls } from "../../../scripts/list-controls";
-  initListControls({
-    containerSelector: ".gallery-container",
-    cardSelector: ".gallery-card",
-  });
+
+  function setupListControls() {
+    // 只在当前页面是 gallery 列表页时初始化
+    const container = document.querySelector(".gallery-container");
+    if (!container) return;
+
+    // 使用双重 requestAnimationFrame 确保渲染完全完成
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        initListControls({
+          containerSelector: ".gallery-container",
+          cardSelector: ".gallery-card",
+        });
+      });
+    });
+  }
+
+  // 初始化
+  setupListControls();
+
+  // View Transitions 导航后重新初始化
+  document.addEventListener("astro:page-load", setupListControls);
 </script>
 
 <style>
