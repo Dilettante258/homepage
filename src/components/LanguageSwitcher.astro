@@ -1,51 +1,132 @@
 ---
-import { SUPPORTED_LOCALES, type Locale } from '../i18n/strings';
+import LanguagesIcon from "components/icons/LanguagesIcon.astro";
+import { SUPPORTED_LOCALES, type Locale } from "../i18n/strings";
 
 type Props = { locale: Locale };
 const { locale } = Astro.props;
 
 const buildHref = (target: Locale) => {
-	const segments = Astro.url.pathname.split('/').filter(Boolean);
-	// ensure locale is always at index 0 when prefixDefaultLocale is on
-	if (!segments.length) return `/${target}`;
-	segments[0] = target;
-	return `/${segments.join('/')}`;
+  const segments = Astro.url.pathname.split("/").filter(Boolean);
+  // ensure locale is always at index 0 when prefixDefaultLocale is on
+  if (!segments.length) return `/${target}`;
+  segments[0] = target;
+  return `/${segments.join("/")}`;
 };
 ---
 
-<div class="switcher" aria-label="Choose language">
-	{SUPPORTED_LOCALES.map((code) => (
-		<a class={code === locale ? 'active' : ''} href={buildHref(code)}>
-			{code.toUpperCase()}
-		</a>
-	))}
+<div class="switcher" aria-label="Choose language" transition:persist="switcher">
+  {
+    SUPPORTED_LOCALES.map((code) => (
+      <a
+        data-locale={code}
+        data-active={code === locale ? "true" : undefined}
+        href={buildHref(code)}
+      >
+        <span>{code.toUpperCase()}</span>
+      </a>
+    ))
+  }
 </div>
 
+<script>
+  function updateActiveLocale() {
+    const switcher = document.querySelector('.switcher');
+    if (!switcher) return;
+
+    const currentPath = window.location.pathname;
+    const segments = currentPath.split('/').filter(Boolean);
+    const currentLocale = segments[0] || 'zh';
+
+    const links = switcher.querySelectorAll('a');
+    links.forEach((link) => {
+      const locale = link.getAttribute('data-locale');
+      if (locale === currentLocale) {
+        link.setAttribute('data-active', 'true');
+      } else {
+        link.removeAttribute('data-active');
+      }
+    });
+  }
+
+  // 初始化
+  updateActiveLocale();
+
+  // 监听页面导航事件（View Transitions）
+  document.addEventListener('astro:page-load', updateActiveLocale);
+</script>
+
 <style>
-	.switcher {
-		display: inline-flex;
-		gap: 2px;
-		border: 1px solid var(--stroke);
-		border-radius: 8px;
-		padding: 2px;
-	}
+  .switcher {
+    position: relative;
+    display: inline-flex;
+    gap: 2px;
+    border: 1px solid var(--stroke);
+    border-radius: 10px;
+    padding: 3px;
+    background: var(--surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
 
-	.switcher a {
-		color: var(--muted);
-		text-decoration: none;
-		font-weight: 500;
-		font-size: 0.8rem;
-		padding: 0.3rem 0.6rem;
-		border-radius: 6px;
-		transition: color 0.15s;
-	}
+  .switcher a {
+    position: relative;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.8rem;
+    padding: 0;
+    border-radius: 7px;
+    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
 
-	.switcher a:hover {
-		color: var(--text);
-	}
+  .switcher a span {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
 
-	.switcher a.active {
-		background: var(--surface-tag);
-		color: var(--text);
-	}
+  .switcher a:hover {
+    color: var(--text);
+  }
+
+  .switcher a:hover:not([data-active="true"]) span {
+    transform: scale(1.05);
+  }
+
+  .switcher a[data-active="true"] {
+    color: var(--text);
+  }
+
+  .switcher a[data-active="true"] span {
+    anchor-name: --active-lang;
+  }
+
+  /* Sliding background indicator */
+  .switcher::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    background: var(--surface-tag);
+    border-radius: 7px;
+    position-anchor: --active-lang;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    left: anchor(left);
+    right: anchor(right);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Fallback for browsers without anchor positioning support */
+  @supports not (anchor-name: --test) {
+    .switcher::before {
+      display: none;
+    }
+
+    .switcher a[data-active="true"] {
+      background: var(--surface-tag);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+  }
 </style>
