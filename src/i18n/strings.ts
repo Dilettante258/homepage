@@ -5,6 +5,7 @@ export type Messages = {
 		home: string;
 		blog: string;
 		gallery: string;
+		projects: string;
 		about: string;
 		contact: string;
 	};
@@ -12,6 +13,7 @@ export type Messages = {
 		title: string;
 		subtitle: string;
 		ctaPrimary: string;
+		ctaGallery: string;
 		ctaSecondary: string;
 	};
 	intro: {
@@ -53,6 +55,27 @@ export type Messages = {
 		sortOldest: string;
 		tagLabels: Record<string, string>;
 	};
+	projects: {
+		title: string;
+		subtitle: string;
+		filterAll: string;
+		sortBy: string;
+		sortDefault: string;
+		sortNameAZ: string;
+		sortNameZA: string;
+		sortNewest: string;
+		sortOldest: string;
+		layoutGrid: string;
+		layoutList: string;
+		viewProject: string;
+		viewCode: string;
+		viewAll: string;
+		tagLabels: Record<string, string>;
+	};
+	home: {
+		projectsTitle: string;
+		projectsSubtitle: string;
+	};
 	about: {
 		title: string;
 		subtitle: string;
@@ -80,6 +103,7 @@ export const messages: Record<Locale, Messages> = {
 			home: 'Home',
 			blog: 'Blog',
 			gallery: 'Gallery',
+			projects: 'Projects',
 			about: 'About',
 			contact: 'Contact'
 		},
@@ -87,8 +111,9 @@ export const messages: Record<Locale, Messages> = {
 			title: 'Full‑stack engineer crafting calm experiences.',
 			subtitle:
 				'I design resilient backends, expressive frontends, and the glue that keeps teams shipping fast.',
-			ctaPrimary: 'View my work',
-			ctaSecondary: 'Let’s talk'
+			ctaPrimary: 'View projects',
+			ctaGallery: 'Gallery',
+			ctaSecondary: 'Let\u2019s talk'
 		},
 		intro: {
 			title: 'Product-minded maker with end‑to‑end range',
@@ -135,6 +160,34 @@ export const messages: Record<Locale, Messages> = {
 				interaction: 'Interaction',
 			},
 		},
+		projects: {
+			title: 'Projects',
+			subtitle: 'Applications, tools, and open-source work.',
+			filterAll: 'All',
+			sortBy: 'Sort by',
+			sortDefault: 'Default',
+			sortNameAZ: 'Name A \u2192 Z',
+			sortNameZA: 'Name Z \u2192 A',
+			sortNewest: 'Newest first',
+			sortOldest: 'Oldest first',
+			layoutGrid: 'Grid',
+			layoutList: 'List',
+			viewProject: 'Live demo',
+			viewCode: 'Source code',
+			viewAll: 'View all projects',
+			tagLabels: {
+				fullstack: 'Full-stack',
+				frontend: 'Frontend',
+				backend: 'Backend',
+				ai: 'AI',
+				tooling: 'Tooling',
+				oss: 'Open Source',
+			},
+		},
+		home: {
+			projectsTitle: 'Selected Projects',
+			projectsSubtitle: 'A few things I\'ve built recently.',
+		},
 		about: {
 			title: 'About Me',
 			subtitle: 'Education, experience, and background.',
@@ -157,13 +210,15 @@ export const messages: Record<Locale, Messages> = {
 			home: '首页',
 			blog: '博客',
 			gallery: '组件集',
+			projects: '项目',
 			about: '关于',
 			contact: '联系'
 		},
 		hero: {
 			title: '全栈工程师，专注平静而可靠的体验',
 			subtitle: '我把复杂需求拆解成优雅的界面与稳健的后端，让团队高效落地想法。',
-			ctaPrimary: '查看作品',
+			ctaPrimary: '查看项目',
+			ctaGallery: '组件集',
 			ctaSecondary: '聊一聊'
 		},
 		intro: {
@@ -210,6 +265,34 @@ export const messages: Record<Locale, Messages> = {
 				ux: '用户体验',
 				interaction: '交互',
 			},
+		},
+		projects: {
+			title: '项目',
+			subtitle: '应用、工具与开源作品。',
+			filterAll: '全部',
+			sortBy: '排序',
+			sortDefault: '默认',
+			sortNameAZ: '名称 A \u2192 Z',
+			sortNameZA: '名称 Z \u2192 A',
+			sortNewest: '最新优先',
+			sortOldest: '最早优先',
+			layoutGrid: '网格',
+			layoutList: '列表',
+			viewProject: '在线演示',
+			viewCode: '源代码',
+			viewAll: '查看全部项目',
+			tagLabels: {
+				fullstack: '全栈',
+				frontend: '前端',
+				backend: '后端',
+				ai: 'AI',
+				tooling: '工具链',
+				oss: '开源',
+			},
+		},
+		home: {
+			projectsTitle: '精选项目',
+			projectsSubtitle: '近期构建的部分作品。',
 		},
 		about: {
 			title: '关于我',

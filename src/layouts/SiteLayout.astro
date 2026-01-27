@@ -19,11 +19,13 @@ const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
 const isAbout = pathname.startsWith(`/${locale}/about`);
 const isBlog = pathname.startsWith(`/${locale}/blog`);
 const isGallery = pathname.startsWith(`/${locale}/gallery`);
+const isProjects = pathname.startsWith(`/${locale}/projects`);
 
 const navLinks = [
   { href: `/${locale}`, label: t.nav.home, active: isHome },
   { href: `/${locale}/about`, label: t.nav.about, active: isAbout },
   { href: `/${locale}/blog`, label: t.nav.blog, active: isBlog },
+  { href: `/${locale}/projects`, label: t.nav.projects, active: isProjects },
   { href: `/${locale}/gallery`, label: t.nav.gallery, active: isGallery },
 ];
 ---

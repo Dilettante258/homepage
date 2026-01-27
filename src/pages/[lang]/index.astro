@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { resolveLocale, messages, SUPPORTED_LOCALES } from "../../i18n/strings";
+import { getFeaturedProjects } from "../../data/projects";
 
 export function getStaticPaths() {
   return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
@@ -9,6 +10,7 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = resolveLocale(lang);
 const t = messages[locale];
+const featured = getFeaturedProjects();
 ---
 
 <SiteLayout locale={locale} t={t}>
@@ -17,7 +19,8 @@ const t = messages[locale];
     <h1>{t.hero.title}</h1>
     <p class="lede">{t.hero.subtitle}</p>
     <div class="cta">
-      <a class="btn" href={`/${locale}/gallery`}>{t.hero.ctaPrimary}</a>
+      <a class="btn" href={`/${locale}/projects`}>{t.hero.ctaPrimary}</a>
+      <a class="ghost" href={`/${locale}/gallery`}>{t.hero.ctaGallery}</a>
       <a class="ghost" href={`/${locale}/about`}>{t.hero.ctaSecondary}</a>
     </div>
     <div class="chips">
@@ -40,6 +43,65 @@ const t = messages[locale];
         </svg>
       </a>
     </div>
+  </section>
+
+  <section class="projects-preview">
+    <div class="section-header">
+      <h2>{t.home.projectsTitle}</h2>
+      <p class="lede">{t.home.projectsSubtitle}</p>
+    </div>
+    <div class="preview-grid">
+      {
+        featured.map((item) => (
+          <div class="preview-card">
+            <div class="preview-thumbnail">
+              {item.cover ? (
+                <img src={item.cover} alt={item.title[locale]} loading="lazy" />
+              ) : (
+                <div
+                  class="preview-gradient"
+                  style={`background: ${item.fallbackGradient};`}
+                />
+              )}
+            </div>
+            <div class="preview-body">
+              <h3>{item.title[locale]}</h3>
+              <p>{item.description[locale]}</p>
+              <div class="preview-tech">
+                {item.tech.map((techName) => (
+                  <span>{techName}</span>
+                ))}
+              </div>
+              <div class="preview-links">
+                {item.links.live && (
+                  <a
+                    href={item.links.live}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="btn small"
+                  >
+                    {t.projects.viewProject} ↗
+                  </a>
+                )}
+                {item.links.github && (
+                  <a
+                    href={item.links.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="ghost small"
+                  >
+                    {t.projects.viewCode} ↗
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+    <a class="view-all" href={`/${locale}/projects`}>
+      {t.projects.viewAll} →
+    </a>
   </section>
 </SiteLayout>
 
@@ -161,9 +223,136 @@ const t = messages[locale];
     box-shadow: 0 8px 30px var(--primary-glow);
   }
 
+  /* ---- Projects Preview ---- */
+  .projects-preview {
+    padding: 2rem 0 3rem;
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    margin: 0 0 0.3rem;
+  }
+
+  .section-header .lede {
+    margin: 0;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .preview-card {
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface-raised);
+    transition:
+      transform 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .preview-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-border);
+    box-shadow: 0 15px 80px var(--primary-glow);
+  }
+
+  .preview-thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .preview-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .preview-gradient {
+    width: 100%;
+    height: 100%;
+  }
+
+  .preview-body {
+    padding: 1rem;
+  }
+
+  .preview-body h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem;
+  }
+
+  .preview-body p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 0.6rem;
+  }
+
+  .preview-tech {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+  }
+
+  .preview-tech span {
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--stroke);
+    color: var(--muted);
+    font-size: 0.8rem;
+    background: var(--surface);
+  }
+
+  .preview-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .small {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .view-all {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1.2rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--stroke);
+    color: var(--text);
+    background: var(--surface-hover);
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s;
+  }
+
+  .view-all:hover {
+    transform: translateY(-1px);
+    border-color: var(--border-hover);
+  }
+
   @media (max-width: 600px) {
     .hero {
       padding: 2rem 0;
+    }
+
+    .cta {
+      flex-wrap: wrap;
     }
   }
 </style>
