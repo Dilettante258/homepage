@@ -3,11 +3,13 @@ import { defineConfig } from 'astro/config';
 import solidJs from '@astrojs/solid-js';
 import react from '@astrojs/react';
 import viewTimelinePlugin from './src/remark/view-timeline';
+import mermaid from 'astro-mermaid';
 import { fontProviders } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
   integrations: [
+    mermaid(),
     react({
       include: ['**/react/*'],
     }),
