@@ -194,6 +194,25 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
     color: var(--muted);
   }
 
+  @media (max-width: 480px) {
+    .page-header {
+      padding: 1.25rem 0 0.25rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .post {
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    .post h3 {
+      font-size: 0.95rem;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     ::view-transition-group(*),
     ::view-transition-old(*),

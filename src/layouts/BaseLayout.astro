@@ -250,25 +250,22 @@ const barClassName = "page-transition-bar";
 
   /* View Transitions 动画 */
   @media (prefers-reduced-motion: no-preference) {
-    /* Root 默认淡入淡出 - 加快动画速度以提升体验 */
+    /* Root 默认淡入淡出 */
     ::view-transition-old(root),
     ::view-transition-new(root) {
       animation-duration: 0.2s;
       animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* 旧页面保持不变，新页面在上层淡入覆盖，避免中间闪白 */
     ::view-transition-old(root) {
-      animation-name: fade-out;
+      animation: none;
+      z-index: 1;
     }
 
     ::view-transition-new(root) {
       animation-name: fade-in;
-    }
-
-    @keyframes fade-out {
-      to {
-        opacity: 0;
-      }
+      z-index: 2;
     }
 
     @keyframes fade-in {
@@ -281,6 +278,18 @@ const barClassName = "page-transition-bar";
     ::view-transition-group(*) {
       animation-duration: 0.25s;
       animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  /* 移动端：缩短过渡时间，体感更轻快 */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 640px) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.12s;
+    }
+
+    ::view-transition-group(*) {
+      animation-duration: 0.15s;
     }
   }
 

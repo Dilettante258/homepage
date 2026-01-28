@@ -531,14 +531,92 @@ const experiences = [
     display: block;
   }
 
+  /* ---- Responsive ---- */
+
+  /* Tablet (≤768px) */
+  @media (max-width: 768px) {
+    .page-header h1 {
+      font-size: 1.75rem;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .wakatime-chart {
+      padding: 0.75rem;
+    }
+  }
+
+  /* Small tablet / large phone (≤600px) */
   @media (max-width: 600px) {
+    .page-header {
+      margin-bottom: 1.2rem;
+    }
+
+    .contact-bar {
+      margin-bottom: 2rem;
+    }
+
+    .section {
+      margin-bottom: 1.75rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+    }
+
     .edu-card {
       flex-direction: column;
+      padding: 1rem;
     }
 
     .timeline-company {
       flex-direction: column;
       gap: 0.1rem;
+    }
+  }
+
+  /* Phone (≤480px) */
+  @media (max-width: 480px) {
+    .about-page {
+      padding: 1.25rem 0;
+    }
+
+    .page-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .wakatime-chart {
+      padding: 0.5rem;
+      border-radius: 8px;
+    }
+
+    .edu-card {
+      border-radius: 8px;
+    }
+
+    .timeline {
+      padding-left: 20px;
+    }
+
+    .timeline-dot {
+      left: -17px;
+      width: 6px;
+      height: 6px;
+    }
+
+    .timeline-card {
+      padding: 0.75rem 0;
     }
   }
 </style>
