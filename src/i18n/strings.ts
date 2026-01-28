@@ -80,8 +80,10 @@ export type Messages = {
 	about: {
 		title: string;
 		subtitle: string;
+		techStackTitle: string;
 		educationTitle: string;
 		experienceTitle: string;
+		codingActivityTitle: string;
 		contactTitle: string;
 		present: string;
 	};
@@ -193,8 +195,10 @@ export const messages: Record<Locale, Messages> = {
 		about: {
 			title: 'About Me',
 			subtitle: 'Education, experience, and background.',
+			techStackTitle: 'Tech Stack',
 			educationTitle: 'Education',
 			experienceTitle: 'Work Experience',
+			codingActivityTitle: 'Coding Activity',
 			contactTitle: 'Get in Touch',
 			present: 'Present',
 		},
@@ -300,8 +304,10 @@ export const messages: Record<Locale, Messages> = {
 		about: {
 			title: '关于我',
 			subtitle: '教育背景与实习经历',
+			techStackTitle: '技术栈',
 			educationTitle: '教育经历',
 			experienceTitle: '实习经历',
+			codingActivityTitle: '编码活跃度',
 			contactTitle: '联系方式',
 			present: '至今',
 		},

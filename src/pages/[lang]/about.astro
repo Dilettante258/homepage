@@ -114,6 +114,81 @@ const experiences = [
       </a>
     </div>
 
+    <!-- Tech Stack -->
+    <div class="section">
+      <h2 class="section-title">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M16 18l6-6-6-6"></path>
+          <path d="M8 6l-6 6 6 6"></path>
+        </svg>
+        {t.about.techStackTitle}
+      </h2>
+      <div class="tech-stack-icons" transition:persist="tech-stack-icons">
+        <img
+          class="skill-icons dark-only"
+          src="https://skillicons.dev/icons?i=nextjs,react,astro,vue,js,ts,vercel,flask,docker,linux,cloudflare,html,css,netlify,latex,md,python&perline=10&theme=dark"
+          alt="Tech Stack"
+          width="554"
+          height="104"
+          loading="lazy"
+        />
+        <img
+          class="skill-icons light-only"
+          src="https://skillicons.dev/icons?i=nextjs,react,astro,vue,js,ts,vercel,flask,docker,linux,cloudflare,html,css,netlify,latex,md,python&perline=10&theme=light"
+          alt="Tech Stack"
+          width="554"
+          height="104"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    <!-- Coding Activity -->
+    <div class="section">
+      <h2 class="section-title">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        {t.about.codingActivityTitle}
+      </h2>
+      <div class="wakatime-chart" transition:persist="wakatime-chart">
+        <img
+          class="wakatime-img dark-only"
+          src="https://wakatime.com/share/@Dilettante258/82da426f-5fb5-41cf-991a-ea2c9cf12bdd.svg"
+          alt="Coding Activity"
+          width="719"
+          height="132"
+          loading="lazy"
+        />
+        <img
+          class="wakatime-img light-only"
+          src="https://wakatime.com/share/@Dilettante258/342e0b6d-5547-48fc-8ca9-1d846c38c389.svg"
+          alt="Coding Activity"
+          width="719"
+          height="132"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
     <!-- Education -->
     <div class="section">
       <h2 class="section-title">
@@ -188,7 +263,6 @@ const experiences = [
     padding: 2rem 0;
     width: 100%;
     max-width: 100%;
-    overflow: hidden;
   }
 
   .subtitle {
@@ -227,7 +301,9 @@ const experiences = [
     color: var(--muted);
     text-decoration: none;
     font-size: 0.85rem;
-    transition: color 0.15s;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -236,6 +312,7 @@ const experiences = [
 
   .contact-chip:hover {
     color: var(--text);
+    border-color: var(--border-hover);
   }
 
   .contact-chip svg {
@@ -245,6 +322,10 @@ const experiences = [
   /* ---- Section ---- */
   .section {
     margin-bottom: 2.5rem;
+  }
+
+  .section:last-child {
+    margin-bottom: 0;
   }
 
   .section-title {
@@ -263,6 +344,37 @@ const experiences = [
     flex-shrink: 0;
   }
 
+  /* ---- Tech Stack ---- */
+  .tech-stack-icons {
+    width: 100%;
+  }
+
+  .skill-icons {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+  }
+
+  /* ---- Coding Activity ---- */
+  .wakatime-chart {
+    max-width: 640px;
+    border: 1px solid var(--stroke);
+    border-radius: 10px;
+    padding: 1rem;
+    background: var(--surface);
+    transition: border-color 0.15s;
+  }
+
+  .wakatime-chart:hover {
+    border-color: var(--border-hover);
+  }
+
+  .wakatime-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
   /* ---- Education Card ---- */
   .edu-card {
     display: flex;
@@ -274,6 +386,12 @@ const experiences = [
     padding: 1.2rem;
     width: 100%;
     overflow: hidden;
+    background: var(--surface);
+    transition: border-color 0.15s;
+  }
+
+  .edu-card:hover {
+    border-color: var(--border-hover);
   }
 
   .edu-main {
@@ -350,6 +468,7 @@ const experiences = [
 
   .timeline-item.current .timeline-dot {
     background: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
   }
 
   .timeline-card {
@@ -397,6 +516,19 @@ const experiences = [
     font-size: 0.88rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
+  }
+
+  /* ---- Dark / Light toggle (must be last to override display rules) ---- */
+  .light-only {
+    display: none;
+  }
+
+  :global([data-theme="light"]) .dark-only {
+    display: none;
+  }
+
+  :global([data-theme="light"]) .light-only {
+    display: block;
   }
 
   @media (max-width: 600px) {
