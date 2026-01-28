@@ -5,7 +5,7 @@ import { getFeaturedProjects } from "../../data/projects";
 import InteractiveGrid from "../../components/InteractiveGrid.astro";
 import GithubIcon from "../../components/icons/GithubIcon.astro";
 import MailIcon from "../../components/icons/MailIcon.astro";
-import "../types.d.ts";
+import "../../utils/types.d.ts";
 
 export function getStaticPaths() {
   return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
