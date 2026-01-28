@@ -1,13 +1,15 @@
 ---
 title: iOS Webview 输入框自动聚焦滚动与定位错乱的相关问题
 description: 解决 iOS Webview 中输入框聚焦时页面自动滚动、定位元素错位等问题的工程化方案。
-date: 2026-1-28
+date: 2026-01-28
 locale: zh
 tags: [iOS, Webview, React]
 slug: ios-input-scroll
 ---
 
-![一则评论](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/64d11ebd1f8b4b91994ee124ec469734~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgRGlsZXR0YW50ZTI1OA==:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDM3NDMzNTQ3OTM1OTQ2NiJ9&rk3s=f64ab15b&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1770195084&x-orig-sign=uGMCbgukIq%2FeGbrpitSrUGp397o%3D)
+![一则评论](http://h-r2.kairi.cc/safari-comment.webp)
+
+> 各位，这太荒谬了。全世界都支持这个功能，只有 Safari 不支持。请尽快修复。你们根本不知道为了解决这个问题，用户要付出多少不必要的努力。
 
 上图中的评论来自 Safari 的一个 Issue 评论区。做 C 端、特别是手机 Web 开发时，我和认识的朋友们普遍觉得开发体验非常难受。
 
@@ -17,7 +19,9 @@ slug: ios-input-scroll
 
 ## 问题现象
 
-我做了一个简单的 demo：顶部有一个 sticky 定位的置顶元素，页面偏下的位置有一个输入框。
+<img src="http://h-r2.kairi.cc/input-demo.webp" alt="demo" width="40%" />
+
+我做了一个简单的 [demo](http://kairi.cc/zh/gallery/ios-input)：顶部有一个 sticky 定位的置顶元素，页面偏下的位置有一个输入框。
 
 当在 iOS 里点击这一输入框时，软键盘弹起，输入框上移，而 sticky 定位的元素失效了。
 
@@ -35,21 +39,7 @@ slug: ios-input-scroll
 
 **Visual Viewport**（视觉视口）是用户实际看到的那个"窗口"。当键盘弹起时，visual viewport 的高度会缩小，同时可能产生一个 `offsetTop`——也就是说，visual viewport 在 layout viewport 内部发生了偏移。
 
-```
-┌─────────────────────────┐
-│     Layout Viewport     │
-│                         │
-│  ┌───────────────────┐  │ ← Visual Viewport（用户看到的）
-│  │                   │  │
-│  │   页面内容         │  │
-│  │                   │  │
-│  └───────────────────┘  │ ← Visual Viewport 底部
-│                         │ ← offsetTop: visual viewport 相对 layout viewport 的偏移
-│  ┌───────────────────┐  │
-│  │   软键盘           │  │
-│  └───────────────────┘  │
-└─────────────────────────┘
-```
+![viewpor](https://h-r2.kairi.cc/viewport.webp)
 
 在桌面浏览器上，这两个视口几乎总是重合的。但在 iOS 上，**键盘弹起时 visual viewport 会缩小并偏移，而 layout viewport 保持不变**。这就是为什么 `position: fixed` 的元素看起来"飘了"——它相对于 layout viewport 没有移动，但用户通过 visual viewport 看到的位置变了。
 
@@ -462,9 +452,9 @@ topViewRef.current?.addEventListener("touchmove", handleTouchMove, {
 
 ---
 
-## 完整代码
+## 效果和完整代码
 
-以下是涉及的四个模块的完整代码。
+以下是涉及的三个模块的完整代码。
 
 ### useKeyboardDetection.ts —— 键盘检测 Hook
 
@@ -682,124 +672,6 @@ export default function KeyboardAdapter({
 }
 ```
 
-### TopView —— 固定顶栏（阻止 touchmove 滚动）
-
-```tsx
-import { View } from "@tarojs/components";
-import { useLayoutEffect, useRef } from "react";
-import Taro from "@tarojs/taro";
-import { getDeviceType } from "@/utils/device";
-import "./index.scss";
-import { getDisplayInfo } from "@/bridge/device";
-
-const deviceType = getDeviceType();
-let topViewStatusBarHeight = 0;
-
-try {
-  const systemInfo = Taro.getSystemInfoSync();
-  const safeAreaTop = systemInfo.safeArea?.top || 0;
-  if (safeAreaTop === 0) {
-    const displayInfo = getDisplayInfo();
-    const { statusBarHeight, density, isImmersiveStatusBar } =
-      displayInfo ?? {};
-    if (
-      statusBarHeight &&
-      density &&
-      deviceType === "android" &&
-      isImmersiveStatusBar
-    ) {
-      topViewStatusBarHeight = statusBarHeight / density;
-    }
-  }
-} catch (error) {
-  console.error("获取状态栏高度失败:", error);
-}
-
-const paddingTopStyle = topViewStatusBarHeight
-  ? { paddingTop: `${topViewStatusBarHeight}px` }
-  : undefined;
-
-function handleTouchMove(e: TouchEvent) {
-  e.preventDefault();
-  e.stopPropagation();
-}
-
-const options: IntersectionObserverInit = { threshold: 0.98 };
-
-export default function TopView({
-  children,
-  zIndex,
-  needShadow = false,
-  container = null,
-  backgroundColor,
-  showShadow: externalShowShadow,
-  whiteBgOnScr = false,
-}: {
-  children: React.ReactNode;
-  zIndex?: number;
-  needShadow?: boolean;
-  container?: any;
-  backgroundColor?: string;
-  showShadow?: boolean;
-  whiteBgOnScr?: boolean;
-}) {
-  const topViewRef = useRef<Element>(null);
-  const topViewPlaceholderRef = useRef<Element>(null);
-
-  useLayoutEffect(() => {
-    const controller = new AbortController();
-    topViewRef.current?.addEventListener("touchmove", handleTouchMove, {
-      signal: controller.signal,
-    });
-    if (externalShowShadow === true) {
-      topViewRef.current?.classList.add("top-view-shadow");
-      return () => controller.abort();
-    }
-    const callback = (entries: IntersectionObserverEntry[]) => {
-      const entry = entries[0];
-      if (
-        entry.intersectionRatio <= 0.98 &&
-        entry.target.getBoundingClientRect().top !== 0
-      ) {
-        topViewRef.current?.classList.add("top-view-shadow");
-      } else {
-        topViewRef.current?.classList.remove("top-view-shadow");
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    if (needShadow && topViewPlaceholderRef.current) {
-      observer.observe(topViewPlaceholderRef.current as Element);
-    }
-    return () => {
-      observer.disconnect();
-      controller.abort();
-    };
-  }, [needShadow, container, externalShowShadow]);
-
-  return (
-    <>
-      <View
-        ref={topViewPlaceholderRef}
-        className="top-view-placeholder-children"
-        data-device={deviceType}
-        style={paddingTopStyle}
-      >
-        {children}
-      </View>
-      <View
-        ref={topViewRef}
-        className="top-view"
-        style={{ zIndex, backgroundColor, ...paddingTopStyle }}
-        data-device={deviceType}
-        data-whitebgonscr={whiteBgOnScr}
-      >
-        {children}
-      </View>
-    </>
-  );
-}
-```
-
 ### InputCell —— 输入框组件（核心逻辑）
 
 以下代码省略了业务 UI（图标、TextArea 变体、清除按钮等），只保留与滚动控制直接相关的核心逻辑。
@@ -905,6 +777,13 @@ export default function InputCell({ value, onChange, label, disabled = false }) 
 
 ## 总结
 
+
+
+
+| before                                                                            | after  |
+| ------------------------------------------------------------------------------ | - |
+| ![demo](http://h-r2.kairi.cc/before.webp) |  ![demo](http://h-r2.kairi.cc/after.webp) |
+
 iOS 键盘问题的难点从来不是"算不算得出 keyboardHeight"，而是：
 
 - **你拿到可靠数据时，浏览器可能已经滚了**
@@ -912,7 +791,6 @@ iOS 键盘问题的难点从来不是"算不算得出 keyboardHeight"，而是�
 
 这里的方案把关键动作前移：**把"键盘可见"当作可以被"预测"的状态，而不是只能被"检测"的结果**。通过在用户手势链路中同步完成 `preventDefault → focus({ preventScroll: true }) → 预告键盘 → 手动滚动`，将体验从"偶现抖动/错位"拉回到"稳定可控"。
 
-这不是一个 hack，而是一种时序工程。
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus "HTMLElement: focus() method - MDN"
 [2]: https://caniuse.com/mdn-api_htmlelement_focus_options_preventscroll_parameter "HTMLElement API: focus: options.preventScroll parameter"

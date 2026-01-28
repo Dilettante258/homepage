@@ -1,13 +1,15 @@
 ---
 title: Common Focus, Auto Scroll, and Position Issues for Inputs in iOS WebViews
 description: Explains why iOS WebViews auto-scroll and misplace elements when inputs focus, and provides a timing-driven, production-ready fix with code.
-date: 2026-1-28
+date: 2026-01-28
 locale: en
 tags: [iOS, Webview, React]
 slug: ios-input-scroll
 ---
 
-![A comment](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/64d11ebd1f8b4b91994ee124ec469734~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgRGlsZXR0YW50ZTI1OA==:q75.awebp?policy=eyJ2bSI6MywidWlkIjoiNDM3NDMzNTQ3OTM1OTQ2NiJ9&rk3s=f64ab15b&x-orig-authkey=f32326d3454f2ac7e96d3d06cdbb035152127018&x-orig-expires=1770195084&x-orig-sign=uGMCbgukIq%2FeGbrpitSrUGp397o%3D)
+![A comment](http://h-r2.kairi.cc/safari-comment.webp)
+
+> Guys, this is ridiculous. Whole world support this, only Safari doesn't. Please fix it. You don't know how much unnecessary work it adds to people to get around this kind of thing.
 
 The comment above comes from an issue thread in Safari. When building B2C products—especially mobile web—my friends and I all feel the developer experience is painful.
 
@@ -17,7 +19,9 @@ During a recent B2C internship I collected some lessons. Many problems had no go
 
 ## What You’ll See
 
-I built a tiny demo: a sticky element at the top, and an input further down the page.
+<img src="http://h-r2.kairi.cc/input-demo.webp" alt="demo" width="40%" />
+
+I built a tiny [demo](http://kairi.cc/zh/gallery/ios-input): a sticky element at the top, and an input further down the page.
 
 On iOS, when you tap the input, the soft keyboard rises, the input moves up, and the sticky element stops sticking.
 
@@ -35,21 +39,7 @@ Before keyboard talk, we must separate two viewports—this is key to everything
 
 **Visual Viewport** is the “window” the user actually sees. When the keyboard appears, its height shrinks and it can shift with an `offsetTop`—meaning the visual viewport moves inside the layout viewport.
 
-```
-┌─────────────────────────┐
-│     Layout Viewport     │
-│                         │
-│  ┌───────────────────┐  │ ← Visual Viewport (what the user sees)
-│  │                   │  │
-│  │   Page Content    │  │
-│  │                   │  │
-│  └───────────────────┘  │ ← Bottom of Visual Viewport
-│                         │ ← offsetTop: visual viewport’s offset in the layout viewport
-│  ┌───────────────────┐  │
-│  │    Soft Keyboard  │  │
-│  └───────────────────┘  │
-└─────────────────────────┘
-```
+![viewport](https://h-r2.kairi.cc/viewport.webp)
 
 On desktop these viewports almost always overlap. On iOS, **the visual viewport shrinks and shifts when the keyboard appears, while the layout viewport stays the same**. That’s why `position: fixed` elements seem to “float”—they haven’t moved relative to the layout viewport, but the user’s viewing window has.
 
@@ -454,9 +444,9 @@ topViewRef.current?.addEventListener("touchmove", handleTouchMove, {
 
 ---
 
-## Full Code
+## Effect and Full Code
 
-Here are the four involved modules.
+Here are the three involved modules.
 
 ### useKeyboardDetection.ts — Keyboard Hook
 
@@ -674,124 +664,6 @@ export default function KeyboardAdapter({
 }
 ```
 
-### TopView — Fixed Header (blocks touchmove scrolling)
-
-```tsx
-import { View } from "@tarojs/components";
-import { useLayoutEffect, useRef } from "react";
-import Taro from "@tarojs/taro";
-import { getDeviceType } from "@/utils/device";
-import "./index.scss";
-import { getDisplayInfo } from "@/bridge/device";
-
-const deviceType = getDeviceType();
-let topViewStatusBarHeight = 0;
-
-try {
-  const systemInfo = Taro.getSystemInfoSync();
-  const safeAreaTop = systemInfo.safeArea?.top || 0;
-  if (safeAreaTop === 0) {
-    const displayInfo = getDisplayInfo();
-    const { statusBarHeight, density, isImmersiveStatusBar } =
-      displayInfo ?? {};
-    if (
-      statusBarHeight &&
-      density &&
-      deviceType === "android" &&
-      isImmersiveStatusBar
-    ) {
-      topViewStatusBarHeight = statusBarHeight / density;
-    }
-  }
-} catch (error) {
-  console.error("Failed to get status bar height:", error);
-}
-
-const paddingTopStyle = topViewStatusBarHeight
-  ? { paddingTop: `${topViewStatusBarHeight}px` }
-  : undefined;
-
-function handleTouchMove(e: TouchEvent) {
-  e.preventDefault();
-  e.stopPropagation();
-}
-
-const options: IntersectionObserverInit = { threshold: 0.98 };
-
-export default function TopView({
-  children,
-  zIndex,
-  needShadow = false,
-  container = null,
-  backgroundColor,
-  showShadow: externalShowShadow,
-  whiteBgOnScr = false,
-}: {
-  children: React.ReactNode;
-  zIndex?: number;
-  needShadow?: boolean;
-  container?: any;
-  backgroundColor?: string;
-  showShadow?: boolean;
-  whiteBgOnScr?: boolean;
-}) {
-  const topViewRef = useRef<Element>(null);
-  const topViewPlaceholderRef = useRef<Element>(null);
-
-  useLayoutEffect(() => {
-    const controller = new AbortController();
-    topViewRef.current?.addEventListener("touchmove", handleTouchMove, {
-      signal: controller.signal,
-    });
-    if (externalShowShadow === true) {
-      topViewRef.current?.classList.add("top-view-shadow");
-      return () => controller.abort();
-    }
-    const callback = (entries: IntersectionObserverEntry[]) => {
-      const entry = entries[0];
-      if (
-        entry.intersectionRatio <= 0.98 &&
-        entry.target.getBoundingClientRect().top !== 0
-      ) {
-        topViewRef.current?.classList.add("top-view-shadow");
-      } else {
-        topViewRef.current?.classList.remove("top-view-shadow");
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    if (needShadow && topViewPlaceholderRef.current) {
-      observer.observe(topViewPlaceholderRef.current as Element);
-    }
-    return () => {
-      observer.disconnect();
-      controller.abort();
-    };
-  }, [needShadow, container, externalShowShadow]);
-
-  return (
-    <>
-      <View
-        ref={topViewPlaceholderRef}
-        className="top-view-placeholder-children"
-        data-device={deviceType}
-        style={paddingTopStyle}
-      >
-        {children}
-      </View>
-      <View
-        ref={topViewRef}
-        className="top-view"
-        style={{ zIndex, backgroundColor, ...paddingTopStyle }}
-        data-device={deviceType}
-        data-whitebgonscr={whiteBgOnScr}
-      >
-        {children}
-      </View>
-    </>
-  );
-}
-```
-
 ### InputCell — Input Component (core logic)
 
 Business UI (icons, textarea variant, clear button, etc.) omitted—only scroll-control logic is shown.
@@ -918,6 +790,10 @@ export default function InputCell({
 ---
 
 ## Takeaways
+
+| before                                                                            | after  |
+| ------------------------------------------------------------------------------ | - |
+| ![demo](http://h-r2.kairi.cc/before.webp) |  ![demo](http://h-r2.kairi.cc/after.webp) |
 
 The hardest part of iOS keyboard issues isn’t “calculating keyboardHeight,” it’s that:
 
