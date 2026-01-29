@@ -115,9 +115,23 @@ const { Content, headings } = await post.render();
   .content pre {
     padding: 1rem;
     border-radius: 8px;
-    background: var(--surface-tag);
+    background: linear-gradient(
+      140deg,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0)
+    );
+    border: 1px solid var(--stroke);
+    box-shadow:
+      0 16px 30px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
     overflow-x: auto;
     font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .content pre code {
+    display: block;
+    color: var(--text);
   }
 
   .content code {
@@ -126,8 +140,29 @@ const { Content, headings } = await post.render();
       Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
+  .content :not(pre) > code {
+    background: var(--surface-tag);
+    border: 1px solid var(--stroke);
+    border-radius: 6px;
+    padding: 0.15rem 0.35rem;
+    font-size: 0.92em;
+    color: var(--text);
+  }
+
   .content a {
     color: var(--primary);
+  }
+
+  :root[data-theme="light"] .content pre {
+    background: linear-gradient(
+        160deg,
+        rgba(255, 255, 255, 0.85),
+        rgba(255, 255, 255, 0.4)
+      ),
+      var(--surface);
+    box-shadow:
+      0 16px 24px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
   }
 
   /* ---- Responsive ---- */
