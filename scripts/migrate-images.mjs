@@ -98,10 +98,10 @@ function uploadToR2(localPath, key, contentType, dryRun) {
   execSync(cmd, { stdio: 'inherit', cwd: resolve('.') });
 }
 
-/** 获取博客文章 slug（从文件名去掉 .en.md / .zh.md） */
+/** 获取博客文章 slug（从文件名去掉 -en.md / -zh.md） */
 function getSlug(filePath) {
   const name = basename(filePath);
-  return name.replace(/\.(en|zh)\.md$/, '').replace(/\.md$/, '');
+  return name.replace(/-(en|zh)\.md$/, '').replace(/\.md$/, '');
 }
 
 // ============ 主流程 ============

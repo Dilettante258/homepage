@@ -4,7 +4,6 @@ description: Explains why iOS WebViews auto-scroll and misplace elements when in
 date: 2026-01-28
 locale: en
 tags: [iOS, Webview, React]
-slug: ios-input-scroll
 ---
 
 ![A comment](http://h-r2.kairi.cc/safari-comment.webp)

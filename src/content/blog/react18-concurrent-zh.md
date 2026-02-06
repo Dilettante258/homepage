@@ -4,7 +4,6 @@ description: 深入理解 React 18 并发渲染机制，包括时间切片、优
 date: 2025-07-17
 locale: zh
 tags: [React]
-slug: react18-concurrent
 ---
 
 > 面向读者：对React原理、前端开发有一定了解和经验的人群，所以一些概念和知识会默认读者已了解，不会详细论述。

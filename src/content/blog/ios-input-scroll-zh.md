@@ -4,7 +4,6 @@ description: 解决 iOS Webview 中输入框聚焦时页面自动滚动、定位
 date: 2026-01-28
 locale: zh
 tags: [iOS, Webview, React]
-slug: ios-input-scroll
 ---
 
 ![一则评论](http://h-r2.kairi.cc/safari-comment.webp)

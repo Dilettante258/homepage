@@ -4,7 +4,6 @@ description: A deep dive into React 18's concurrent rendering mechanism, includi
 date: 2025-07-17
 locale: en
 tags: [React]
-slug: react18-concurrent
 ---
 
 > Target audience: Readers with some understanding and experience of React internals and frontend development. Some concepts and knowledge are assumed to be already known and will not be explained in detail.

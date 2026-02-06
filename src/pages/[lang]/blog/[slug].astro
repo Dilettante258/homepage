@@ -8,16 +8,19 @@ import ArrowLeftIcon from "../../../components/icons/ArrowLeftIcon.astro";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { lang: post.data.locale, slug: post.slug },
+    params: {
+      lang: post.data.locale,
+      slug: post.slug.replace(new RegExp(`-${post.data.locale}$`), ""),
+    },
+    props: { post },
   }));
 }
 
-const { lang, slug } = Astro.params;
+const { lang } = Astro.params;
 const locale = resolveLocale(lang);
 const t = messages[locale];
 
-const posts = await getCollection("blog", ({ data }) => data.locale === locale);
-const post = posts.find((entry) => entry.slug === slug);
+const { post } = Astro.props;
 
 if (!post) {
   throw new Error(`Post not found for slug "${slug}" and locale "${locale}"`);

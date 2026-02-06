@@ -20,6 +20,11 @@ const posts = (
   await getCollection("blog", ({ data }) => data.locale === locale)
 ).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
+/** Strip locale suffix from auto-generated slug */
+function toUrlSlug(slug: string) {
+  return slug.replace(new RegExp(`-${locale}$`), "");
+}
+
 const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
 ---
 
@@ -61,7 +66,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
         posts.map((post, idx) => (
           <a
             class="post"
-            href={`/${locale}/blog/${post.slug}`}
+            href={`/${locale}/blog/${toUrlSlug(post.slug)}`}
             data-tags={(post.data.tags ?? []).join(",")}
             data-title={post.data.title}
             data-date={post.data.date.toISOString()}
