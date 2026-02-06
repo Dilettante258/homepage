@@ -178,12 +178,19 @@ function stripLeadingNumbering(input: string) {
 </div>
 
 <script>
-  const headingLists = document.getElementById("h-ol")! as HTMLOListElement;
-  headingLists.addEventListener("click", function (e) {
-    if (e.target instanceof HTMLButtonElement) {
-      location.hash = e.target.dataset.href!;
-    }
-  });
+  function setupTocNavigation() {
+    const headingLists = document.getElementById("h-ol");
+    if (!headingLists) return;
+
+    headingLists.addEventListener("click", function (e) {
+      const button = (e.target as Element)?.closest("button[data-href]");
+      if (button instanceof HTMLButtonElement) {
+        location.hash = button.dataset.href!;
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupTocNavigation);
 </script>
 
 <style is:global>

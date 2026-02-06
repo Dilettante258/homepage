@@ -17,7 +17,7 @@ const { locale, t, title, description, ...rest } = Astro.props;
 ---
 
 <BaseLayout locale={locale} title={title} description={description}>
-  <header class="shell header" transition:persist>
+  <header class="shell header">
     <div class="brand">
       <strong class="brand-name">Dilettante258</strong>
     </div>
@@ -30,7 +30,7 @@ const { locale, t, title, description, ...rest } = Astro.props;
   <main class="shell content" {...rest}>
     <slot />
   </main>
-  <footer class="shell footer" transition:persist>
+  <footer class="shell footer">
     <p>{t.footer.note}</p>
   </footer>
 </BaseLayout>
