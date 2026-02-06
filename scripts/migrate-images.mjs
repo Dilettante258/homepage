@@ -7,7 +7,7 @@ import { readdir } from 'node:fs/promises';
 
 // ============ 配置 ============
 const CONFIG = {
-  bucket: 'h-r2',                // R2 bucket 名称
+  bucket: 'homepage',                // R2 bucket 名称
   customDomain: 'h-r2.kairi.cc', // 自定义域名
   blogDir: 'src/content/blog',   // 博客目录
   tmpDir: '.tmp-images',         // 临时下载目录
@@ -90,7 +90,7 @@ async function downloadImage(url, dest, cookie) {
 
 /** 上传文件到 R2 */
 function uploadToR2(localPath, key, contentType, dryRun) {
-  const cmd = `npx wrangler r2 object put "${CONFIG.bucket}/${key}" --file="${localPath}" --content-type="${contentType}"`;
+  const cmd = `npx wrangler r2 object put "${CONFIG.bucket}/${key}" --file="${localPath}" --content-type="${contentType}" --remote`;
   if (dryRun) {
     console.log(`  [dry-run] ${cmd}`);
     return;
