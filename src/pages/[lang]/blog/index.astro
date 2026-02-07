@@ -152,7 +152,8 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
 
   /* ---- Posts Container ---- */
   .posts {
-    margin-top: 1.2rem;
+    margin-top: calc(1.2rem - 2px);
+    padding-top: 2px;
     width: 100%;
     overflow: hidden;
   }
