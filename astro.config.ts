@@ -8,6 +8,7 @@ import { fontProviders } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
+  trailingSlash: 'never',
   integrations: [
     mermaid(),
     react({

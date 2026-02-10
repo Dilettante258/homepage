@@ -27,6 +27,7 @@ const barClassName = "page-transition-bar";
 
     <ClientRouter />
     <script is:inline>
+      const barClassName = "page-transition-bar";
       // 主题初始化
       function getTheme() {
         const saved = localStorage.getItem("theme");
@@ -46,6 +47,29 @@ const barClassName = "page-transition-bar";
         // 在新 document 交换进来之前，先设置主题
         const theme = getTheme();
         e.newDocument.documentElement.dataset.theme = theme;
+
+        // 持久化字体相关的 head 元素，防止页面切换时字体闪烁
+        // ClientRouter 默认只保留 <link rel="stylesheet">，不会保留 <style>（@font-face）和 <link rel="preload">
+        var heads = [document.head, e.newDocument.head];
+        for (var h = 0; h < heads.length; h++) {
+          var idx = 0;
+          for (var el of heads[h].querySelectorAll("style")) {
+            if (el.textContent.indexOf("@font-face") !== -1) {
+              el.setAttribute(
+                "data-astro-transition-persist",
+                "font-style-" + idx++,
+              );
+            }
+          }
+          for (var link of heads[h].querySelectorAll(
+            'link[rel="preload"][as="font"]',
+          )) {
+            link.setAttribute(
+              "data-astro-transition-persist",
+              "font-preload-" + link.getAttribute("href"),
+            );
+          }
+        }
       });
 
       const barSelector = "." + barClassName;
@@ -109,7 +133,8 @@ const barClassName = "page-transition-bar";
     --grid-opacity: 0;
 
     /* Astro 会自动生成 --font-heading 和 --font-body CSS 变量 */
-    --font-mono: ui-monospace, "SF Mono", Monaco, Menlo, Consolas, "Courier New", monospace;
+    --font-mono:
+      ui-monospace, "SF Mono", Monaco, Menlo, Consolas, "Courier New", monospace;
     font-family: var(--font-body);
     scroll-behavior: smooth;
   }
