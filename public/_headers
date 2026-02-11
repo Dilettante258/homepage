@@ -1,0 +1,13 @@
+# SSG pages — content fixed between deployments, Cloudflare auto-purges on deploy
+/*
+  Cache-Control: public, max-age=3600, s-maxage=86400
+
+# Hashed assets (JS, CSS, fonts) — immutable
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Favicon
+/favicon.svg
+  Cache-Control: public, max-age=86400
+/favicon.ico
+  Cache-Control: public, max-age=86400
