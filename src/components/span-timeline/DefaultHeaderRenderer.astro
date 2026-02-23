@@ -1,0 +1,18 @@
+---
+import type { HeaderRenderProps } from "./types";
+
+const { locale, totalUs, formatDuration, globalVar } = Astro.props as HeaderRenderProps;
+
+const spanTitle = typeof globalVar.spanTitle === "string"
+  ? globalVar.spanTitle
+  : "Span";
+const startTitle = typeof globalVar.startTitle === "string"
+  ? globalVar.startTitle
+  : locale === "zh"
+  ? "起始时间"
+  : "Start Time";
+---
+
+<div><span>{spanTitle}</span></div>
+<div><span>0</span><span>{formatDuration(totalUs)}</span></div>
+<div>{startTitle}</div>

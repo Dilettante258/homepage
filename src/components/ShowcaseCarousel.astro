@@ -1,0 +1,326 @@
+---
+import type { Locale } from "../i18n/strings";
+
+type Props = {
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+
+const slides = locale === "zh"
+  ? [
+      { className: "slide2", label: "可视化分析" },
+      { className: "slide3", label: "数据导出" },
+      { className: "slide1", label: "自定义设置" },
+    ]
+  : [
+      { className: "slide2", label: "Visual Analytics" },
+      { className: "slide3", label: "Data Export" },
+      { className: "slide1", label: "Custom Settings" },
+    ];
+
+const prevLabel = locale === "zh" ? "上一张" : "Previous slide";
+const nextLabel = locale === "zh" ? "下一张" : "Next slide";
+---
+
+<div class="carouselShell" data-carousel-root>
+  <button
+    type="button"
+    class="arrow arrowLeft"
+    aria-label={prevLabel}
+    data-carousel-prev
+  >
+    ‹
+  </button>
+  <div class="carousel" data-carousel-track>
+    {
+      slides.map((slide) => (
+        <div class={`slide ${slide.className}`}>
+          <div class="slideContent">
+            <span class="cardLabel">{slide.label}</span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <button
+    type="button"
+    class="arrow arrowRight"
+    aria-label={nextLabel}
+    data-carousel-next
+  >
+    ›
+  </button>
+</div>
+
+<script>
+  const AUTO_SCROLL_INTERVAL = 4000;
+  const activeCarousels = new Map();
+
+  function setupCarousel(root) {
+    const track = root.querySelector("[data-carousel-track]");
+    const prev = root.querySelector("[data-carousel-prev]");
+    const next = root.querySelector("[data-carousel-next]");
+    if (!(track instanceof HTMLElement)) return;
+
+    let paused = false;
+    const pause = () => {
+      paused = true;
+    };
+    const resume = () => {
+      paused = false;
+    };
+
+    const toPrev = () => {
+      track.scrollBy({ left: -track.clientWidth, behavior: "smooth" });
+    };
+
+    const toNext = () => {
+      track.scrollBy({ left: track.clientWidth, behavior: "smooth" });
+    };
+
+    const timer = window.setInterval(() => {
+      if (paused) return;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (track.scrollLeft >= maxScroll - 2) {
+        track.scrollTo({ left: 0, behavior: "smooth" });
+        return;
+      }
+      track.scrollBy({ left: track.clientWidth, behavior: "smooth" });
+    }, AUTO_SCROLL_INTERVAL);
+
+    prev?.addEventListener("click", toPrev);
+    next?.addEventListener("click", toNext);
+
+    track.addEventListener("pointerenter", pause);
+    track.addEventListener("pointerleave", resume);
+    track.addEventListener("focusin", pause);
+    track.addEventListener("focusout", resume);
+    track.addEventListener("touchstart", pause, { passive: true });
+    track.addEventListener("touchend", resume, { passive: true });
+
+    activeCarousels.set(root, () => {
+      window.clearInterval(timer);
+      prev?.removeEventListener("click", toPrev);
+      next?.removeEventListener("click", toNext);
+      track.removeEventListener("pointerenter", pause);
+      track.removeEventListener("pointerleave", resume);
+      track.removeEventListener("focusin", pause);
+      track.removeEventListener("focusout", resume);
+      track.removeEventListener("touchstart", pause);
+      track.removeEventListener("touchend", resume);
+    });
+  }
+
+  function initCarousels() {
+    for (const [root, cleanup] of activeCarousels.entries()) {
+      if (!document.contains(root)) {
+        cleanup();
+        activeCarousels.delete(root);
+      }
+    }
+
+    const roots = document.querySelectorAll("[data-carousel-root]");
+    for (const root of roots) {
+      if (!(root instanceof HTMLElement) || activeCarousels.has(root)) continue;
+      setupCarousel(root);
+    }
+  }
+
+  initCarousels();
+  document.addEventListener("astro:page-load", initCarousels);
+</script>
+
+<style>
+  .carouselShell {
+    position: relative;
+    width: min(23.75rem, calc(100vw - 2rem));
+    margin: 0 auto 2rem;
+  }
+
+  .carousel {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px -12px rgb(0 0 0 / 8%);
+    scroll-marker-group: after;
+  }
+
+  .carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel::scroll-marker-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    padding-top: 1rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .slide {
+    position: relative;
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    container-type: scroll-state;
+    container-name: slide;
+  }
+
+  .slideContent {
+    width: 100%;
+    height: 25.6rem;
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.72;
+    scale: 0.96;
+    transition: opacity 0.35s ease, scale 0.35s ease;
+  }
+
+  .cardLabel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    opacity: 0.95;
+    color: #fff;
+    text-shadow: 0 2px 12px rgb(0 0 0 / 45%);
+  }
+
+  .slide1 .slideContent {
+    background-image: url("https://h-r2.kairi.cc/tb/slide1%401x.webp");
+  }
+
+  .slide2 .slideContent {
+    background-image: url("https://h-r2.kairi.cc/tb/slide2%401x.webp");
+  }
+
+  .slide3 .slideContent {
+    background-image: url("https://h-r2.kairi.cc/tb/slide3%401x.webp");
+  }
+
+  @media (min-resolution: 2dppx) {
+    .slide1 .slideContent {
+      background-image: url("https://h-r2.kairi.cc/tb/slide1%402x.webp");
+    }
+
+    .slide2 .slideContent {
+      background-image: url("https://h-r2.kairi.cc/tb/slide2%402x.webp");
+    }
+
+    .slide3 .slideContent {
+      background-image: url("https://h-r2.kairi.cc/tb/slide3%402x.webp");
+    }
+  }
+
+  .slide::scroll-marker {
+    content: "";
+    width: 90px;
+    height: 6px;
+    border-radius: 4px;
+    background: rgb(148 163 184 / 45%);
+    transition: background-color 0.25s ease;
+  }
+
+  .slide1::scroll-marker:target-current {
+    background: #93c5fd;
+  }
+
+  .slide2::scroll-marker:target-current {
+    background: #fdba74;
+  }
+
+  .slide3::scroll-marker:target-current {
+    background: #86efac;
+  }
+
+  .arrow {
+    position: absolute;
+    top: calc(50% - 0.5rem);
+    transform: translateY(-50%);
+    z-index: 3;
+    border: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: rgb(15 23 42 / 35%);
+    color: #fff;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .arrowLeft {
+    left: 0.625rem;
+  }
+
+  .arrowRight {
+    right: 0.625rem;
+  }
+
+  .arrow:hover {
+    background: rgb(15 23 42 / 52%);
+  }
+
+  @container slide scroll-state(snapped: x) {
+    .slideContent {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  :global(:root[data-theme="dark"]) .carousel {
+    box-shadow: 0 20px 40px -12px rgb(0 0 0 / 30%);
+  }
+
+  :global(:root[data-theme="dark"]) .slide::scroll-marker {
+    background: rgb(255 255 255 / 30%);
+  }
+
+  :global(:root[data-theme="dark"]) .slide1::scroll-marker:target-current {
+    background: #60a5fa;
+  }
+
+  :global(:root[data-theme="dark"]) .slide2::scroll-marker:target-current {
+    background: #fb923c;
+  }
+
+  :global(:root[data-theme="dark"]) .slide3::scroll-marker:target-current {
+    background: #4ade80;
+  }
+
+  :global(:root[data-theme="dark"]) .arrow {
+    background: rgb(2 6 23 / 45%);
+  }
+
+  @media (max-width: 768px) {
+    .slideContent {
+      height: 20rem;
+    }
+
+    .arrowLeft {
+      left: 0.375rem;
+    }
+
+    .arrowRight {
+      right: 0.375rem;
+    }
+  }
+</style>

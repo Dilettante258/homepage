@@ -1,0 +1,159 @@
+---
+import SiteLayout from "./SiteLayout.astro";
+import type { Locale, Messages } from "../i18n/strings";
+
+type Props = {
+  locale: Locale;
+  t: Messages;
+  title: string;
+  subtitle: string;
+  features: string[];
+  metaDescription?: string;
+  maxWidth?: string;
+  headerMarginBottom?: string;
+  demoMinHeight?: string;
+  demoMinHeightMobile?: string;
+  demoPadding?: string;
+  featuresTitle?: string;
+};
+
+const {
+  locale,
+  t,
+  title,
+  subtitle,
+  features,
+  metaDescription = subtitle,
+  maxWidth = "860px",
+  headerMarginBottom = "2rem",
+  demoMinHeight = "auto",
+  demoMinHeightMobile = demoMinHeight,
+  demoPadding = "0",
+  featuresTitle = locale === "en" ? "Features" : "特性",
+} = Astro.props;
+
+const pageStyle = [
+  `--gallery-page-max-width:${maxWidth}`,
+  `--gallery-header-margin-bottom:${headerMarginBottom}`,
+  `--gallery-demo-min-height:${demoMinHeight}`,
+  `--gallery-demo-min-height-mobile:${demoMinHeightMobile}`,
+  `--gallery-demo-padding:${demoPadding}`,
+].join(";");
+---
+
+<SiteLayout
+  locale={locale}
+  t={t}
+  title={`${title} · Dilettante258`}
+  description={metaDescription}
+>
+  <article class="gallery-page" transition:animate="fade" style={pageStyle}>
+    <div class="page-header">
+      <a href={`/${locale}/gallery`} class="back-link">
+        ← {t.gallery.backToGallery}
+      </a>
+      <h1>{title}</h1>
+      <p class="subtitle">{subtitle}</p>
+    </div>
+
+    <div class="demo-container">
+      <slot name="demo" />
+    </div>
+
+    <div class="description">
+      <h2>{featuresTitle}</h2>
+      <ul>
+        {features.map((feature) => <li>{feature}</li>)}
+      </ul>
+    </div>
+
+    <slot />
+  </article>
+</SiteLayout>
+
+<style>
+  .gallery-page {
+    padding: 2rem 0;
+    max-width: var(--gallery-page-max-width);
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: var(--gallery-header-margin-bottom);
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover {
+    color: var(--text);
+  }
+
+  h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .demo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--gallery-demo-min-height);
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    background: var(--surface);
+    margin-bottom: 2rem;
+    padding: var(--gallery-demo-padding);
+  }
+
+  .description {
+    padding: 0.5rem 0;
+  }
+
+  .description h2 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin: 0 0 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .description ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .description li {
+    padding: 0.5rem 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .description li::before {
+    content: "→";
+    margin-right: 0.75rem;
+    color: var(--primary);
+  }
+
+  @media (max-width: 600px) {
+    .demo-container {
+      min-height: var(--gallery-demo-min-height-mobile);
+    }
+  }
+</style>

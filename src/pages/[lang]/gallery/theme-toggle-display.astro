@@ -1,5 +1,5 @@
 ---
-import SiteLayout from "../../../layouts/SiteLayout.astro";
+import GalleryDemoLayout from "../../../layouts/GalleryDemoLayout.astro";
 import {
   resolveLocale,
   messages,
@@ -13,102 +13,39 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = resolveLocale(lang);
 const t = messages[locale];
+const title = locale === "en" ? "Theme Toggle" : "主题切换";
+const subtitle = locale === "en"
+  ? "Smooth animated theme switcher"
+  : "流畅的主题切换动画";
+const metaDescription = locale === "en"
+  ? "Interactive theme toggle animation"
+  : "交互式主题切换动画";
+const features = [
+  locale === "en" ? "Smooth rotation animation" : "流畅的旋转动画",
+  locale === "en" ? "Icon cross-fade transition" : "图标淡入淡出过渡",
+  locale === "en" ? "Hover scale effect" : "悬停缩放效果",
+  locale === "en" ? "CSS-only animation" : "纯 CSS 动画",
+];
 ---
 
-<SiteLayout
+<GalleryDemoLayout
   locale={locale}
   t={t}
-  title={`${locale === "en" ? "Theme Toggle" : "主题切换"} · Dilettante258`}
-  description={locale === "en"
-    ? "Interactive theme toggle animation"
-    : "交互式主题切换动画"}
+  title={title}
+  subtitle={subtitle}
+  metaDescription={metaDescription}
+  features={features}
+  maxWidth="800px"
+  headerMarginBottom="3rem"
+  demoMinHeight="400px"
+  demoMinHeightMobile="300px"
 >
-  <article class="gallery-page" transition:animate="fade">
-    <div class="page-header">
-      <a href={`/${locale}/gallery`} class="back-link">
-        ← {t.gallery.backToGallery}
-      </a>
-      <h1>{locale === "en" ? "Theme Toggle" : "主题切换"}</h1>
-      <p class="subtitle">
-        {
-          locale === "en"
-            ? "Smooth animated theme switcher"
-            : "流畅的主题切换动画"
-        }
-      </p>
-    </div>
-
-    <div class="demo-container">
-      <div class="theme-toggle-wrapper">
-        <ThemeToggle />
-      </div>
-    </div>
-
-    <div class="description">
-      <h2>{locale === "en" ? "Features" : "特性"}</h2>
-      <ul>
-        <li>
-          {locale === "en" ? "Smooth rotation animation" : "流畅的旋转动画"}
-        </li>
-        <li>
-          {locale === "en" ? "Icon cross-fade transition" : "图标淡入淡出过渡"}
-        </li>
-        <li>{locale === "en" ? "Hover scale effect" : "悬停缩放效果"}</li>
-        <li>{locale === "en" ? "CSS-only animation" : "纯 CSS 动画"}</li>
-      </ul>
-    </div>
-  </article>
-</SiteLayout>
+  <div slot="demo" class="theme-toggle-wrapper">
+    <ThemeToggle />
+  </div>
+</GalleryDemoLayout>
 
 <style>
-  .gallery-page {
-    padding: 2rem 0;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .page-header {
-    margin-bottom: 3rem;
-  }
-
-  .back-link {
-    display: inline-block;
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    transition: color 0.15s;
-  }
-
-  .back-link:hover {
-    color: var(--text);
-  }
-
-  h1 {
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    font-weight: 400;
-    margin: 0 0 0.5rem;
-    letter-spacing: -0.01em;
-  }
-
-  .subtitle {
-    color: var(--muted);
-    font-size: 1rem;
-    margin: 0;
-  }
-
-  .demo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    border: 1px solid var(--stroke);
-    border-radius: 12px;
-    background: var(--surface);
-    margin-bottom: 3rem;
-  }
-
   .theme-toggle-wrapper {
     display: flex;
     align-items: center;
@@ -176,41 +113,7 @@ const t = messages[locale];
     transition-duration: 0.2s;
   }
 
-  .description {
-    padding: 2rem 0;
-  }
-
-  .description h2 {
-    font-family: var(--font-heading);
-    font-size: 1.4rem;
-    font-weight: 400;
-    margin: 0 0 1rem;
-    letter-spacing: -0.01em;
-  }
-
-  .description ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .description li {
-    padding: 0.5rem 0;
-    color: var(--muted);
-    font-size: 0.95rem;
-  }
-
-  .description li::before {
-    content: "→";
-    margin-right: 0.75rem;
-    color: var(--primary);
-  }
-
   @media (max-width: 600px) {
-    .demo-container {
-      min-height: 300px;
-    }
-
     .theme-toggle {
       width: 64px;
       height: 64px;

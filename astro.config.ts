@@ -4,20 +4,26 @@ import solidJs from '@astrojs/solid-js';
 import react from '@astrojs/react';
 import viewTimelinePlugin from './src/remark/view-timeline';
 import mermaid from 'astro-mermaid';
+import sitemap from '@astrojs/sitemap';
 import { fontProviders } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
+  site: "https://kairi.cc",
   trailingSlash: 'never',
-  integrations: [
-    mermaid(),
-    react({
-      include: ['**/react/*'],
-    }),
-    solidJs({
-      include: ['**/solid/*'],
-    }),
-  ],
+  integrations: [mermaid(), react({
+    include: ['**/react/*'],
+  }), solidJs({
+    include: ['**/solid/*'],
+  }), sitemap({
+    i18n: {
+      defaultLocale: 'zh',
+      locales: {
+        en: 'en',
+        zh: 'zh',
+      },
+    },
+  })],
 
   i18n: {
     defaultLocale: 'zh',

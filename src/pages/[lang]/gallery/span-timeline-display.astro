@@ -1,0 +1,58 @@
+---
+import GalleryDemoLayout from "../../../layouts/GalleryDemoLayout.astro";
+import SpanTimeline from "../../../components/solid/SpanTimeline";
+import {
+  resolveLocale,
+  messages,
+  SUPPORTED_LOCALES,
+} from "../../../i18n/strings";
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+
+const title = locale === "zh" ? "Span 时间线" : "Span Timeline";
+const subtitle = locale === "zh"
+  ? "基于 details/summary 的可折叠调用链时间线"
+  : "Collapsible call-chain timeline built with details/summary";
+const features = [
+  locale === "zh"
+    ? "使用 details + summary 渲染可展开/折叠树结构"
+    : "Tree rendering with details + summary",
+  locale === "zh"
+    ? "虚线连接线、状态 badge（成功/失败）与层级竖线"
+    : "Dotted guides, status badges, and vertical hierarchy lines",
+  locale === "zh"
+    ? "时间条通过 CSS 变量计算 left/right，实现跨度定位"
+    : "Timeline spans positioned with CSS variable left/right calculations",
+  locale === "zh"
+    ? "支持展示服务名与主机字段"
+    : "Includes service name and host columns",
+];
+---
+
+<GalleryDemoLayout
+  locale={locale}
+  t={t}
+  title={title}
+  subtitle={subtitle}
+  features={features}
+  maxWidth="1280px"
+  demoPadding="1rem"
+>
+  <div slot="demo" class="timelineDemo">
+    <SpanTimeline client:load locale={locale} innerWidth={1600} />
+  </div>
+</GalleryDemoLayout>
+
+<style>
+  .timelineDemo {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+</style>

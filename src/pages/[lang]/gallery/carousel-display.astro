@@ -1,0 +1,184 @@
+---
+import GalleryDemoLayout from "../../../layouts/GalleryDemoLayout.astro";
+import ShowcaseCarousel from "../../../components/ShowcaseCarousel.astro";
+import {
+  resolveLocale,
+  messages,
+  SUPPORTED_LOCALES,
+} from "../../../i18n/strings";
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+
+const title = locale === "en" ? "Carousel" : "轮播图";
+const subtitle = locale === "en"
+  ? "Snap carousel built with Astro + native scrolling"
+  : "基于 Astro 与原生滚动能力实现的吸附轮播";
+const features = [
+  locale === "en"
+    ? "Auto-scroll with hover/touch/focus pause"
+    : "自动轮播，支持悬停/触摸/聚焦暂停",
+  locale === "en"
+    ? "Scroll snap + smooth scroll for natural paging"
+    : "吸附滚动 + 平滑滚动带来顺滑翻页体验",
+  locale === "en"
+    ? "Arrow controls and color-mode adaptation"
+    : "左右箭头切换并适配明暗主题",
+];
+const coreTitle = locale === "en" ? "Implementation Core" : "实现核心";
+const pseudoTitle = locale === "en" ? "Pseudo-elements / Pseudo-classes" : "伪元素 / 伪类";
+const cssTitle = locale === "en" ? "Important CSS Properties" : "关键 CSS 属性";
+const jsTitle = locale === "en" ? "Interaction Logic" : "交互逻辑";
+---
+
+<GalleryDemoLayout
+  locale={locale}
+  t={t}
+  title={title}
+  subtitle={subtitle}
+  features={features}
+  demoPadding="1.25rem 0"
+>
+  <ShowcaseCarousel slot="demo" locale={locale} />
+  <section class="implementation">
+    <h2>{coreTitle}</h2>
+
+    <h3>{pseudoTitle}</h3>
+    <ul>
+      <li>
+        <code>::-webkit-scrollbar</code>
+        {locale === "en" ? " hides scrollbar on WebKit browsers." : "：隐藏 WebKit 浏览器滚动条。"}
+      </li>
+      <li>
+        <code>::scroll-marker-group</code>
+        {locale === "en"
+          ? " creates and aligns marker container."
+          : "：生成并布局分页指示器容器。"}
+      </li>
+      <li>
+        <code>::scroll-marker</code>
+        {locale === "en" ? " styles each slide marker." : "：定义每个 slide 的 marker 样式。"}
+      </li>
+      <li>
+        <code>:target-current</code>
+        {locale === "en"
+          ? " highlights current slide marker."
+          : "：高亮当前 slide 对应的 marker。"}
+      </li>
+      <li>
+        <code>@container scroll-state(snapped: x)</code>
+        {locale === "en"
+          ? " boosts active slide opacity and scale."
+          : "：当前吸附页提亮并放大。"}
+      </li>
+    </ul>
+
+    <h3>{cssTitle}</h3>
+    <ul>
+      <li>
+        <code>overflow-x: auto</code> + <code>display: flex</code>
+        {locale === "en" ? " for horizontal track layout." : "：实现横向滚动轨道。"}
+      </li>
+      <li>
+        <code>scroll-snap-type: x mandatory</code>
+        {locale === "en" ? " for forced page snapping." : "：开启强制分页吸附。"}
+      </li>
+      <li>
+        <code>scroll-snap-align: center</code> + <code>scroll-snap-stop: always</code>
+        {locale === "en"
+          ? " for precise one-page snapping."
+          : "：确保逐页精确吸附，不跳页。"}
+      </li>
+      <li>
+        <code>scroll-behavior: smooth</code>
+        {locale === "en" ? " for smooth button/auto scrolling." : "：按钮和自动滚动都平滑过渡。"}
+      </li>
+      <li>
+        <code>overscroll-behavior-x: contain</code>
+        {locale === "en"
+          ? " to prevent horizontal scroll chaining."
+          : "：阻止横向滚动穿透到页面外层。"}
+      </li>
+      <li>
+        <code>scale</code> + <code>opacity</code> + <code>transition</code>
+        {locale === "en"
+          ? " for active/inactive slide emphasis."
+          : "：通过缩放和透明度区分当前页与非当前页。"}
+      </li>
+    </ul>
+
+    <h3>{jsTitle}</h3>
+    <ul>
+      <li>
+        {locale === "en"
+          ? "Auto-scroll every 4 seconds, and loop back at the end."
+          : "每 4 秒自动滚动一屏，末尾自动回到起点。"}
+      </li>
+      <li>
+        {locale === "en"
+          ? "Pause on hover, touch, or focus to avoid interrupting user actions."
+          : "悬停、触摸、聚焦时暂停自动轮播，避免打断用户操作。"}
+      </li>
+      <li>
+        {locale === "en"
+          ? "Arrow buttons move by one viewport width per click."
+          : "左右箭头每次按容器宽度切换一页。"}
+      </li>
+    </ul>
+  </section>
+</GalleryDemoLayout>
+
+<style>
+  .implementation {
+    border-top: 1px solid var(--stroke);
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .implementation h2 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin: 0 0 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .implementation h3 {
+    margin: 1.1rem 0 0.65rem;
+    font-size: 0.96rem;
+    letter-spacing: 0.01em;
+  }
+
+  .implementation ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .implementation li {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    padding: 0.22rem 0;
+  }
+
+  .implementation li::before {
+    content: "•";
+    color: var(--primary);
+    margin-right: 0.55rem;
+  }
+
+  .implementation code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--surface-tag);
+    border-radius: 6px;
+    padding: 0.1rem 0.35rem;
+    color: var(--text);
+  }
+</style>
