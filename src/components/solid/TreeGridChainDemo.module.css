@@ -1,0 +1,70 @@
+.metricCol {
+  font-size: 1.05rem;
+  color: #1f2937;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 10px;
+}
+
+.headWithHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hintIcon {
+  width: 17px;
+  height: 17px;
+  border: 1px solid #9aa3b2;
+  border-radius: 999px;
+  color: #667085;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.costCol {
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+}
+
+.costCell {
+  width: 100%;
+}
+
+.markCol {
+  color: #9aa3b2;
+}
+
+.actionCol {
+  height: 100%;
+  padding: 0 14px;
+  background: #fff;
+  display: grid;
+  align-items: center;
+}
+
+
+.actionBtn {
+  color: #2f62f2;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 500;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.actionBtn:hover {
+  text-decoration: underline;
+}

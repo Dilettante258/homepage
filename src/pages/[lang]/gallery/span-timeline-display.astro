@@ -1,6 +1,7 @@
 ---
 import GalleryDemoLayout from "../../../layouts/GalleryDemoLayout.astro";
 import SpanTimeline from "../../../components/solid/SpanTimeline";
+import TreeGridChainDemo from "../../../components/solid/TreeGridChainDemo";
 import {
   resolveLocale,
   messages,
@@ -15,23 +16,135 @@ const { lang } = Astro.params;
 const locale = resolveLocale(lang);
 const t = messages[locale];
 
-const title = locale === "zh" ? "Span 时间线" : "Span Timeline";
-const subtitle = locale === "zh"
-  ? "基于 details/summary 的可折叠调用链时间线"
-  : "Collapsible call-chain timeline built with details/summary";
-const features = [
+const title = locale === "zh" ? "Span 时间线表格" : "Span Timeline Table";
+const subtitle =
   locale === "zh"
-    ? "使用 details + summary 渲染可展开/折叠树结构"
-    : "Tree rendering with details + summary",
-  locale === "zh"
-    ? "虚线连接线、状态 badge（成功/失败）与层级竖线"
-    : "Dotted guides, status badges, and vertical hierarchy lines",
-  locale === "zh"
-    ? "时间条通过 CSS 变量计算 left/right，实现跨度定位"
-    : "Timeline spans positioned with CSS variable left/right calculations",
-  locale === "zh"
-    ? "支持展示服务名与主机字段"
-    : "Includes service name and host columns",
+    ? "基于 details/summary 的可折叠调用链时间线"
+    : "Collapsible call-chain timeline built with details/summary";
+const spanDemoTitle =
+  locale === "zh" ? "Span 时间线 Demo" : "Span Timeline Demo";
+const chainDemoTitle = locale === "zh" ? "链路树表格 Demo" : "Chain Tree Demo";
+const highlightsTitle =
+  locale === "zh" ? "实现亮点" : "Implementation Highlights";
+
+const highlights = [
+  {
+    title: locale === "zh" ? "树结构渲染" : "Tree Rendering",
+    lines:
+      locale === "zh"
+        ? [
+            "采用原生 DOM 元素 details + summary 渲染可展开/折叠树结构。",
+            "避免手写复杂折叠状态管理，结构语义和交互行为更自然。",
+          ]
+        : [
+            "Native details + summary is used to render the collapsible tree structure.",
+            "This avoids custom expand-state machinery while preserving semantic behavior.",
+          ],
+  },
+  {
+    title: locale === "zh" ? "层级连线系统" : "Hierarchy Connectors",
+    lines:
+      locale === "zh"
+        ? [
+            "竖线通过背景 linear-gradient 绘制，再配合白色背景遮挡做层级裁切。",
+            "横向虚线通过伪元素 + repeating-linear-gradient 实现。",
+          ]
+        : [
+            "Vertical connectors are drawn with background linear-gradient and clipped with white background masking.",
+            "Horizontal dashes are rendered by pseudo-elements with repeating-linear-gradient.",
+          ],
+  },
+  {
+    title: locale === "zh" ? "耗时条与布局" : "Duration Bar Layout",
+    lines:
+      locale === "zh"
+        ? [
+            "耗时条使用 CSS 变量计算 left(right)-margin，再填充背景色和文字。在左边距大于 80% 的情况下，更换文字书写方向，避免文字重合。",
+          ]
+        : [
+            "The duration bar computes left/right margin with CSS variables, then fills background and label text.",
+            "When the left offset exceeds 80%, the label writing direction changes to keep the tail readable.",
+          ],
+  },
+  {
+    title:
+      locale === "zh" ? "范型复用与类型推导" : "Generic Reuse & Type Inference",
+    lines:
+      locale === "zh"
+        ? [
+            "利用范型约束与高阶组件，复用组件样式和渲染逻辑。",
+            "通过类型推导统一列定义和节点数据约束，减少重复与类型分叉。",
+          ]
+        : [
+            "Generic constraints and higher-order composition are used to reuse styles and rendering logic.",
+          "Type inference keeps column definitions and node data contracts aligned with less duplication.",
+          ],
+  },
+  {
+    title: locale === "zh" ? "列锁定（Sticky Col）" : "Sticky Columns",
+    lines:
+      locale === "zh"
+        ? [
+            "列模型通过 sticky 字段声明左右锁定，运行时计算每个锁定列的累计偏移。",
+            "单元格使用 position: sticky + left/right 偏移变量，实现横向滚动时的列固定。",
+          ]
+        : [
+            "Column definitions declare left/right stickiness, and runtime computes cumulative sticky offsets.",
+            "Cells use position: sticky with left/right CSS vars to stay fixed during horizontal scrolling.",
+          ],
+  },
+  {
+    title: locale === "zh" ? "高亮与导航" : "Highlight & Navigation",
+    lines:
+      locale === "zh"
+        ? [
+            "命中状态通过 data-* 写回 DOM，再用属性选择器控制样式优先级。",
+            "支持组件标签/关键词/异常并集高亮，并在可见命中范围内上下跳转定位。",
+          ]
+        : [
+            "Match state is written to data-* and styled via attribute selector priority.",
+            "Tag/keyword/error union highlighting supports next/prev navigation on visible matches.",
+          ],
+  },
+  {
+    title: locale === "zh" ? "样式优先级管理" : "Style Priority Strategy",
+    lines:
+      locale === "zh"
+        ? [
+            "使用 CSS 自带特性管理样式，相比手写 style 或手动控制 className 更清晰。",
+            "样式继承与优先级关系更直观，高亮、异常与当前定位态更容易协同。",
+          ]
+        : [
+            "Native CSS mechanisms are used instead of heavy inline styles or manual className toggling.",
+            "Inheritance and priority become clearer, making highlight/error/active states easier to coordinate.",
+          ],
+  },
+  {
+    title: locale === "zh" ? "动画与复用" : "Animation & Reuse",
+    lines:
+      locale === "zh"
+        ? [
+            "为 ::details-content 添加折叠动画，并用 interpolate-size: allow-keywords 做高度过渡。",
+            "以 TreeGridBase<T> 作为基座，Span 时间线与链路树表格复用同一套渲染框架。",
+          ]
+        : [
+            "Collapse animation is applied on ::details-content with interpolate-size for height transition.",
+            "A generic TreeGridBase<T> enables shared rendering architecture for timeline and chain tree demos.",
+          ],
+  },
+  {
+    title: locale === "zh" ? "同页双 Demo 验证" : "Dual Demo Validation",
+    lines:
+      locale === "zh"
+        ? [
+            "该页提供了 2 个 Demo，用于对照验证同一套组件基座能力。",
+            "在生产中一共有 5 个地方用到了该组件，涉及 3 个基础页面。",
+          ]
+        : [
+            "This page provides two demos to verify the same shared component base side by side.",
+            "In production, the component is used in five places across three core pages.",
+          ],
+  },
 ];
 ---
 
@@ -40,19 +153,134 @@ const features = [
   t={t}
   title={title}
   subtitle={subtitle}
-  features={features}
   maxWidth="1280px"
-  demoPadding="1rem"
+  demoPadding="0.95rem"
 >
-  <div slot="demo" class="timelineDemo">
-    <SpanTimeline client:load locale={locale} innerWidth={1600} />
+  <div slot="demo" class="timelineDemoStack">
+    <section class="demoBlock">
+      <h3>{spanDemoTitle}</h3>
+      <div class="demoBlockBody">
+        <SpanTimeline
+          client:load
+          locale={locale}
+          innerWidth={1400}
+          showHighlighter
+        />
+      </div>
+    </section>
+
+    <section class="demoBlock">
+      <h3>{chainDemoTitle}</h3>
+      <div class="demoBlockBody">
+        <TreeGridChainDemo client:load locale={locale} innerWidth={2300} />
+      </div>
+    </section>
   </div>
+
+  <section slot="features" class="highlights">
+    <h2>{highlightsTitle}</h2>
+    <div class="highlightCards">
+      {
+        highlights.map((card) => (
+          <article class="highlightCard">
+            <h3>{card.title}</h3>
+            {card.lines.map((line) => (
+              <p>{line}</p>
+            ))}
+          </article>
+        ))
+      }
+    </div>
+  </section>
 </GalleryDemoLayout>
 
 <style>
-  .timelineDemo {
+  .timelineDemoStack {
     width: 100%;
-    max-width: 1180px;
-    margin: 0 auto;
+    min-width: 0;
+    display: grid;
+    gap: 1rem;
+    box-sizing: border-box;
+  }
+
+  .demoBlock {
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 0.95rem;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .demoBlock h3 {
+    margin: 0 0 0.8rem;
+    font-size: 1.03rem;
+    color: var(--muted);
+    font-weight: 580;
+    line-height: 1.35;
+    letter-spacing: 0.005em;
+  }
+
+  .demoBlockBody {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--stroke);
+    border-radius: 10px;
+    background: var(--surface-hover);
+    padding: 0.6rem;
+  }
+
+  .highlights {
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--stroke);
+  }
+
+  .highlights h2 {
+    font-family: var(--font-heading);
+    font-size: 1.52rem;
+    font-weight: 500;
+    margin: 0 0 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .highlightCards {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .highlightCard {
+    box-sizing: border-box;
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 1.02rem 1.08rem;
+  }
+
+  .highlightCard h3 {
+    margin: 0 0 0.68rem;
+    font-size: 1.08rem;
+    line-height: 1.32;
+    font-weight: 620;
+    letter-spacing: -0.005em;
+  }
+
+  .highlightCard p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.96rem;
+    line-height: 1.72;
+  }
+
+  .highlightCard p + p {
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .highlightCards {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

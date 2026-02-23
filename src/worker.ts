@@ -8,7 +8,7 @@ interface ImageDef {
 }
 
 const SKILLICON_PARAMS =
-	'i=nextjs,react,astro,vue,js,ts,vercel,flask,docker,linux,cloudflare,html,css,netlify,latex,md,python&perline=10';
+	'i=ts,nodejs,react,astro,css,nodejs,nextjs,solidjs,cloudflare,docker,github,githubactions,vercel,npm,md,rust,wasm,latex&perline=10';
 
 const IMAGES: Record<string, ImageDef[]> = {
 	skillicons: [

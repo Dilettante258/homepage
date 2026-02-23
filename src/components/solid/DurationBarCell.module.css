@@ -1,0 +1,49 @@
+.cell {
+  --row-start-us: 0;
+  --row-duration-us: 0;
+  --row-total-us: 1;
+  --left: calc(var(--row-start-us) / var(--row-total-us) * 100%);
+  --width: calc(var(--row-duration-us) / var(--row-total-us) * 100%);
+  --right: calc(100% - var(--left) - var(--width));
+  height: 100%;
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  background: #d1f5dd;
+  box-sizing: border-box;
+  color: #0d5436;
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: var(--left);
+  width: max(var(--width), 0.5px);
+  display: block;
+}
+
+.text {
+  position: absolute;
+  top: 50%;
+  left: clamp(6px, calc(var(--left) + 6px), calc(100% - 84px));
+  transform: translateY(-50%);
+  color: #245e42;
+  font-size: 1.15rem;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.textFromRight {
+  left: auto;
+  right: clamp(6px, calc(var(--right) + 6px), calc(100% - 84px));
+  text-align: right;
+}
+
+.cell[data-error="true"] .bar {
+  background: #f7d7d3;
+}
+
+.cell[data-error="true"] .text {
+  color: #bf3b32;
+}

@@ -62,8 +62,8 @@ export const galleryItems: GalleryItem[] = [
 	{
 		slug: 'span-timeline-display',
 		title: {
-			en: 'Span Timeline',
-			zh: 'Span 时间线',
+			en: 'Span Timeline Table',
+			zh: 'Span 时间线表格',
 		},
 		description: {
 			en: 'Collapsible trace timeline with details/summary, badges, and span bars.',

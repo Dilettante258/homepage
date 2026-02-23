@@ -60,7 +60,6 @@ const featured = getFeaturedProjects();
       <h2>{t.home.projectsTitle}</h2>
       <p class="section-desc">{t.home.projectsSubtitle}</p>
     </div>
-    <ShowcaseCarousel locale={locale} />
     <div class="project-list">
       {
         featured.map((item) => (
@@ -94,7 +93,9 @@ const featured = getFeaturedProjects();
                   {typeof item.githubStars === "number" && (
                     <span class="github-stars">
                       <span aria-hidden="true">★</span>
-                      {item.githubStars.toLocaleString(locale === "zh" ? "zh-CN" : "en-US")}
+                      {item.githubStars.toLocaleString(
+                        locale === "zh" ? "zh-CN" : "en-US",
+                      )}
                     </span>
                   )}
                   <div class="tech-icons">

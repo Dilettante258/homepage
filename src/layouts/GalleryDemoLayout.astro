@@ -1,13 +1,14 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
 import type { Locale, Messages } from "../i18n/strings";
+import GalleryFeatureList from "../components/gallery/GalleryFeatureList.astro";
 
 type Props = {
   locale: Locale;
   t: Messages;
   title: string;
   subtitle: string;
-  features: string[];
+  features?: string[];
   metaDescription?: string;
   maxWidth?: string;
   headerMarginBottom?: string;
@@ -15,6 +16,9 @@ type Props = {
   demoMinHeightMobile?: string;
   demoPadding?: string;
   featuresTitle?: string;
+  featuresVariant?: "list" | "cards";
+  featuresTitleSize?: string;
+  featureArrow?: boolean;
 };
 
 const {
@@ -22,7 +26,7 @@ const {
   t,
   title,
   subtitle,
-  features,
+  features = [],
   metaDescription = subtitle,
   maxWidth = "860px",
   headerMarginBottom = "2rem",
@@ -30,6 +34,9 @@ const {
   demoMinHeightMobile = demoMinHeight,
   demoPadding = "0",
   featuresTitle = locale === "en" ? "Features" : "特性",
+  featuresVariant = "list",
+  featuresTitleSize = "1.4rem",
+  featureArrow = true,
 } = Astro.props;
 
 const pageStyle = [
@@ -60,12 +67,19 @@ const pageStyle = [
       <slot name="demo" />
     </div>
 
-    <div class="description">
-      <h2>{featuresTitle}</h2>
-      <ul>
-        {features.map((feature) => <li>{feature}</li>)}
-      </ul>
-    </div>
+    {
+      Astro.slots.has("features") ? (
+        <slot name="features" />
+      ) : (
+        <GalleryFeatureList
+          title={featuresTitle}
+          items={features}
+          variant={featuresVariant}
+          titleSize={featuresTitleSize}
+          showArrow={featureArrow}
+        />
+      )
+    }
 
     <slot />
   </article>
@@ -121,34 +135,11 @@ const pageStyle = [
     padding: var(--gallery-demo-padding);
   }
 
-  .description {
-    padding: 0.5rem 0;
-  }
-
-  .description h2 {
-    font-family: var(--font-heading);
-    font-size: 1.4rem;
-    font-weight: 400;
-    margin: 0 0 1rem;
-    letter-spacing: -0.01em;
-  }
-
-  .description ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .description li {
-    padding: 0.5rem 0;
-    color: var(--muted);
-    font-size: 0.95rem;
-  }
-
-  .description li::before {
-    content: "→";
-    margin-right: 0.75rem;
-    color: var(--primary);
+  .demo-container > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   @media (max-width: 600px) {

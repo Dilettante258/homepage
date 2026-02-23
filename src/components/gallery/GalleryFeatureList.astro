@@ -1,0 +1,93 @@
+---
+type Props = {
+  title: string;
+  items: string[];
+  variant?: "list" | "cards";
+  titleSize?: string;
+  className?: string;
+  showArrow?: boolean;
+};
+
+const {
+  title,
+  items,
+  variant = "list",
+  titleSize = "1.4rem",
+  className = "",
+  showArrow = true,
+} = Astro.props;
+
+const style = `--gallery-feature-title-size:${titleSize}`;
+---
+
+<section
+  class:list={[
+    "feature-list",
+    className,
+    variant === "cards" && "feature-list-cards",
+    !showArrow && "feature-list-no-arrow",
+  ]}
+  style={style}
+>
+  <h2>{title}</h2>
+  <ul>
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+</section>
+
+<style>
+  .feature-list {
+    padding: 0.5rem 0;
+  }
+
+  .feature-list h2 {
+    font-family: var(--font-heading);
+    font-size: var(--gallery-feature-title-size);
+    font-weight: 400;
+    margin: 0 0 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .feature-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .feature-list li {
+    padding: 0.5rem 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .feature-list li::before {
+    content: "→";
+    margin-right: 0.75rem;
+    color: var(--primary);
+  }
+
+  .feature-list-no-arrow li::before,
+  .feature-list-cards li::before {
+    content: none;
+  }
+
+  .feature-list-cards ul {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feature-list-cards li {
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 0.95rem 1rem;
+  }
+
+  @media (max-width: 720px) {
+    .feature-list-cards ul {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
