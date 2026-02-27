@@ -26,6 +26,25 @@ const spanDemoTitle =
 const chainDemoTitle = locale === "zh" ? "链路树表格 Demo" : "Chain Tree Demo";
 const highlightsTitle =
   locale === "zh" ? "实现亮点" : "Implementation Highlights";
+const articleHref =
+  locale === "zh"
+    ? "/zh/blog/span-timeline-tree-grid"
+    : "/zh/blog/span-timeline-tree-grid";
+const articleLinkText =
+  locale === "zh"
+    ? "查看实现复盘文章"
+    : "Read the implementation write-up";
+const articleDesc =
+  locale === "zh"
+    ? "这篇博客详细记录了数据建模、TreeGridBase 抽象、高亮导航与样式协议等实现取舍。"
+    : "Detailed write-up (Chinese) covering data modeling, TreeGridBase abstraction, highlight navigation, and styling protocol decisions.";
+const productDocHref = "https://www.volcengine.com/docs/6431/81116?lang=zh";
+const productDocText =
+  locale === "zh" ? "查看线上产品说明文档" : "Open product documentation";
+const productDocDesc =
+  locale === "zh"
+    ? "该能力在实际线上产品中也有对应说明，可用于对照业务场景理解组件设计。"
+    : "Related online product documentation (Chinese), useful for mapping the demo to production scenarios.";
 
 const highlights = [
   {
@@ -179,6 +198,14 @@ const highlights = [
 
   <section slot="features" class="highlights">
     <h2>{highlightsTitle}</h2>
+    <p class="articleLinkNote">
+      <a href={articleHref}>{articleLinkText}</a>
+      <span>{articleDesc}</span>
+    </p>
+    <p class="articleLinkNote">
+      <a href={productDocHref} target="_blank" rel="noreferrer">{productDocText}</a>
+      <span>{productDocDesc}</span>
+    </p>
     <div class="highlightCards">
       {
         highlights.map((card) => (
@@ -243,6 +270,29 @@ const highlights = [
     font-weight: 500;
     margin: 0 0 1rem;
     letter-spacing: -0.01em;
+  }
+
+  .articleLinkNote {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0 0 1rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--stroke);
+    border-radius: 10px;
+    background: var(--surface-hover);
+  }
+
+  .articleLinkNote a {
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .articleLinkNote span {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.5;
   }
 
   .highlightCards {
