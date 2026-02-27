@@ -259,24 +259,35 @@ React-side effects:
 
 ## Why Not Just JSON for RSC?
 
-At first glance, component trees can be represented as objects, so JSON seems enough. But JSON has two practical issues here:
+A component tree can absolutely be represented as a JS object and sent as JSON.  
+So the natural question is: why doesn't RSC just do that?
 
-1. Typical handling is closer to "wait for full payload, then parse".
-2. It is weaker for progressive expression of async tree dependencies.
+In a "data arrives while UI is already rendering" scenario, JSON is often not the best fit:
 
-If transfer behaves like depth-first delivery, one slow branch can block useful rendering. RSC/Flight uses a model closer to "chunked records + placeholder references":
+1. In practice, clients usually wait for a sufficiently complete payload before parsing.
+2. Servers also tend to prepare a more complete structure before sending.
+3. Slow branches can delay the whole useful render path.
+
+If you think of this as a depth-first style transfer flow, one slow nested part can block downstream availability.
+
+RSC/Flight is closer to a chunked + placeholder model:
 
 ```text
 { header: "$1", post: "$2", footer: "$3" }
 ```
 
-`"$1"`, `"$2"`, and `"$3"` can be filled later by subsequent chunks.
+`"$1"`, `"$2"`, and `"$3"` are references to chunks that can arrive later.
+In other words: send the structure skeleton first, then progressively fill it.
 
 - Ready parts can render early.
 - Pending parts stay suspended as placeholders/promises.
 - When data arrives, only relevant boundaries unlock and update.
 
-This aligns naturally with `<Suspense>`:
+You might ask: if a component is just HTML, is this complexity worth it?
+For fully static output, probably not.
+But real apps contain async data dependencies (Promises), and streaming alone is not enough without a model that can represent incomplete UI safely.
+
+That is exactly where `<Suspense>` fits:
 
 - show fallback first
 - reveal real content when data resolves
@@ -323,10 +334,14 @@ flowchart TD
 
 Server/client boundaries are mainly declared by directives: `'use client'` and `'use server'`.
 
-- `'use client'`: module is bundled for client runtime (UI/events/state).
-- `'use server'`: function is invokable from client, compiled into network calls by framework.
+- `'use client'` can be read as: this module must end up in browser-side bundles (UI/events/state).
+- `'use server'` can be read as: this function runs on the server and can be triggered from the client (RPC/fetch-like callsite after compilation).
 
-That makes cross-environment boundary part of the module system, so bundlers can decide:
+The key point is not syntax sugar; it is that client/server boundaries become part of the module graph.
+
+Compared with traditional CSR mental models (manually writing `fetch/xhr` in client components), RSC shifts more cross-boundary wiring into compile-time conventions.
+
+That allows bundlers/frameworks to decide:
 
 1. what goes to browser bundle
 2. what stays server-side
@@ -351,6 +366,20 @@ export function MessageContainer({ messagePromise }) {
   );
 }
 ```
+
+Why are bundler bindings still required in RSC?
+Because React itself does not know how a specific bundler serializes and loads module references at runtime.
+
+That part is implemented by bundler-specific bindings (for example, `react-server-dom-webpack` and `react-server-dom-parcel`).
+
+Their responsibilities are roughly:
+
+1. Build time: discover `'use client'` entry points and emit client chunks.
+2. Server side: teach React how to serialize module references into Flight payloads (e.g. `chunk123.js#Counter`).
+3. Client side: teach React how to ask bundler runtime to load and hydrate those references.
+
+After these three pieces are connected, React Server can serialize module references correctly, and React Client can deserialize and load them.
+So RSC is not only "data transport"; it is "data + module-reference protocol" working together.
 
 ## How to Think About "Shared Modules"
 
