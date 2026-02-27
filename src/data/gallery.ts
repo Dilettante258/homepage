@@ -33,6 +33,7 @@ export const galleryItems: GalleryItem[] = [
 		},
 		tags: ['css', 'interaction', 'ux'],
 		fallbackGradient: 'linear-gradient(120deg, #E9E7FF, #DDEEF8)',
+		cover: "https://h-r2.kairi.cc/navbar-cover.webp",
 		aspect: 'landscape',
 		createdAt: '2026-02-27',
 	},
