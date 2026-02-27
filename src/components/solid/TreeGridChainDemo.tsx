@@ -1,4 +1,5 @@
 /** @jsxImportSource solid-js */
+import type { JSX } from "solid-js";
 import type { Locale } from "../../i18n/strings";
 import TreeGridBase, {
   type TreeGridColumn,
@@ -40,6 +41,8 @@ const getTag = (apiName: string): string => {
 type TreeGridChainDemoProps = {
   locale: Locale;
   innerWidth?: number | string;
+  maxHeight?: number;
+  styleVars?: JSX.CSSProperties;
 };
 
 const formatPercent = (value: number): string => `${(value * 100).toFixed(2)}%`;
@@ -211,7 +214,8 @@ const TreeGridChainDemo = (props: TreeGridChainDemoProps) => {
       innerWidth={props.innerWidth ?? 2460}
       stickyCols={["action"]}
       showHighlighter={false}
-      maxHeight={620}
+      maxHeight={props.maxHeight ?? 620}
+      styleVars={props.styleVars}
     />
   );
 };

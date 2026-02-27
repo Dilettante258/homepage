@@ -9,6 +9,11 @@
   --hover-color: #f6f8fa;
   --treegrid-inner-width: 1280px;
   --treegrid-max-height: 620px;
+  --treegrid-font-size-header: 14px;
+  --treegrid-font-size-row: 1.1rem;
+  --treegrid-row-height: 42px;
+  --treegrid-summary-min-height: 32px;
+  --treegrid-header-cell-padding: 16px;
   font-family: Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
@@ -167,7 +172,7 @@
   background: #f2f4f7;
   border-bottom: var(--border);
   color: #303640;
-  font-size: 14px;
+  font-size: var(--treegrid-font-size-header);
   line-height: 1;
   position: sticky;
   top: 0;
@@ -178,7 +183,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 16px;
+  padding: var(--treegrid-header-cell-padding);
   font-weight: 600;
   border-right: var(--border);
   box-sizing: border-box;
@@ -249,7 +254,7 @@
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  min-height: 32px;
+  min-height: var(--treegrid-summary-min-height);
 }
 
 .summary:hover {
@@ -286,8 +291,8 @@
 .row {
   flex: 1;
   width: var(--treegrid-inner-width);
-  min-height: 42px;
-  height: 42px;
+  min-height: var(--treegrid-row-height);
+  height: var(--treegrid-row-height);
   display: flex;
   align-items: center;
 }
@@ -315,7 +320,7 @@
   align-items: center;
   min-width: 0;
   flex: 1;
-  font-size: 1.1rem;
+  font-size: var(--treegrid-font-size-row);
   color: #16181d;
 }
 

@@ -1,4 +1,5 @@
 /** @jsxImportSource solid-js */
+import type { JSX } from "solid-js";
 import type { Locale } from "../../i18n/strings";
 import {
   normalizeSampleTrace,
@@ -19,11 +20,11 @@ type SpanTimelineProps = {
   innerWidth?: number | string;
   stickyCols?: string[];
   showHighlighter?: boolean;
-  colW?: number;
   serviceColWidth?: number;
   hostColWidth?: number;
   startColWidth?: number;
   maxHeight?: number;
+  styleVars?: JSX.CSSProperties;
 };
 
 const formatDuration = (microseconds: number): string => {
@@ -37,7 +38,6 @@ const SpanTimeline = (props: SpanTimelineProps) => {
   const { nodes, startUs, totalUs } = normalizeSampleTrace();
   const locale = props.locale;
   const globalVar = props.globalVar ?? {};
-  const colW = props.colW ?? 360;
   const serviceColWidth = props.serviceColWidth ?? 180;
   const hostColWidth = props.hostColWidth ?? 220;
   const startColWidth = props.startColWidth ?? 280;
@@ -105,7 +105,7 @@ const SpanTimeline = (props: SpanTimelineProps) => {
           <span>{formatDuration(totalUs)}</span>
         </>
       ),
-      width: colW,
+      width: 290,
       className: styles.timeCol,
       headerClassName: styles.timeHead,
       render: ({ node }) => {
@@ -125,7 +125,9 @@ const SpanTimeline = (props: SpanTimelineProps) => {
       title: serviceTitle,
       width: serviceColWidth,
       className: styles.metaCol,
-      render: ({ node }) => <span title={node.serviceName}>{node.serviceName}</span>,
+      render: ({ node }) => (
+        <span title={node.serviceName}>{node.serviceName}</span>
+      ),
     },
     {
       key: "host",
@@ -152,6 +154,7 @@ const SpanTimeline = (props: SpanTimelineProps) => {
       stickyCols={stickyCols}
       showHighlighter={props.showHighlighter}
       maxHeight={maxHeight}
+      styleVars={props.styleVars}
     />
   );
 };

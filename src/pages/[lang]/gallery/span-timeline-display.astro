@@ -26,14 +26,19 @@ const spanDemoTitle =
 const chainDemoTitle = locale === "zh" ? "链路树表格 Demo" : "Chain Tree Demo";
 const highlightsTitle =
   locale === "zh" ? "实现亮点" : "Implementation Highlights";
+const compactTreeGridVars = {
+  "--treegrid-font-size-header": "12px",
+  "--treegrid-font-size-row": "14px",
+  "--treegrid-row-height": "34px",
+  "--treegrid-summary-min-height": "26px",
+  "--treegrid-header-cell-padding": "10px 12px",
+};
 const articleHref =
   locale === "zh"
     ? "/zh/blog/span-timeline-tree-grid"
     : "/zh/blog/span-timeline-tree-grid";
 const articleLinkText =
-  locale === "zh"
-    ? "查看实现复盘文章"
-    : "Read the implementation write-up";
+  locale === "zh" ? "查看实现复盘文章" : "Read the implementation write-up";
 const articleDesc =
   locale === "zh"
     ? "这篇博客详细记录了数据建模、TreeGridBase 抽象、高亮导航与样式协议等实现取舍。"
@@ -96,7 +101,7 @@ const highlights = [
           ]
         : [
             "Generic constraints and higher-order composition are used to reuse styles and rendering logic.",
-          "Type inference keeps column definitions and node data contracts aligned with less duplication.",
+            "Type inference keeps column definitions and node data contracts aligned with less duplication.",
           ],
   },
   {
@@ -182,7 +187,9 @@ const highlights = [
         <SpanTimeline
           client:load
           locale={locale}
-          innerWidth={1400}
+          innerWidth={1300}
+          maxHeight={540}
+          styleVars={compactTreeGridVars}
           showHighlighter
         />
       </div>
@@ -191,7 +198,13 @@ const highlights = [
     <section class="demoBlock">
       <h3>{chainDemoTitle}</h3>
       <div class="demoBlockBody">
-        <TreeGridChainDemo client:load locale={locale} innerWidth={2300} />
+        <TreeGridChainDemo
+          client:load
+          locale={locale}
+          innerWidth={2300}
+          maxHeight={540}
+          styleVars={compactTreeGridVars}
+        />
       </div>
     </section>
   </div>
@@ -203,7 +216,9 @@ const highlights = [
       <span>{articleDesc}</span>
     </p>
     <p class="articleLinkNote">
-      <a href={productDocHref} target="_blank" rel="noreferrer">{productDocText}</a>
+      <a href={productDocHref} target="_blank" rel="noreferrer"
+        >{productDocText}</a
+      >
       <span>{productDocDesc}</span>
     </p>
     <div class="highlightCards">
