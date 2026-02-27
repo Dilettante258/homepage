@@ -22,6 +22,21 @@ export interface GalleryItem {
 
 export const galleryItems: GalleryItem[] = [
 	{
+		slug: 'anchor-nav-display',
+		title: {
+			en: 'Anchor Navbar',
+			zh: '锚点导航栏',
+		},
+		description: {
+			en: 'Sliding active indicator navbar built with anchor positioning and active state sync.',
+			zh: '基于 Anchor Positioning 与激活态同步的滑动导航指示器。',
+		},
+		tags: ['css', 'interaction', 'ux'],
+		fallbackGradient: 'linear-gradient(120deg, #E9E7FF, #DDEEF8)',
+		aspect: 'landscape',
+		createdAt: '2026-02-27',
+	},
+	{
 		slug: 'span-timeline-display',
 		title: {
 			en: 'Span Timeline Table',
@@ -66,7 +81,7 @@ export const galleryItems: GalleryItem[] = [
 		tags: ['css', 'interaction'],
 		fallbackGradient: 'linear-gradient(120deg, #FFA07A, #FFD700)',
 		cover: 'https://h-r2.kairi.cc/theme-btn-cover.webp',
-		aspect: 'square',
+		aspect: 'landscape',
 		createdAt: '2026-01-27',
 	},
 ];

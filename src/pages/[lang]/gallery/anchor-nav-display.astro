@@ -1,0 +1,138 @@
+---
+import GalleryDemoLayout from "../../../layouts/GalleryDemoLayout.astro";
+import NavLinks from "../../../components/NavLinks.astro";
+import {
+  resolveLocale,
+  messages,
+  SUPPORTED_LOCALES,
+} from "../../../i18n/strings";
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = resolveLocale(lang);
+const t = messages[locale];
+const title = locale === "en" ? "Anchor Navbar" : "锚点导航栏";
+const subtitle = locale === "en"
+  ? "Sliding active indicator navigation with CSS anchor positioning"
+  : "使用 CSS Anchor Positioning 实现滑动激活指示器";
+const features = [
+  locale === "en"
+    ? "Active pill follows selected item with elastic easing"
+    : "激活背景块跟随选中项并使用弹性缓动",
+  locale === "en"
+    ? "Responsive behavior: horizontal on desktop, vertical on mobile"
+    : "响应式布局：桌面横向、移动端纵向",
+  locale === "en"
+    ? "CSS-first animation, JS only updates active state"
+    : "动画主要由 CSS 完成，JS 只负责更新激活态",
+];
+
+const principleTitle = locale === "en" ? "How It Works" : "实现原理";
+const principleItems = locale === "en"
+  ? [
+      "This demo directly reuses `src/components/NavLinks.astro` from the real site header.",
+      "Active route state is computed from `window.location.pathname` and synchronized on `astro:page-load`.",
+      "The active item exposes an anchor (`anchor-name`), and `.nav::before` is attached via `position-anchor`.",
+      "Indicator geometry comes from `anchor(top/left/right/bottom)` so CSS can animate the pill motion.",
+      "For cross-page navbar animations, keep the nav DOM stable with `transition:persist` and split persist keys by locale.",
+    ]
+  : [
+      "本示例直接复用站点头部的 `src/components/NavLinks.astro` 组件。",
+      "激活态通过 `window.location.pathname` 计算，并在 `astro:page-load` 时同步。",
+      "当前激活项提供锚点（`anchor-name`），`.nav::before` 通过 `position-anchor` 绑定到该锚点。",
+      "指示器位置和尺寸由 `anchor(top/left/right/bottom)` 提供，再交给 CSS transition 做移动动画。",
+      "如果是跨页面导航，需配合 `transition:persist` 保持导航 DOM 连续，并按语言拆分 persist key。",
+    ];
+---
+
+<GalleryDemoLayout
+  locale={locale}
+  t={t}
+  title={title}
+  subtitle={subtitle}
+  features={features}
+  maxWidth="920px"
+  demoPadding="2rem 1rem"
+>
+  <section slot="demo" class="demo-wrap">
+    <div class="container nav-host">
+      <NavLinks
+        locale={locale}
+        t={t}
+        disableNavigation
+        persistKey={`demo-nav-${locale}`}
+      />
+    </div>
+  </section>
+
+  <section class="implementation">
+    <h2>{principleTitle}</h2>
+    <ul>
+      {principleItems.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+</GalleryDemoLayout>
+
+<style>
+  .demo-wrap {
+    width: 100%;
+  }
+
+  .container {
+    margin: 0 auto;
+    width: fit-content;
+    max-width: 100%;
+    background: var(--surface-raised);
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 4px 14px var(--shadow);
+    overflow-x: auto;
+  }
+
+  .nav-host :global(.nav) {
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  .implementation {
+    border-top: 1px solid var(--stroke);
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .implementation h2 {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin: 0 0 0.9rem;
+    letter-spacing: -0.01em;
+  }
+
+  .implementation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .implementation li {
+    color: var(--muted);
+    line-height: 1.7;
+    padding: 0.18rem 0;
+  }
+
+  .implementation li::before {
+    content: "•";
+    color: var(--primary);
+    margin-right: 0.55rem;
+  }
+
+  @media (max-width: 640px) {
+    .container {
+      width: 100%;
+    }
+  }
+</style>

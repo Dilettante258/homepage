@@ -4,9 +4,16 @@ import type { Locale, Messages } from "../i18n/strings";
 type Props = {
   locale: Locale;
   t: Messages;
+  disableNavigation?: boolean;
+  persistKey?: string;
 };
 
-const { locale, t } = Astro.props;
+const {
+  locale,
+  t,
+  disableNavigation = false,
+  persistKey = `site-nav-${locale}`,
+} = Astro.props;
 
 const pathname = Astro.url.pathname;
 const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
@@ -24,7 +31,12 @@ const navLinks = [
 ];
 ---
 
-<nav class="nav">
+<nav
+  class="nav"
+  transition:persist={persistKey}
+  data-nav-root
+  data-disable-navigation={disableNavigation ? "true" : undefined}
+>
   {
     navLinks.map((link) => (
       <a class={link.active ? "active" : ""} href={link.href} data-nav-link>
@@ -35,10 +47,15 @@ const navLinks = [
 </nav>
 
 <script>
-  function updateActiveNav() {
-    const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll("[data-nav-link]");
+  function normalizePath(path) {
+    return path.replace(/\/$/, "");
+  }
 
+  function updateActiveNav(nav) {
+    if (!nav || nav.getAttribute("data-disable-navigation") === "true") return;
+
+    const currentPath = window.location.pathname;
+    const navLinks = nav.querySelectorAll("[data-nav-link]");
     navLinks.forEach((link) => {
       const href = link.getAttribute("href");
       if (!href) return;
@@ -47,8 +64,8 @@ const navLinks = [
       link.classList.remove("active");
 
       // 规范化路径（去除末尾斜杠）
-      const normalizedCurrent = currentPath.replace(/\/$/, "");
-      const normalizedHref = href.replace(/\/$/, "");
+      const normalizedCurrent = normalizePath(currentPath);
+      const normalizedHref = normalizePath(href);
 
       // 精确匹配当前路径
       if (normalizedCurrent === normalizedHref) {
@@ -65,13 +82,38 @@ const navLinks = [
     });
   }
 
+  function setupNoNavigationMode(nav) {
+    if (!nav || nav.getAttribute("data-disable-navigation") !== "true") return;
+    if (nav.getAttribute("data-no-nav-ready") === "true") return;
+    nav.setAttribute("data-no-nav-ready", "true");
+
+    const navLinks = nav.querySelectorAll("[data-nav-link]");
+    navLinks.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        navLinks.forEach((item) => {
+          item.classList.toggle("active", item === link);
+        });
+      });
+    });
+  }
+
+  function initNavLinks() {
+    const navRoots = document.querySelectorAll("[data-nav-root]");
+    navRoots.forEach((nav) => {
+      setupNoNavigationMode(nav);
+      updateActiveNav(nav);
+    });
+  }
+
   // 使用 astro:page-load 统一处理初始化和导航后更新
-  document.addEventListener("astro:page-load", updateActiveNav);
+  document.addEventListener("astro:page-load", initNavLinks);
 </script>
 
 <style>
   .nav {
     position: relative;
+    anchor-scope: --active-nav;
     display: flex;
     gap: 0.25rem;
     flex-wrap: wrap;
