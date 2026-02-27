@@ -200,7 +200,7 @@ sequenceDiagram
 
 1. 是否纯缓存命中。
 2. 是否需要请求 RSC。
-3. 是否需要 refresh/retry，必要时是否降级 MPA。
+3. 是否需要 refresh/retry，必要时是否降级 MPA（相当于重新请求整个页面）。
 
 对应一次更细的内部处理可以表示为：
 
@@ -259,24 +259,32 @@ React 层的结果是：
 
 ## RSC 为什么不是直接用 JSON
 
-直觉上，组件树能表示为对象，似乎用 JSON 就够了。但 JSON 有两个问题：
+一个组件树当然可以描述成 JS 对象，再转成 JSON 传输，听起来很合理。 但 RSC 没这么做，而是用了带标识符和数组对的流式格式。
 
-1. 常见处理方式偏“整体到齐再解析”。
-2. 对树状异步依赖的渐进表达能力不足。
+核心原因是：JSON 这条路在“边到数据边渲染 UI”的场景下不够顺手。
 
-如果把传输看成“深度优先”，任何慢节点都可能拖慢整体可用时间。RSC/Flight 采用的是一种更接近“分块 + 引用占位”的方式：
+一方面，浏览器通常要等到 JSON 数据相对完整，才能稳定 `JSON.parse`；  另一方面，服务端也往往要准备好较完整的结构再发。  这会让慢节点拖慢整段可用时间。
 
-```text
+如果把 JSON 传输过程粗略理解成“深度优先”展开：从顶层属性一路往下走，任何一个慢分支都容易阻塞后续呈现。
+
+如果我们用“广度优先”的方法发送数据，这里用JSON做比喻：
+
+```json
 { header: "$1", post: "$2", footer: "$3" }
 ```
-
-其中 `"$1"`、`"$2"`、`"$3"` 可在后续流里逐步补齐。这样：
+RSC/Flight 更像“分块 + 占位引用”的方式。
+这里的 `"$1"`、`"$2"`、`"$3"` 代表后续才会到达的块。
+也就是：先给结构骨架，再逐步填充内容。这样就能做到：
 
 - 先到的数据可先渲染。
 - 未到的数据以占位（Promise/引用）挂起。
 - 到达后再局部解锁并替换。
 
-这与 `<Suspense>` 的模型天然契合：
+你可能会觉得：组件不就是一堆 HTML 吗？有必要这么复杂吗？
+如果只是纯静态内容，差异确实不大。
+但真实页面里有大量异步数据（本质是 Promise），这时“只会流式传输”还不够，还需要一个能处理“不完整 UI”的模型。
+
+React 用 `<Suspense>` 把这件事模型化了：
 
 - 先显示 fallback。
 - 数据到达后局部恢复真实内容。
@@ -341,16 +349,52 @@ flowchart TD
     J --> P[server action 映射]
 ```
 
-服务端/客户端边界主要依赖指令：`'use client'` 与 `'use server'`。
+上图里最关键的问题是：**服务器组件和客户端组件到底怎么区分？**
 
-- `'use client'`：声明该模块要被客户端打包和执行（UI/事件/状态）。
-- `'use server'`：声明可从客户端触发的服务端函数（由框架转换为网络调用）。
+核心就是两个指令：`'use client'` 和 `'use server'`。  
+它们的价值不只是“语法标记”，而是把客户端/服务端边界放进模块系统里。
 
-这让“跨端边界”进入模块系统，构建器才能准确决定：
+- `'use client'` 可以理解成“这个模块最终会进浏览器脚本”，更接近 `<script>` 的角色。
+- `'use server'` 可以理解成“这个函数在服务端执行、可被客户端触发”，更接近 `fetch/RPC` 的角色。
 
-1. 哪些代码进浏览器包。
-2. 哪些代码留在服务器。
-3. 如何建立两端引用映射。
+这和传统 CSR 的心智差异很大。  
+传统 CSR 通常是：前端组件里手写 `fetch/xhr` 请求，再处理返回值。  
+RSC 场景里，很多跨端调用会在模块边界上被编译器接管，开发者更像在写声明式的组件组合。
+
+例如服务端拿到一个 Promise，可以直接传给客户端组件，再用 `<Suspense>` + `use()` 消费：
+
+```tsx
+"use client";
+import { use, Suspense } from "react";
+
+function Message({ messagePromise }) {
+  const messageContent = use(messagePromise);
+  return <p>Here is the message: {messageContent}</p>;
+}
+
+export function MessageContainer({ messagePromise }) {
+  return (
+    <Suspense fallback={<p>⌛Downloading message...</p>}>
+      <Message messagePromise={messagePromise} />
+    </Suspense>
+  );
+}
+```
+
+为什么说 RSC 打包还依赖 bundler 绑定？  
+因为 React 本身并不知道“模块该怎么被具体打包器发送和加载”。这部分需要 Webpack / Parcel /（逐步完善中的）Vite 绑定去补齐。React 仓库里有对应实现：
+
+- `react-server-dom-webpack`
+- `react-server-dom-parcel`
+
+这些绑定大致做三件事：
+
+1. **构建期**：找到 `'use client'` 入口并产出客户端 chunk。
+2. **服务端**：告诉 React 如何把模块引用序列化到 Flight 数据里（例如 `chunk123.js#Counter`）。
+3. **客户端**：告诉 React 如何通过打包器运行时把这些模块真正加载回来。
+
+这三步打通之后，React Server 才知道“怎么序列化模块引用”，React Client 才知道“怎么反序列化并加载模块”。  
+也就是说，RSC 不是“只传数据”，而是“数据 + 模块引用协议”一起工作。
 
 ## “公共模块”怎么理解
 
