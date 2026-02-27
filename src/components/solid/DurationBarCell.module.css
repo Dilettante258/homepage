@@ -28,7 +28,7 @@
   left: clamp(6px, calc(var(--left) + 6px), calc(100% - 84px));
   transform: translateY(-50%);
   color: #245e42;
-  font-size: 1.15rem;
+  font-size: 0.8rem;
   line-height: 1;
   white-space: nowrap;
   z-index: 1;
