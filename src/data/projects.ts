@@ -27,7 +27,7 @@ export const projectItems: ProjectItem[] = [
 			en: 'EZTB - Tieba Toolbox',
 			zh: 'Eztb-贴吧工具箱',
 		},
-		githubStars: 71,
+		githubStars: 72,
 		description: {
 			en: 'A toolbox for Baidu Tieba: search, analyze, and export in one place, with an open-source backend and SDK.',
 			zh: 'eztb 贴吧工具箱。查询·分析·导出,一站完成。（有开源后端与SDK）',
@@ -70,6 +70,7 @@ export const projectItems: ProjectItem[] = [
 			en: 'Personal Homepage',
 			zh: '个人主页',
 		},
+		githubStars: 2,
 		cover: 'https://h-r2.kairi.cc/homepage-icon.webp',
 		description: {
 			en: 'This very site — built with Astro, Solid.js, and React islands, featuring i18n and dark mode.',
@@ -79,7 +80,7 @@ export const projectItems: ProjectItem[] = [
 		tech: ['Astro', 'React', 'Cloudflare', 'TypeScript'],
 		fallbackGradient: 'linear-gradient(120deg, #9BB7FF, #c1a3ff)',
 		links: {
-			github: 'https://github.com/Dilettante258he/homepage',
+			github: 'https://github.com/Dilettante258/homepage',
 		},
 		featured: true,
 		createdAt: '2026-01-10',
@@ -90,7 +91,7 @@ export const projectItems: ProjectItem[] = [
 			en: 'Tentix AI Ticketing System',
 			zh: 'Tentix AI 工单系统',
 		},
-		githubStars: 220,
+		githubStars: 221,
 		// cover: 'https://h-r2.kairi.cc/homepage-icon.webp',
 		description: {
 			en: 'An AI-native ticketing platform built with a Node.js full-stack architecture.',
@@ -100,7 +101,7 @@ export const projectItems: ProjectItem[] = [
 		tech: ['React', 'Node.js', 'Drizzle ORM', 'TypeScript'],
 		fallbackGradient: 'linear-gradient(120deg, #9BB7FF, #c1a3ff)',
 		links: {
-			github: 'https://github.com/Dilettante258he/homepage',
+			github: 'https://github.com/labring/tentix',
 		},
 		featured: true,
 		createdAt: '2026-04-10',
