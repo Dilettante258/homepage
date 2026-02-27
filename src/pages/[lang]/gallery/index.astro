@@ -44,6 +44,7 @@ const allTags = getAllTags();
           { value: "oldest", label: t.gallery.sortOldest },
         ]}
         layouts={["grid", "list", "tiling"]}
+        defaultLayout="tiling"
         layoutLabels={{
           grid: t.gallery.layoutGrid,
           list: t.gallery.layoutList,
@@ -51,7 +52,7 @@ const allTags = getAllTags();
         }}
       />
 
-      <div class="gallery-container" data-layout="grid">
+      <div class="gallery-container" data-layout="tiling">
         {
           galleryItems.map((item, idx) => (
             <a
@@ -63,19 +64,19 @@ const allTags = getAllTags();
               data-order={String(idx)}
               transition:name={`gallery-${item.slug}`}
             >
-              <div class={`card-thumbnail card-thumbnail--${item.aspect}`}>
+              <div
+                class={`card-thumbnail card-thumbnail--${item.aspect}`}
+                style={`--fallback-gradient: ${item.fallbackGradient};`}
+              >
+                <div class="card-gradient" />
                 {item.cover ? (
                   <img
                     src={item.cover}
                     alt={item.title[locale]}
                     loading="lazy"
+                    decoding="async"
                   />
-                ) : (
-                  <div
-                    class="card-gradient"
-                    style={`background: ${item.fallbackGradient};`}
-                  />
-                )}
+                ) : null}
               </div>
               <div class="card-body">
                 <h3>{item.title[locale]}</h3>
@@ -110,8 +111,36 @@ const allTags = getAllTags();
     });
   }
 
+  function setupCoverFallbacks() {
+    const coverImages =
+      document.querySelectorAll<HTMLImageElement>(".card-thumbnail img");
+    for (const img of coverImages) {
+      const parent = img.closest(".card-thumbnail");
+      if (!parent) continue;
+
+      const markLoaded = () => {
+        parent.setAttribute("data-image-loaded", "true");
+      };
+      const markError = () => {
+        parent.setAttribute("data-image-error", "true");
+      };
+
+      // Cached images may already be loaded before listeners run.
+      if (img.complete && img.naturalWidth > 0) {
+        markLoaded();
+        continue;
+      }
+
+      img.addEventListener("load", markLoaded, { once: true });
+      img.addEventListener("error", markError, { once: true });
+    }
+  }
+
   // 使用 astro:page-load 统一处理初始化和导航后更新
-  document.addEventListener("astro:page-load", setupListControls);
+  document.addEventListener("astro:page-load", () => {
+    setupListControls();
+    setupCoverFallbacks();
+  });
 </script>
 
 <style>
@@ -200,6 +229,8 @@ const allTags = getAllTags();
   .card-thumbnail {
     width: 100%;
     overflow: hidden;
+    position: relative;
+    background: var(--fallback-gradient);
   }
 
   .card-thumbnail--landscape {
@@ -213,16 +244,24 @@ const allTags = getAllTags();
   }
 
   .card-thumbnail img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .card-thumbnail[data-image-loaded="true"] img {
+    opacity: 1;
   }
 
   .card-gradient {
-    width: 100%;
-    height: 100%;
-    min-height: 120px;
+    position: absolute;
+    inset: 0;
+    background: var(--fallback-gradient);
   }
 
   .card-body {
