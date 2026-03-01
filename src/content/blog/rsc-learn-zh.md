@@ -14,12 +14,11 @@ tags: [React, Next.js, RSC, SSR, 前端工程]
 
 React 官方文档对 RSC 的定义大意如下：
 
-> 服务器组件是一种在打包前预渲染的新型组件，运行环境与客户端应用或 SSR 服务器分离。这个独立环境就是 RSC 里的“服务器”。
-> Server Components 既可以在构建时运行（例如 CI），也可以在请求时运行（Web 服务器）。
+> 服务器组件是一种新型的组件，它在打包之前，在独立于客户端应用程序或 SSR 服务器的环境中提前渲染。
+>
+> React 服务器组件中的「服务器」就是指这个独立的环境。服务器组件可以在构建时在你的 CI 服务器上运行一次，也可以在每次请求时在 Web 服务器中运行。
 
-如果用一句话概括：**RSC 让一部分组件只在服务器执行，把“结果”而不是“实现”发送给浏览器。**
-
-常见收益：
+优势：
 
 1. 减轻客户端 JavaScript 负担。
 2. 更快的首屏可见速度。
@@ -351,14 +350,14 @@ flowchart TD
 
 上图里最关键的问题是：**服务器组件和客户端组件到底怎么区分？**
 
-核心就是两个指令：`'use client'` 和 `'use server'`。  
+核心就是两个指令：`'use client'` 和 `'use server'`。
 它们的价值不只是“语法标记”，而是把客户端/服务端边界放进模块系统里。
 
 - `'use client'` 可以理解成“这个模块最终会进浏览器脚本”，更接近 `<script>` 的角色。
 - `'use server'` 可以理解成“这个函数在服务端执行、可被客户端触发”，更接近 `fetch/RPC` 的角色。
 
-这和传统 CSR 的心智差异很大。  
-传统 CSR 通常是：前端组件里手写 `fetch/xhr` 请求，再处理返回值。  
+这和传统 CSR 的心智差异很大。
+传统 CSR 通常是：前端组件里手写 `fetch/xhr` 请求，再处理返回值。
 RSC 场景里，很多跨端调用会在模块边界上被编译器接管，开发者更像在写声明式的组件组合。
 
 例如服务端拿到一个 Promise，可以直接传给客户端组件，再用 `<Suspense>` + `use()` 消费：
@@ -381,7 +380,7 @@ export function MessageContainer({ messagePromise }) {
 }
 ```
 
-为什么说 RSC 打包还依赖 bundler 绑定？  
+为什么说 RSC 打包还依赖 bundler 绑定？
 因为 React 本身并不知道“模块该怎么被具体打包器发送和加载”。这部分需要 Webpack / Parcel /（逐步完善中的）Vite 绑定去补齐。React 仓库里有对应实现：
 
 - `react-server-dom-webpack`
@@ -393,7 +392,7 @@ export function MessageContainer({ messagePromise }) {
 2. **服务端**：告诉 React 如何把模块引用序列化到 Flight 数据里（例如 `chunk123.js#Counter`）。
 3. **客户端**：告诉 React 如何通过打包器运行时把这些模块真正加载回来。
 
-这三步打通之后，React Server 才知道“怎么序列化模块引用”，React Client 才知道“怎么反序列化并加载模块”。  
+这三步打通之后，React Server 才知道“怎么序列化模块引用”，React Client 才知道“怎么反序列化并加载模块”。
 也就是说，RSC 不是“只传数据”，而是“数据 + 模块引用协议”一起工作。
 
 ## “公共模块”怎么理解
