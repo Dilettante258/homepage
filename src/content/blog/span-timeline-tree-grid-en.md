@@ -225,6 +225,30 @@ summary[data-error="true"] .nameText[data-mark="true"] { --bgC: #ffa9a7; }
 
 Result: highlight/error/current states compose predictably.
 
+## Interaction Performance: Use Event Delegation to Reduce Listeners and Closures
+
+Click handling is not bound per row via individual `onClick` callbacks. Instead, one listener is attached at the component root, and row context is resolved through `dataset`:
+
+```ts
+root.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement | null;
+  const row = target?.closest<HTMLElement>("[data-row-id]");
+  if (!row) return;
+
+  const rowId = row.dataset.rowId;
+  const isMatch = row.dataset.match === "true";
+  if (!rowId) return;
+
+  onRowClick?.({ rowId, isMatch });
+});
+```
+
+Benefits:
+
+1. Listener count stays constant (`1`) regardless of row count.
+2. Avoids creating per-row closures, reducing memory and GC pressure.
+3. Centralizes click entry so states like `data-last-clicked` and navigation state are easier to coordinate.
+
 ## Animation Strategy: Reuse `::details-content` Globally
 
 Collapse animation uses `::details-content` with `interpolate-size` for height transitions:
@@ -265,7 +289,8 @@ Business components (`SpanTimeline`, `TreeGridChainDemo`) keep only:
 2. Prefer native semantics for expansion; reduce custom state-machine complexity.
 3. Define match-navigation semantics around user-visible scope.
 4. Dataset-based state expression works better for complex style priority scenarios.
-5. Extract abstractions after validation; this usually yields better stability and reuse.
+5. Prefer root-level event delegation so listeners and closures do not scale linearly with data size.
+6. Extract abstractions after validation; this usually yields better stability and reuse.
 
 ## References
 

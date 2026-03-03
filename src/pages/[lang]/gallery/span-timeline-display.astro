@@ -124,10 +124,12 @@ const highlights = [
         ? [
             "命中状态通过 data-* 写回 DOM，再用属性选择器控制样式优先级。",
             "支持组件标签/关键词/异常并集高亮，并在可见命中范围内上下跳转定位。",
+            "点击交互采用组件根节点事件委托，基于 dataset 解析目标行，减少监听器与闭包数量。",
           ]
         : [
             "Match state is written to data-* and styled via attribute selector priority.",
             "Tag/keyword/error union highlighting supports next/prev navigation on visible matches.",
+            "Click handling is delegated at the component root and resolved by dataset to reduce listener and closure count.",
           ],
   },
   {

@@ -225,6 +225,30 @@ summary[data-error="true"] .nameText[data-mark="true"] { --bgC: #ffa9a7; }
 
 结果：高亮、异常、当前项三类状态可组合且可预测。
 
+## 交互性能：用事件委托收敛监听器与闭包
+
+点击交互不在每一行单独绑定 `onClick`，而是在组件根部统一监听，再通过 `dataset` 定位目标行：
+
+```ts
+root.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement | null;
+  const row = target?.closest<HTMLElement>("[data-row-id]");
+  if (!row) return;
+
+  const rowId = row.dataset.rowId;
+  const isMatch = row.dataset.match === "true";
+  if (!rowId) return;
+
+  onRowClick?.({ rowId, isMatch });
+});
+```
+
+这样做的收益：
+
+1. 监听器数量固定为 1，不随行数增长。
+2. 避免为每一行创建不同闭包，减少内存与 GC 压力。
+3. 交互入口统一，点击态（如 `data-last-clicked`）与导航态更容易集中管理。
+
 ## 动画策略：全局复用 `::details-content`
 
 折叠动画采用 `::details-content`，并使用 `interpolate-size` 做高度过渡：
@@ -266,7 +290,8 @@ details::details-content {
 2. 展开行为优先原生语义，减少状态机复杂度。
 3. 命中导航口径应与用户可见范围一致。
 4. 状态表达使用 dataset，更适合复杂样式优先级场景。
-5. 抽象放在验证之后，稳定性与复用性更高。
+5. 点击交互优先事件委托，避免监听器与闭包数量随数据规模线性增长。
+6. 抽象放在验证之后，稳定性与复用性更高。
 
 ## 参考资料
 
