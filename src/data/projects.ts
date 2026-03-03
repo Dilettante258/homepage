@@ -86,6 +86,26 @@ export const projectItems: ProjectItem[] = [
 		createdAt: '2026-01-10',
 	},
 	{
+		slug: 'docs-link-inline-loader',
+		title: {
+			en: 'docs-link-inline-loader',
+			zh: 'docs-link-inline-loader',
+		},
+		githubStars: 0,
+		description: {
+			en: 'A Webpack Loader that can inline the results of getDocsLink calls into string literals, eliminating runtime mapping overhead.',
+			zh: '一个 Webpack Loader，可将 getDocsLink 调用结果内联为字符串字面量，消除运行时映射开销。',
+		},
+		tags: ['tooling', 'oss'],
+		tech: ['Webpack', 'Node.js', 'TypeScript'],
+		fallbackGradient: 'linear-gradient(135deg, #8ED0FF, #3C78E5)',
+		links: {
+			github: 'https://github.com/Dilettante258/docs-link-inline-loader',
+		},
+		featured: false,
+		createdAt: '2026-03-03',
+	},
+	{
 		slug: 'tentix',
 		title: {
 			en: 'Tentix AI Ticketing System',
