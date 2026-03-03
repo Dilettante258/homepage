@@ -3,7 +3,7 @@ title: Common Focus, Auto Scroll, and Position Issues for Inputs in iOS WebViews
 description: Explains why iOS WebViews auto-scroll and misplace elements when inputs focus, and provides a timing-driven, production-ready fix with code.
 date: 2026-01-28
 locale: en
-tags: [iOS, Webview, React]
+tags: [Cross-Platform, Webview, React]
 ---
 
 ![A comment](http://h-r2.kairi.cc/safari-comment.webp)

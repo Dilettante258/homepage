@@ -3,7 +3,7 @@ title: How to Implement a Soft Keyboard State Detection Hook
 description: Using useSyncExternalStore to build a keyboard state detection Hook with a "pre-announce" mechanism, solving timing issues when the mobile keyboard appears.
 date: 2026-02-05
 locale: en
-tags: [React, iOS, Android, Hook]
+tags: [React, Cross-Platform, Hook]
 ---
 
 In mobile web development, handling the soft keyboard is unavoidable. Whether you're dealing with input positioning, page scrolling, or fixed element misalignment, the first step is always **accurately detecting the keyboard state**.

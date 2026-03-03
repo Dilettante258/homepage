@@ -3,7 +3,7 @@ title: iOS Webview 输入框自动聚焦滚动与定位错乱的相关问题
 description: 解决 iOS Webview 中输入框聚焦时页面自动滚动、定位元素错位等问题的工程化方案。
 date: 2026-01-28
 locale: zh
-tags: [iOS, Webview, React]
+tags: [跨端, Webview, React]
 ---
 
 ![一则评论](http://h-r2.kairi.cc/safari-comment.webp)

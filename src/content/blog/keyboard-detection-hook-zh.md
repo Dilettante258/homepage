@@ -3,7 +3,7 @@ title: 如何实现一个软键盘弹起状态检测 Hook
 description: 使用 useSyncExternalStore 实现一个支持"预告"机制的软键盘状态检测 Hook，解决移动端键盘弹起时的时序问题。
 date: 2026-02-05
 locale: zh
-tags: [React, iOS, Android, Hook]
+tags: [React, 跨端, Hook]
 ---
 
 在移动端 Web 开发中，软键盘弹起是一个绑不开的话题。无论是处理输入框定位、页面滚动还是 fixed 元素错位，第一步都需要**准确检测键盘状态**。
