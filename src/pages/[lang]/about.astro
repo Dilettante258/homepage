@@ -28,6 +28,42 @@ const education = {
   period: "2022.09 – 2026.06",
 };
 
+const companyLogos = {
+  weightWave:
+    "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",
+  bytedance: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="ByteDance"><path d="M14.944 18.587l-1.704-.445V10.01l1.824-.462c1-.254 1.84-.461 1.88-.453.032 0 .056 2.235.056 4.972v4.973l-.176-.008c-.104 0-.952-.207-1.88-.446z" fill="#00C8D2" fill-rule="nonzero"/><path d="M7 16.542c0-2.736.024-4.98.064-4.98.032-.008.872.2 1.88.454l1.816.461-.016 4.05-.024 4.049-1.632.422c-.896.23-1.736.445-1.856.469L7 21.523v-4.98z" fill="#3C8CFF" fill-rule="nonzero"/><path d="M19.24 12.477c0-9.03.008-9.515.144-9.475.072.024.784.207 1.576.406.792.207 1.576.405 1.744.445l.296.08-.016 8.56-.024 8.568-1.624.414c-.888.23-1.728.437-1.856.47l-.24.055v-9.523z" fill="#78E6DC" fill-rule="nonzero"/><path d="M1 12.509c0-4.678.024-8.505.064-8.505.032 0 .872.207 1.872.454l1.824.461v7.582c0 4.16-.016 7.574-.032 7.574-.024 0-.872.215-1.88.47L1 21.013v-8.505z" fill="#325AB4"/></svg>`,
+  euro: `data:image/png;base64,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`,
+  huanjie: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-label="Huanjie Cloud"><path fill="url(#huanjie-grad-a)" d="M8.7 18.8c2.2 3.3 7 3 7 3-1.2-1.1-2-2.2-2-5.2-.1-3-1.8-3.7-1.8-3.7 3-2 2-4 1.8-6.3a4 4 0 0 1 1.5-3.2A15 15 0 0 0 2.4 20c.3-.8 4.2-4.3 6.3-1.2"/><path fill="url(#huanjie-grad-b)" d="M36.6 12.8q0-.4-.4-1a7 7 0 0 0-12.9 4.5l.2.6A10.7 10.7 0 0 1 11 30.1a11 11 0 0 1-8.4-8.7A17.7 17.7 0 0 0 24.4 36a17.6 17.6 0 0 0 12.2-23.2"/><path fill="url(#huanjie-grad-c)" fill-rule="evenodd" d="M33.7 17.6A15.6 15.6 0 0 1 6.7 28a10.6 10.6 0 0 0 16.8-11.2l-.2-.6A7 7 0 0 1 30.4 8q3.1 4 3.3 9.6" clip-rule="evenodd"/><defs><linearGradient id="huanjie-grad-a" x1="13.1" x2="-1.8" y1="1.4" y2="24.8" gradientUnits="userSpaceOnUse"><stop stop-color="#0aa3f9"/><stop offset="1" stop-color="#b5b4ff"/></linearGradient><linearGradient id="huanjie-grad-b" x1="42.9" x2="19.1" y1="37.4" y2="7.1" gradientUnits="userSpaceOnUse"><stop stop-color="#0aa3f9"/><stop offset="1" stop-color="#b5b4ff"/></linearGradient><linearGradient id="huanjie-grad-c" x1="29.6" x2="7.6" y1="8" y2="30.3" gradientUnits="userSpaceOnUse"><stop stop-color="#7abbfd"/><stop offset="1" stop-color="#7abbfd" stop-opacity="0"/></linearGradient></defs></svg>`,
+  dishi:
+    "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAAw5JREFUeAHtVksorVEU/g7HK688yrNEMpAYGDDwmDCQmBgoM8qjKDIgJZIyE+UxkJARecREEiYGyEBRkiKPc07nfU6dV+e577/Wvf+5uvemrsmZ/Guy93/22mt96/vW2h2VkAwRtChE2BQACgAFgALg2wBCoRD+fESDwSD+1xhAIBD40snr9UL28/v9Py9GRf2VVKVS4V9AZSPAMmha+a74ZZ2dnaKurk50d3eLnZ0dkZGRIUZGRsTc3ByfZ2dny64iNzdXLC0thb+7urpETU2N6O3tFdfX12JgYIDj3d/fC5PJJEZHR0V+fr44ODgQi4uLIicnRywsLPBdLsPlcuHt7Q3Nzc1oaGjA/Pw8bm9v8fj4CCkYhoaGYDAYMDs7i/r6elxdXeHy8hKbm5vweDy8SgngcDhwdnYGjUaDxsZGSMmQkpICs9kMq9WKvLw82O12WCwWJCUl/ZYgMTERExMTsNlsuLm54WSHh4c4OjqC2+1mQCUlJZAYQlxcHDo6Oth3eXmZwb+8vGBra4sBtLS0cNK9vT0kJCSwHyWvqqrC7u4uXl9fUVlZCa1Wy/KoZX1WV1cZCF0izSXq0NfXx8H29/fx/PyM09NTnJyc4OLiAmlpaSgrK4PP50NWVhYGBwcZ9Pj4OCetqKjAzMwMx6uurmY239/fmTFikcBSH4Wn4OPjg2mUdEJMTAyenp6YZqK7sLAQ6enpGBsbw8rKCmpra/Hw8MBgYmNjuZkI8NTUFJqamjA5OYmNjQ1OTlVSLPIrLi5GeXk59Ho9r2EJqLN7enqwvr6O7e1tlJaWcoCCggKml+gnHclSU1Oh0+m4+vj4eO5m+ibKaU+VUTw6I3M6nVw1sZCZmYnk5GSeFtqTf1gC0oRopgZpa2vj6ouKitDa2orp6WkMDw+zX3t7O46Pj1kC6gkKQnv6/fz8HGq1Gnd3d5AmAnJxa2tr6O/vh9T9DIaa2mg0MhAVjQLRRHrIM0t7CkwO8vp5puVzoj46Opr38rvw2ejd+Oqc4qmU/4SIsCkAFAAKAAVAxAH8AIY0zSYITt/IAAAAAElFTkSuQmCC",
+} as const;
+
+const logoToImageSrc = (logo: string) => {
+  const value = logo.trim();
+
+  if (/^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(value)) {
+    return value;
+  }
+
+  if (/^[A-Za-z0-9+/]+={0,2}$/.test(value) && value.length > 100) {
+    const mimeType = value.startsWith("iVBORw0KGgo")
+      ? "image/png"
+      : value.startsWith("UklGR")
+        ? "image/webp"
+        : value.startsWith("/9j/")
+          ? "image/jpeg"
+          : value.startsWith("R0lGOD")
+            ? "image/gif"
+            : value.startsWith("PHN2Zy")
+              ? "image/svg+xml"
+              : "image/png";
+
+    return `data:${mimeType};base64,${value}`;
+  }
+
+  return null;
+};
+
 const experiences = [
   {
     company: { en: "DeepWhale (深鲸源)", zh: "深鲸源" },
@@ -37,10 +73,11 @@ const experiences = [
       zh: "AI Agent 全栈开发实习生",
     },
     period: {
-      en: `2026.01 – ${t.about.present}`,
-      zh: `2026.01 – ${t.about.present}`,
+      en: `2026.01 – 2026.02`,
+      zh: `2026.01 – 2026.02`,
     },
     location: { en: "Shanghai", zh: "上海" },
+    logo: companyLogos.weightWave,
     current: true,
   },
   {
@@ -49,6 +86,7 @@ const experiences = [
     role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
     period: { en: "2025.11 – 2026.01", zh: "2025.11 – 2026.01" },
     location: { en: "Shanghai", zh: "上海" },
+    logo: companyLogos.euro,
     current: false,
   },
   {
@@ -60,6 +98,7 @@ const experiences = [
     role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
     period: { en: "2025.06 – 2025.11", zh: "2025.06 – 2025.11" },
     location: { en: "Shanghai", zh: "上海" },
+    logo: companyLogos.bytedance,
     current: false,
   },
   {
@@ -71,6 +110,7 @@ const experiences = [
     role: { en: "React & Node Dev", zh: "React & Node 开发工程师" },
     period: { en: "2025.03 – 2025.05", zh: "2025.03 – 2025.05" },
     location: { en: "Hangzhou", zh: "杭州" },
+    logo: companyLogos.huanjie,
     current: false,
   },
   {
@@ -79,6 +119,7 @@ const experiences = [
     role: { en: "Frontend Dev Intern", zh: "前端开发实习生" },
     period: { en: "2024.07 – 2024.08", zh: "2024.07 – 2024.08" },
     location: { en: "Wuhan", zh: "武汉" },
+    logo: companyLogos.dishi,
     current: false,
   },
 ];
@@ -237,21 +278,44 @@ const experiences = [
       </h2>
       <div class="timeline">
         {
-          experiences.map((exp) => (
-            <div class:list={["timeline-item", { current: exp.current }]}>
-              <div class="timeline-dot" />
-              <div class="timeline-card">
-                <p class="timeline-period">
-                  {exp.period[locale]} · {exp.location[locale]}
-                </p>
-                <h3 class="timeline-company">
-                  {exp.company[locale]}
-                  <span class="timeline-dept">{exp.department[locale]}</span>
-                </h3>
-                <p class="timeline-role">{exp.role[locale]}</p>
+          experiences.map((exp) => {
+            const logoSrc = exp.logo ? logoToImageSrc(exp.logo) : null;
+            return (
+              <div class:list={["timeline-item", { current: exp.current }]}>
+                <div class="timeline-dot" />
+                <div class="timeline-card">
+                  <p class="timeline-period">
+                    {exp.period[locale]} · {exp.location[locale]}
+                  </p>
+                  <h3 class="timeline-company">
+                    <span class="timeline-company-main">
+                      {exp.logo && (
+                        <span class="timeline-logo" aria-hidden="true">
+                          {logoSrc ? (
+                            <img
+                              class="timeline-logo-img"
+                              src={logoSrc}
+                              alt=""
+                            />
+                          ) : (
+                            <span
+                              class="timeline-logo-svg"
+                              set:html={exp.logo}
+                            />
+                          )}
+                        </span>
+                      )}
+                      <span class="timeline-company-name">
+                        {exp.company[locale]}
+                      </span>
+                    </span>
+                    <span class="timeline-dept">{exp.department[locale]}</span>
+                  </h3>
+                  <p class="timeline-role">{exp.role[locale]}</p>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         }
       </div>
     </div>
@@ -495,11 +559,51 @@ const experiences = [
     font-size: 1rem;
     font-weight: 400;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 0.5rem;
     flex-wrap: wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
+  }
+
+  .timeline-company-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  .timeline-company-name {
+    min-width: 0;
+  }
+
+  .timeline-logo {
+    width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--surface) 90%, var(--stroke) 10%);
+  }
+
+  .timeline-logo-img,
+  .timeline-logo-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .timeline-logo-img {
+    object-fit: contain;
+  }
+
+  .timeline-logo :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   .timeline-dept {
@@ -573,6 +677,7 @@ const experiences = [
 
     .timeline-company {
       flex-direction: column;
+      align-items: flex-start;
       gap: 0.1rem;
     }
   }
